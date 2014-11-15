@@ -7,9 +7,9 @@ import java.io.IOException;
 
 import repository.ActivationMode;
 import repository.KeyMapping;
-import repository.SoundSample;
 import repository.SoundPack;
 import repository.SoundPackLoadingFailedException;
+import repository.SoundSample;
 
 /**
  * This manages soundpacks. It can load {@link SoundPack}s from disc and
@@ -20,6 +20,10 @@ import repository.SoundPackLoadingFailedException;
 public class SoundPackManager {
 
 	private SoundpackFileParser parser = new SoundpackFileParser();
+	
+	public void init(){
+		
+	}
 	
 	/**
 	 * Loads a {@link SoundPack}. On disk, a sound pack is a folder that contains audio files

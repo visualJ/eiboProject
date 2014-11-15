@@ -5,7 +5,13 @@ import presentation.UserInterface;
 public class Application {
 
 	public static void main(String[] args) {
-		UserInterface ui = new UserInterface(new AudioCore(), new SoundPackManager());
+		AudioCore audioCore = new AudioCore();
+		audioCore.init();
+		
+		SoundPackManager soundpackManager = new SoundPackManager();
+		soundpackManager.init();
+		
+		UserInterface ui = new UserInterface(audioCore,soundpackManager);
 		ui.init();
 	}
 

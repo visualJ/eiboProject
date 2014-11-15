@@ -13,7 +13,7 @@ public class SoundPack {
 
 	private String packName;
 	private String creatorName;
-	List <KeyMapping> keyMappings = new ArrayList<KeyMapping>();
+	private List <KeyMapping> keyMappings = new ArrayList<KeyMapping>();
 	
 	public void setPackName(String packName) {
 		this.packName = packName;

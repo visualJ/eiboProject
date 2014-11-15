@@ -10,6 +10,7 @@ import repository.SoundPack;
 import repository.SoundSample;
 import ddf.minim.AudioInput;
 import ddf.minim.AudioOutput;
+import ddf.minim.AudioRecorder;
 import ddf.minim.Minim;
 import ddf.minim.ugens.Delay;
 import ddf.minim.ugens.FilePlayer;
@@ -22,6 +23,8 @@ public class AudioCore {
 	private AudioInput audioInput;
 	private Summer audioMixer;
 	private AudioFx audioFx;
+	private AudioRecorder inputRecorder;
+	private AudioRecorder outputRecorder;
 	private Map<SoundSample, FilePlayer> sounds;
 	
 	public void init(){
@@ -105,6 +108,45 @@ public class AudioCore {
 			sounds.get(soundSample).play();
 		}else{
 			System.out.println("Error: playSample() tried playing sound sample "+soundSample.getFileName()+" when is was not loaded!");
+		}
+	}
+	
+	/**
+	 * Stop a playing sample.
+	 * If it is already playing, this will stop the
+	 * sound and play it from the beginning
+	 * @param soundSample
+	 */
+	public void stopSample(SoundSample soundSample){
+		if(sounds.containsKey(soundSample)){
+			sounds.get(soundSample).pause();
+			sounds.get(soundSample).rewind();
+		}else{
+			System.out.println("Error: playSample() tried stopping sound sample "+soundSample.getFileName()+" when is was not loaded!");
+		}
+	}
+	
+	/**
+	 * Starts recording the sound output. A new soundfile is created.
+	 * @param fileName The name of the sound file to record to.
+	 */
+	public void startRecordingPerformance(String fileName){
+		if(outputRecorder != null && outputRecorder.isRecording()){
+			// Stop current recording
+			outputRecorder.endRecord();
+			outputRecorder.save();
+		}
+		outputRecorder = minim.createRecorder(audioOutput, fileName);
+		outputRecorder.beginRecord();
+	}
+	
+	/**
+	 * Stops a live performance recording and saves the file
+	 */
+	public void endRecordingPerformance(){
+		if(outputRecorder != null){
+			outputRecorder.endRecord();
+			outputRecorder.save();
 		}
 	}
 	

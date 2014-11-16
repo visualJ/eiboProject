@@ -12,6 +12,7 @@ import ddf.minim.AudioInput;
 import ddf.minim.AudioOutput;
 import ddf.minim.AudioRecorder;
 import ddf.minim.Minim;
+import ddf.minim.Recordable;
 import ddf.minim.ugens.Delay;
 import ddf.minim.ugens.FilePlayer;
 import ddf.minim.ugens.Summer;
@@ -23,8 +24,8 @@ public class AudioCore {
 	private AudioInput audioInput;
 	private Summer audioMixer;
 	private AudioFx audioFx;
-	private AudioRecorder inputRecorder;
-	private AudioRecorder outputRecorder;
+	private AudioSampleRecorder inputRecorder;
+	private AudioSampleRecorder outputRecorder;
 	private Map<SoundSample, FilePlayer> sounds;
 	
 	public void init(){
@@ -48,6 +49,10 @@ public class AudioCore {
 		
 		// Prepare the list of sounds, that can be played
 		sounds = new HashMap<SoundSample, FilePlayer>();
+		
+		// Prepare the sample recorders
+		outputRecorder = new AudioSampleRecorder(audioOutput);
+		inputRecorder = new AudioSampleRecorder(audioInput);
 	}
 	
 	/**
@@ -64,7 +69,7 @@ public class AudioCore {
 			// Load the sound and create a file player
 			FilePlayer player = loadSoundSamplePlayer(soundSample);
 			
-			// Attatch the player to the audio mixer, so that the sound
+			// Attach the player to the audio mixer, so that the sound
 			// can be played
 			player.pause();
 			player.patch(audioMixer);
@@ -131,25 +136,96 @@ public class AudioCore {
 	 * @param fileName The name of the sound file to record to.
 	 */
 	public void startRecordingPerformance(String fileName){
-		if(outputRecorder != null && outputRecorder.isRecording()){
-			// Stop current recording
-			outputRecorder.endRecord();
-			outputRecorder.save();
-		}
-		outputRecorder = minim.createRecorder(audioOutput, fileName);
-		outputRecorder.beginRecord();
+		outputRecorder.beginRecord(fileName);
 	}
 	
 	/**
 	 * Stops a live performance recording and saves the file
 	 */
-	public void endRecordingPerformance(){
-		if(outputRecorder != null){
-			outputRecorder.endRecord();
-			outputRecorder.save();
+	public SoundSample endRecordingPerformance(){
+		return outputRecorder.endRecord();
+	}
+	
+	/**
+	 * Starts recording the mic. A new soundfile is created.
+	 * @param fileName The name of the sound file to record to.
+	 */
+	public void startRecordingMic(String fileName){
+		inputRecorder.beginRecord(fileName);
+	}
+	
+	/**
+	 * Stops a mic recording and saves the file
+	 */
+	public SoundSample endRecordingMic(){
+		return inputRecorder.endRecord();
+	}
+	
+	/**
+	 * Creates a {@link FilePlayer} from a {@link SoundSample}
+	 * @param soundSample The sound sample to create a file player from
+	 * @return The file player
+	 */
+	private FilePlayer loadSoundSamplePlayer(SoundSample soundSample){
+		return new FilePlayer(minim.loadFileStream(soundSample.getFileName(), 1024, false));
+	}
+	
+	////////////////////////////////////////// Memberklassen \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+	/**
+	 * Processes audio with effects and is patched
+	 * to the standart output
+	 * @author Benedikt Ringlein
+	 *
+	 */
+	private class AudioFx extends Delay{
+		public AudioFx(AudioOutput audioOutput){
+			setDelTime(1/audioOutput.sampleRate());
+			patch(audioOutput);
 		}
 	}
 	
+	/**
+	 * Records audio samples. This uses minims {@link AudioRecorder}, but is
+	 * easier to use and creates {@link SoundSample}s
+	 * @author Benedikt Ringlein
+	 * 
+	 */
+	private class AudioSampleRecorder{
+		private AudioRecorder recorder;
+		private String fileName;
+		private Recordable recsource;
+		
+		public AudioSampleRecorder(Recordable recsource){
+			this.recsource = recsource;
+		}
+		
+		public void beginRecord(String fileName){
+			if(recorder == null){
+				recorder = minim.createRecorder(recsource, fileName);
+				recorder.beginRecord();
+				this.fileName = fileName;
+			}else{
+				System.out.println("Tried to start recording, when a recording was already running.");
+			}
+		}
+		
+		public SoundSample endRecord(){
+			if(recorder != null && recorder.isRecording()){
+				recorder.endRecord();
+				recorder.save();
+				return new SoundSample(fileName);
+			}else{
+				System.out.println("Error: endRecord() tried to end recording, when it was not started.");
+				return null;
+			}
+		}
+		
+		public boolean isRecording(){
+			if(recorder == null) return false;
+			else return recorder.isRecording();
+		}
+	}
 	
 	//////////////////////////////// Minim needs the following methods \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 	
@@ -162,7 +238,7 @@ public class AudioCore {
 	public String sketchPath(String fileName) {
 		return fileName;
 	}
-
+	
 	/**
 	 * Used by minim
 	 * Creates a file input stream
@@ -174,21 +250,5 @@ public class AudioCore {
 			return new FileInputStream(fileName);
 		} catch (Exception ex) {}
 		return null;
-	}
-	
-	/**
-	 * Creates a {@link FilePlayer} from a {@link SoundSample}
-	 * @param soundSample The sound smaple to create a file player from
-	 * @return The file player
-	 */
-	private FilePlayer loadSoundSamplePlayer(SoundSample soundSample){
-		return new FilePlayer(minim.loadFileStream(soundSample.getFileName(), 1024, false));
-	}
-
-	private class AudioFx extends Delay{
-		public AudioFx(AudioOutput audioOutput){
-			setDelTime(1/audioOutput.sampleRate());
-			patch(audioOutput);
-		}
 	}
 }

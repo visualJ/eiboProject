@@ -25,4 +25,14 @@ public class SoundSample {
 		this.fileName = fileName;
 	}
 	
+	@Override
+	public String toString() {
+		return "SoundSample: " + fileName;
+	}
+	
+	@Override
+	public int hashCode() {
+		return fileName.hashCode();
+	}
+	
 }

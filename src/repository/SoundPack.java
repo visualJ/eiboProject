@@ -13,8 +13,18 @@ public class SoundPack {
 
 	private String packName;
 	private String creatorName;
-	private List <KeyMapping> keyMappings = new ArrayList<KeyMapping>();
+	private String imageFile;
 	
+	private List <KeyMapping> keyMappings = new ArrayList<KeyMapping>();
+
+	public String getImageFile() {
+		return imageFile;
+	}
+
+	public void setImageFile(String imageFile) {
+		this.imageFile = imageFile;
+	}
+
 	public void setPackName(String packName) {
 		this.packName = packName;
 	}

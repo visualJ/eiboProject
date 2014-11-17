@@ -36,7 +36,7 @@ public class SoundPackManager {
 	public SoundPack loadSoundPack(String soundPackFolder) throws SoundPackLoadingFailedException{
 		final SoundPack soundpack = new SoundPack();
 		final String _soundPackFolder = soundPackFolder;
-		parser.listener = new SPFParseListener() {
+		parser.handler = new SPFParseHandler() {
 			@Override
 			public void readName(String name) {
 				soundpack.setPackName(name);
@@ -44,6 +44,10 @@ public class SoundPackManager {
 			@Override
 			public void readCreator(String creator) {
 				soundpack.setCreatorName(creator);
+			}
+			@Override
+			public void readImage(String imageFile) {
+				soundpack.setImageFile(imageFile);
 			}
 			@Override
 			public void readKeyMapping(int keyCode, ActivationMode activationMode, String soundFile) {
@@ -68,9 +72,10 @@ public class SoundPackManager {
 	 * @author Benedikt Ringlein
 	 *
 	 */
-	private interface SPFParseListener{
+	private interface SPFParseHandler{
 		public void readName(String name);
 		public void readCreator(String creator);
+		public void readImage(String imageFile);
 		public void readKeyMapping(int keyCode, ActivationMode activationMode, String soundFile);
 	}
 	
@@ -81,7 +86,7 @@ public class SoundPackManager {
 	 *
 	 */
 	private class SoundpackFileParser{
-		public SPFParseListener listener;
+		public SPFParseHandler handler;
 		public void parse(String file) throws IOException{
 			BufferedReader reader = new BufferedReader(new FileReader(file));
 			String line;
@@ -91,11 +96,15 @@ public class SoundPackManager {
 				switch(line.substring(0, 2)){
 				case "N ":
 					// read a name
-					listener.readName(line.substring(2).trim());
+					handler.readName(line.substring(2).trim());
 					break;
 				case "C ":
 					// read a creator
-					listener.readCreator(line.substring(2).trim());
+					handler.readCreator(line.substring(2).trim());
+					break;
+				case "I ":
+					// read an image
+					handler.readImage(line.substring(2).trim());
 					break;
 				case "K ":
 					// read a keymapping
@@ -108,7 +117,7 @@ public class SoundPackManager {
 						keyCode = Integer.parseInt(splitline[0].trim());
 						activationMode = ActivationMode.valueOf(splitline[1].trim());
 						soundFile = splitline[2].trim();
-						listener.readKeyMapping(keyCode, activationMode, soundFile);
+						handler.readKeyMapping(keyCode, activationMode, soundFile);
 					} catch (Exception e) {
 						e.printStackTrace();
 						// Don't add the mapping, if an error occurred during parsing

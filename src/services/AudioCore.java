@@ -66,16 +66,8 @@ public class AudioCore {
 			// Get the sound sample
 			SoundSample soundSample = keyMapping.getSoundSample();
 			
-			// Load the sound and create a file player
-			FilePlayer player = loadSoundSamplePlayer(soundSample);
-			
-			// Attach the player to the audio mixer, so that the sound
-			// can be played
-			player.pause();
-			player.patch(audioMixer);
-			
-			// Add the player to the list of sounds
-			sounds.put(soundSample, player);
+			// Load the sound and add it to the sound map
+			loadSoundSample(soundSample);
 		}
 	}
 	
@@ -89,6 +81,31 @@ public class AudioCore {
 			// Get the sound sample
 			SoundSample soundSample = keyMapping.getSoundSample();
 			
+			// Unload and remove the sound sample
+			unloadSoundSample(soundSample);
+		}
+	}
+	
+	/**
+	 * Loads a single SoundSample and makes it available for playback
+	 * @param soundSample
+	 */
+	public void loadSoundSample(SoundSample soundSample){
+		if(!sounds.containsKey(soundSample)){
+			
+			// Load a sound file and put it in the sounds map
+			sounds.put(soundSample, loadSoundSamplePlayer(soundSample));
+		}
+	}
+	
+	/**
+	 * Unloads a {@link SoundSample} and removes it from the map
+	 * of available sounds
+	 * @param soundSample
+	 */
+	public void unloadSoundSample(SoundSample soundSample){
+		if(sounds.containsKey(soundSample)){
+			
 			// Get the corresponding file player
 			FilePlayer player = sounds.get(soundSample);
 			
@@ -100,7 +117,7 @@ public class AudioCore {
 			sounds.remove(soundSample);
 		}
 	}
-	
+
 	/**
 	 * Plays a previously loaded sound sample.
 	 * If it is already playing, this will stop the
@@ -162,12 +179,22 @@ public class AudioCore {
 	}
 	
 	/**
-	 * Creates a {@link FilePlayer} from a {@link SoundSample}
+	 * Creates a {@link FilePlayer} from a {@link SoundSample} and prepares
+	 * it to be played by attaching it to the audioMixer
 	 * @param soundSample The sound sample to create a file player from
 	 * @return The file player
 	 */
 	private FilePlayer loadSoundSamplePlayer(SoundSample soundSample){
-		return new FilePlayer(minim.loadFileStream(soundSample.getFileName(), 1024, false));
+		
+		// Load the sound file and create a playable object
+		FilePlayer player = new FilePlayer(minim.loadFileStream(soundSample.getFileName(), 1024, false));
+		
+		// Attach the player to the audio mixer, so that the sound
+		// can be played
+		player.pause();
+		player.patch(audioMixer);
+		
+		return player;
 	}
 	
 	////////////////////////////////////////// Memberklassen \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
@@ -200,6 +227,10 @@ public class AudioCore {
 			this.recsource = recsource;
 		}
 		
+		/**
+		 * Starts recording audio to a file
+		 * @param fileName The name of the file to record to
+		 */
 		public void beginRecord(String fileName){
 			if(recorder == null){
 				recorder = minim.createRecorder(recsource, fileName);
@@ -210,6 +241,10 @@ public class AudioCore {
 			}
 		}
 		
+		/**
+		 * Stops recording audio.
+		 * @return  The recorded SoundSample
+		 */
 		public SoundSample endRecord(){
 			if(recorder != null && recorder.isRecording()){
 				recorder.endRecord();

@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
+import repository.AudioFx;
 import repository.KeyMapping;
 import repository.SoundPack;
 import repository.SoundSample;
@@ -13,7 +14,6 @@ import ddf.minim.AudioOutput;
 import ddf.minim.AudioRecorder;
 import ddf.minim.Minim;
 import ddf.minim.Recordable;
-import ddf.minim.ugens.Delay;
 import ddf.minim.ugens.FilePlayer;
 import ddf.minim.ugens.Summer;
 
@@ -179,12 +179,22 @@ public class AudioCore {
 	}
 	
 	/**
+	 * Returns the {@link AudioFx} object for altering
+	 * the sound effects
+	 * @return the audio fx object
+	 */
+	public AudioFx getAudioFx(){
+		return audioFx;
+	}
+	
+	/**
 	 * Creates a {@link FilePlayer} from a {@link SoundSample} and prepares
 	 * it to be played by attaching it to the audioMixer
 	 * @param soundSample The sound sample to create a file player from
 	 * @return The file player
 	 */
 	private FilePlayer loadSoundSamplePlayer(SoundSample soundSample){
+		System.out.println("load sound sample "+soundSample.getFileName());
 		
 		// Load the sound file and create a playable object
 		FilePlayer player = new FilePlayer(minim.loadFileStream(soundSample.getFileName(), 1024, false));
@@ -199,19 +209,6 @@ public class AudioCore {
 	
 	////////////////////////////////////////// Memberklassen \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
-	/**
-	 * Processes audio with effects and is patched
-	 * to the standart output
-	 * @author Benedikt Ringlein
-	 *
-	 */
-	private class AudioFx extends Delay{
-		public AudioFx(AudioOutput audioOutput){
-			setDelTime(1/audioOutput.sampleRate());
-			patch(audioOutput);
-		}
-	}
-	
 	/**
 	 * Records audio samples. This uses minims {@link AudioRecorder}, but is
 	 * easier to use and creates {@link SoundSample}s
@@ -256,6 +253,10 @@ public class AudioCore {
 			}
 		}
 		
+		/**
+		 * Returns whether the recorder is recording or not.
+		 * @return True, if currently recording
+		 */
 		public boolean isRecording(){
 			if(recorder == null) return false;
 			else return recorder.isRecording();

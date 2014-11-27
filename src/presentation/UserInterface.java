@@ -22,10 +22,8 @@ public class UserInterface extends JFrame {
 		//TODO initialize the window and GUI components
 		setTitle("eiboProject");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		setSize(500, 400); // setzt die Fenstergroesse auf 500 x 400 px
+		setSize(500, 400);
 		setVisible(true);
-		
-
 	}
 	
 }

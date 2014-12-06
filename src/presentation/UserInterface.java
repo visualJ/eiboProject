@@ -2,8 +2,6 @@ package presentation;
 
 import javax.swing.JFrame;
 
-import repository.SoundPack;
-import repository.SoundPackLoadingFailedException;
 import services.AudioCore;
 import services.SoundPackManager;
 

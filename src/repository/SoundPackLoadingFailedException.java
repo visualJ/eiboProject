@@ -6,5 +6,6 @@ public class SoundPackLoadingFailedException extends Exception {
 
 	public SoundPackLoadingFailedException(String name){
 		super("Failed to load soundpack '" + name + "'.");
+		//This is a test
 	}
 }

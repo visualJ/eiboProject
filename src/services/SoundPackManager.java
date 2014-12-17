@@ -50,9 +50,10 @@ public class SoundPackManager {
 				soundpack.setImageFile(imageFile);
 			}
 			@Override
-			public void readKeyMapping(int keyCode, ActivationMode activationMode, String soundFile) {
+			public void readKeyMapping(int keyCode, ActivationMode activationMode, String soundFile, String imageFile) {
 				if(new File(_soundPackFolder+File.separator+soundFile).exists()){
-					soundpack.addKeyMapping(new KeyMapping(keyCode, activationMode, new SoundSample(_soundPackFolder+File.separator+soundFile)));
+					// Add keymapping, if the actual sound file exists
+					soundpack.addKeyMapping(new KeyMapping(keyCode, activationMode, new SoundSample(_soundPackFolder+File.separator+soundFile), imageFile));
 				}
 			}
 		};
@@ -76,7 +77,7 @@ public class SoundPackManager {
 		public void readName(String name);
 		public void readCreator(String creator);
 		public void readImage(String imageFile);
-		public void readKeyMapping(int keyCode, ActivationMode activationMode, String soundFile);
+		public void readKeyMapping(int keyCode, ActivationMode activationMode, String soundFile, String imageFile);
 	}
 	
 	/**
@@ -110,14 +111,15 @@ public class SoundPackManager {
 					// read a keymapping
 					int keyCode;
 					ActivationMode activationMode;
-					String soundFile;
-					// split the commy sperated values
+					String soundFile, imageFile;
+					// split the comma separated values
 					String splitline[] = line.substring(2).split(",");
 					try {
 						keyCode = Integer.parseInt(splitline[0].trim());
 						activationMode = ActivationMode.valueOf(splitline[1].trim());
 						soundFile = splitline[2].trim();
-						handler.readKeyMapping(keyCode, activationMode, soundFile);
+						imageFile = splitline.length>=4?splitline[3].trim():null;
+						handler.readKeyMapping(keyCode, activationMode, soundFile, imageFile);
 					} catch (Exception e) {
 						e.printStackTrace();
 						// Don't add the mapping, if an error occurred during parsing

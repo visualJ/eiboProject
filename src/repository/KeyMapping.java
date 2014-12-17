@@ -10,7 +10,12 @@ public class KeyMapping {
 	private int keyCode;
 	private ActivationMode activationMode;
 	private SoundSample soundSample;
+	private String imageFile;
 	
+	public String getImageFile() {
+		return imageFile;
+	}
+
 	public int getKeyCode() {
 		return keyCode;
 	}
@@ -29,10 +34,11 @@ public class KeyMapping {
 	 * @param activationMode The activation mode, how to trigger the sound
 	 * @param soundSample The actual soundsample to play.
 	 */
-	public KeyMapping(int keyCode, ActivationMode activationMode, SoundSample soundSample) {
+	public KeyMapping(int keyCode, ActivationMode activationMode, SoundSample soundSample, String imageFile) {
 		this.keyCode = keyCode;
 		this.activationMode = activationMode;
 		this.soundSample = soundSample;
+		this.imageFile = imageFile;
 	}
 	
 	

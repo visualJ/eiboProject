@@ -10,6 +10,7 @@ public class UserInterface extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private AudioCore audioCore;
 	private SoundPackManager soundpackManager;
+	private BackgroundPanel background = new BackgroundPanel();
 
 	public UserInterface(AudioCore audioCore, SoundPackManager soundpackManager) {
 		this.audioCore = audioCore;
@@ -22,6 +23,8 @@ public class UserInterface extends JFrame {
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setSize(500, 400);
 		setVisible(true);
+		
+		add(background);
 	}
 	
 }

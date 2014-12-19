@@ -11,20 +11,48 @@ public class BackgroundPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	private static final int NUMBER_OF_BARS = 100;
-	private static final float HORIZON = 0.3f;
+	private static final float HORIZON = 0.4f;
 
 	private float[] bars = new float[NUMBER_OF_BARS];
-	private GradientPaint gradient;
 	private int pos = 0;
+	private float beatIndicatorAlpha = 0;
+	private int bpm = 120;
+	private Thread beatIndicatorThread;
+	private Runnable beatIndicatorAnimation = new Runnable(){
+		@Override
+		public void run() {
+			// Slowly decrease the alpha value over time
+			for(int i = 9;i>=0;i--){
+				beatIndicatorAlpha = 0.4f * i / 9;
+				repaint();
+				try {
+					Thread.sleep(6000/bpm);
+				} catch (InterruptedException e) {
+					Thread.currentThread().interrupt();
+				}
+			}
+			repaint();
+		}
+	};
 	
+	/**
+	 * A background panel with different visualizers
+	 */
 	public BackgroundPanel(){
 		super();
 		setOpaque(false);
 		setBackground(Color.black);
-		setForeground(Color.blue);
-		gradient = new GradientPaint(0, 0, Color.blue, 0, 1000, Color.black);
+		setForeground(new Color(170,20,240));
 	}
-	
+
+	public int getBpm() {
+		return bpm;
+	}
+
+	public void setBpm(int bpm) {
+		this.bpm = bpm;
+	}
+
 	/**
 	 * Updates the Graph with a new value
 	 * @param value New value to append to the right
@@ -41,6 +69,18 @@ public class BackgroundPanel extends JPanel {
 		repaint(); 
 	}
 	
+	/**
+	 * Visualize a beat.
+	 * This method should be called once every beat at
+	 * the set beats per minute.
+	 */
+	public void beat(){
+		// Start or restart the animation
+		if(beatIndicatorThread!=null) beatIndicatorThread.interrupt();
+		beatIndicatorThread = new Thread(beatIndicatorAnimation);
+		beatIndicatorThread.start(); 
+	}
+	
 	@Override
 	public void paint(Graphics g) {
 		
@@ -48,15 +88,19 @@ public class BackgroundPanel extends JPanel {
 		Graphics2D graphics = (Graphics2D)g;
 		graphics.setColor(getBackground());
 		graphics.fillRect(0, 0, getWidth(), getHeight());
-		graphics.setColor(getForeground());
+		
+		// draw beat indicator
+		graphics.setPaint(new GradientPaint(0, HORIZON*getHeight(), alphaColor(getForeground(), beatIndicatorAlpha), 0, 0, getBackground()));
+		paintBeatIndicator(graphics);
 		
 		// draw bars
+		graphics.setColor(getForeground());
 		for(int i = 0; i < bars.length; i++){
 			paintBar(i, graphics, false);
 		}
 		
 		// draw reflections
-		graphics.setPaint(gradient);
+		graphics.setPaint(new GradientPaint(0, Math.round(HORIZON*getHeight()), alphaColor(getForeground(), 0.25f), 0, Math.round(HORIZON*getHeight()*1.5f), alphaColor(getForeground(), 0f)));
 		for(int i = 0; i < bars.length; i++){
 			paintBar(i, graphics, true);
 		}
@@ -66,16 +110,34 @@ public class BackgroundPanel extends JPanel {
 	}
 	
 	/**
+	 * Creates a new Color with an alpha value
+	 * @param color The color to use
+	 * @param alpha The alpha value the new color should have
+	 * @return A new color with the specified alpha value
+	 */
+	private Color alphaColor(Color color, float alpha){
+		return new Color(color.getRed(),color.getGreen(),color.getBlue(),Math.round(255*alpha));
+	}
+	
+	/**
+	 * Paints a subtle pulsing beat indicator
+	 * @param graphics The graphics object to paint on
+	 */
+	private void paintBeatIndicator(Graphics2D graphics){
+		graphics.fillRect(0,0, getWidth(), Math.round(HORIZON*getHeight()));
+	}
+	
+	/**
 	 * Paints a bar or the reflection of a bar
 	 * @param i The bar's index
-	 * @param graphics THe graphics object to paint on
+	 * @param graphics The graphics object to paint on
 	 * @param reflection If true, the bar is drawn as a reflection
 	 */
 	private void paintBar(int i, Graphics2D graphics, boolean reflection){
 		graphics.fillRect(
-				/*X*/ Math.round(i * (getWidth() / (float) bars.length)),
-				/*Y*/ Math.round(getHeight() * HORIZON - ((reflection) ? 0 : getHeight() * HORIZON * bars[(i + pos) % bars.length] )), 
-				/*W*/ Math.round(getWidth() / bars.length / 2), 
+				/*X*/ (int) Math.ceil((i*getWidth() / (float) bars.length)),
+				/*Y*/ (int) Math.floor(getHeight() * HORIZON - ((reflection) ? 0 : Math.floor(getHeight() * HORIZON * bars[(i + pos) % bars.length] ))), 
+				/*W*/ (int) Math.ceil(getWidth() / (float) bars.length / 3), 
 				/*H*/ (int) Math.ceil(getHeight() * HORIZON * bars[(i + pos) % bars.length] ));
 	}
 	

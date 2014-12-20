@@ -247,6 +247,14 @@ public class AudioCore {
 	}
 	
 	/**
+	 * Resturns the volume of the current audio output
+	 * @return The volume
+	 */
+	public float getOutputLevel(){
+		return audioOutput.mix.level();
+	}
+	
+	/**
 	 * Inform all BeatListeners, that a beat happened
 	 */
 	private void notifyBeatListenersBeat(){

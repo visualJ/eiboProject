@@ -14,6 +14,24 @@ public class BackgroundPanel extends JPanel {
 	private static final float HORIZON = 0.4f;
 
 	private float[] bars = new float[NUMBER_OF_BARS];
+	private int barsOffset = 0;
+	private Thread barOffsetThread;
+	private Runnable barOffsetAnimation = new Runnable(){
+		@Override
+		public void run() {
+			for(int i=24;i>=0;i--){
+				barsOffset = Math.round(i/24f*getWidth() / (float) bars.length);
+				repaint();
+				try {
+					Thread.sleep(2);
+				} catch (InterruptedException e) {
+					Thread.currentThread().interrupt();
+					return;
+				}
+			}
+			barsOffset = 0;
+		}
+	};
 	private int pos = 0;
 	private float beatIndicatorAlpha = 0;
 	private int bpm = 60;
@@ -66,8 +84,9 @@ public class BackgroundPanel extends JPanel {
 		// Set the new value on the right end
 		bars[(pos+bars.length-1)%bars.length] = value; 
 		
-		// repaint the panel
-		repaint(); 
+		if(barOffsetThread != null) barOffsetThread.interrupt();
+		barOffsetThread = new Thread(barOffsetAnimation);
+		barOffsetThread.start();
 	}
 	
 	/**
@@ -135,7 +154,7 @@ public class BackgroundPanel extends JPanel {
 	 * @param reflection If true, the bar is drawn as a reflection
 	 */
 	private void paintBar(int i, Graphics2D graphics, boolean reflection){
-		int x = (int) Math.ceil((i*getWidth() / (float) bars.length));
+		int x = (int) (Math.ceil((i*getWidth() / (float) bars.length))+barsOffset);
 		int y = (int) (Math.floor(getHeight() * HORIZON));
 		int width = (int) Math.ceil(getWidth() / (float) bars.length / 3);
 		int height = (int) Math.floor(getHeight() * HORIZON * bars[(i + pos) % bars.length] ) * (reflection?1:-1);

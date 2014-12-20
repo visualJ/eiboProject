@@ -3,6 +3,7 @@ package presentation;
 import javax.swing.JFrame;
 
 import repository.BeatListener;
+import repository.SoundPack;
 import services.AudioCore;
 import services.SoundPackManager;
 
@@ -12,6 +13,18 @@ public class UserInterface extends JFrame {
 	private AudioCore audioCore;
 	private SoundPackManager soundpackManager;
 	private BackgroundPanel background = new BackgroundPanel();
+	private Thread backgroundUpdate = new Thread(){
+		@Override
+		public void run() {
+			while(true){
+				background.update(audioCore.getOutputLevel());
+				try {
+					Thread.sleep(50);
+				} catch (InterruptedException e) {
+				}
+			}
+		}
+	};
 
 	public UserInterface(AudioCore audioCore, SoundPackManager soundpackManager) {
 		this.audioCore = audioCore;
@@ -39,8 +52,11 @@ public class UserInterface extends JFrame {
 			}
 		});
 		
-		// Set die bpm right
+		// Set the bpm right
 		background.setBpm(audioCore.getBpm());
+		
+		// Start updating the background
+		backgroundUpdate.start();
 	}
 	
 }

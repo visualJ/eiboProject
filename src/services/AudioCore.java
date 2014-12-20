@@ -2,7 +2,9 @@ package services;
 
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import repository.AudioFx;
@@ -27,6 +29,27 @@ public class AudioCore {
 	private AudioSampleRecorder inputRecorder;
 	private AudioSampleRecorder outputRecorder;
 	private Map<SoundSample, FilePlayer> sounds;
+	private List<SoundSample> sheduledSounds = new ArrayList<SoundSample>();
+	private int bpm = 60;
+	private Thread beatThread;
+	private Runnable beatClock = new Runnable(){
+		@Override
+		public void run() {
+			while(!Thread.currentThread().isInterrupted()){
+				
+				// Play all sounds that are sheduled for the next beat
+				playSheduledSounds();
+				
+				try {
+					// Sleep, so that this thread is active once per beat
+					Thread.sleep(60000/bpm);
+				} catch (InterruptedException e) {
+					Thread.currentThread().interrupt();
+					e.printStackTrace();
+				}
+			}
+		}
+	};
 	
 	public void init(){
 		// Prepare the minim player
@@ -53,6 +76,10 @@ public class AudioCore {
 		// Prepare the sample recorders
 		outputRecorder = new AudioSampleRecorder(audioOutput);
 		inputRecorder = new AudioSampleRecorder(audioInput);
+		
+		// Start the beat tread
+		beatThread = new Thread(beatClock);
+		beatThread.start();
 	}
 	
 	/**
@@ -149,6 +176,17 @@ public class AudioCore {
 	}
 	
 	/**
+	 * Shedules a {@link SoundSample} to be played on the next beat.
+	 * A SoundSample can only be sheduled once per beat.
+	 * @param soundSample The {@link SoundSample} to be sheduled
+	 */
+	public void playSampleOnNextBeat(SoundSample soundSample){
+		if(!sheduledSounds.contains(soundSample)){
+			sheduledSounds.add(soundSample);
+		}
+	}
+	
+	/**
 	 * Starts recording the sound output. A new soundfile is created.
 	 * @param fileName The name of the sound file to record to.
 	 */
@@ -205,6 +243,20 @@ public class AudioCore {
 		player.patch(audioMixer);
 		
 		return player;
+	}
+	
+	/**
+	 * Plays all sheduled sounds and clears the list
+	 */
+	private void playSheduledSounds(){
+		
+		// Play all sheduled sounds
+		for(SoundSample sample:sheduledSounds){
+			playSample(sample);
+		}
+		
+		// Clear the seduled sounds list
+		sheduledSounds.clear();
 	}
 	
 	////////////////////////////////////////// Memberklassen \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
@@ -286,5 +338,13 @@ public class AudioCore {
 			return new FileInputStream(fileName);
 		} catch (Exception ex) {}
 		return null;
+	}
+
+	public int getBpm() {
+		return bpm;
+	}
+
+	public void setBpm(int bpm) {
+		this.bpm = bpm;
 	}
 }

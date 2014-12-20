@@ -16,17 +16,18 @@ public class BackgroundPanel extends JPanel {
 	private float[] bars = new float[NUMBER_OF_BARS];
 	private int pos = 0;
 	private float beatIndicatorAlpha = 0;
-	private int bpm = 120;
+	private int bpm = 60;
 	private Thread beatIndicatorThread;
 	private Runnable beatIndicatorAnimation = new Runnable(){
 		@Override
 		public void run() {
 			// Slowly decrease the alpha value over time
-			for(int i = 9;i>=0;i--){
-				beatIndicatorAlpha = 0.4f * i / 9;
+			int framesPerBeat = 1500/bpm; // 25fps * 60bpm
+			for(int i = framesPerBeat-1;i>=0;i--){
+				beatIndicatorAlpha = 0.4f * i / (framesPerBeat-1);
 				repaint();
 				try {
-					Thread.sleep(6000/bpm);
+					Thread.sleep(60000/(framesPerBeat)/bpm);
 				} catch (InterruptedException e) {
 					Thread.currentThread().interrupt();
 				}

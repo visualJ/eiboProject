@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import repository.AudioFx;
+import repository.BeatListener;
 import repository.KeyMapping;
 import repository.SoundPack;
 import repository.SoundSample;
@@ -31,11 +32,15 @@ public class AudioCore {
 	private Map<SoundSample, FilePlayer> sounds;
 	private List<SoundSample> sheduledSounds = new ArrayList<SoundSample>();
 	private int bpm = 60;
+	private List<BeatListener> beatListeners = new ArrayList<BeatListener>();
 	private Thread beatThread;
 	private Runnable beatClock = new Runnable(){
 		@Override
 		public void run() {
 			while(!Thread.currentThread().isInterrupted()){
+				
+				// Tell all BeatListeners that a beat happened
+				notifyBeatListenersBeat();
 				
 				// Play all sounds that are sheduled for the next beat
 				playSheduledSounds();
@@ -226,6 +231,40 @@ public class AudioCore {
 	}
 	
 	/**
+	 * Adds a {@link BeatListener} to the AudioCore
+	 * @param listener The listener to inform on every beat
+	 */
+	public void addBeatListener(BeatListener listener){
+		beatListeners.add(listener);
+	}
+	
+	/**
+	 * Removes a {@link BeatListener} from the AudioCore
+	 * @param listener The listener to remove
+	 */
+	public void removeBeatListener(BeatListener listener){
+		beatListeners.remove(listener);
+	}
+	
+	/**
+	 * Inform all BeatListeners, that a beat happened
+	 */
+	private void notifyBeatListenersBeat(){
+		for(BeatListener listener:beatListeners){
+			listener.beat();
+		}
+	}
+	
+	/**
+	 * Inform all BeatListeners, that the bpm changed
+	 */
+	private void notifyBeatListenersBpmChanged(){
+		for(BeatListener listener:beatListeners){
+			listener.bpmChanged(bpm);
+		}
+	}
+	
+	/**
 	 * Creates a {@link FilePlayer} from a {@link SoundSample} and prepares
 	 * it to be played by attaching it to the audioMixer
 	 * @param soundSample The sound sample to create a file player from
@@ -346,5 +385,6 @@ public class AudioCore {
 
 	public void setBpm(int bpm) {
 		this.bpm = bpm;
+		notifyBeatListenersBpmChanged();
 	}
 }

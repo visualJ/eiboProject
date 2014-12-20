@@ -3,6 +3,7 @@ package services;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FilenameFilter;
 import java.io.IOException;
 
 import repository.ActivationMode;
@@ -19,6 +20,7 @@ import repository.SoundSample;
  */
 public class SoundPackManager {
 
+	private static final String SOUNDPACK_FILE_EXTENTION = ".pck";
 	private SoundpackFileParser parser = new SoundpackFileParser();
 	
 	public void init(){
@@ -63,6 +65,39 @@ public class SoundPackManager {
 			throw new SoundPackLoadingFailedException(soundPackFolder);
 		}
 		return soundpack;
+	}
+	
+	/**
+	 * Loads and returns all {@link SoundPack}s in the given directory
+	 * @param dir The directory to load the soundpacks from
+	 * @return An array of {@link SoundPack}s
+	 */
+	public SoundPack[] getSoundpacksInDirectory(String dir){
+		File directory = new File(dir);
+		SoundPack[] soundpacks;
+		if(directory.isDirectory()){
+			
+			// Get all the soundpack file names
+			String[] spNames = directory.list(new FilenameFilter() {
+				@Override
+				public boolean accept(File dir, String name) {
+					return name.endsWith(SOUNDPACK_FILE_EXTENTION);
+				}
+			});
+			soundpacks = new SoundPack[spNames.length];
+			
+			// Load every soundpack (this only loads information, 
+			// not the actual heavy weight data, like sound or images)
+			for(int i = 0; i < spNames.length; i++){
+				try {
+					soundpacks[i] = loadSoundPack(spNames[i]);
+				} catch (SoundPackLoadingFailedException e) {
+					e.printStackTrace();
+				}
+			}
+			return soundpacks;
+		}
+		return new SoundPack[0];
 	}
 	
 	///////////////////////////////// Integrated File Parser \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\

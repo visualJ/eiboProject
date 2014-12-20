@@ -124,7 +124,7 @@ public class BackgroundPanel extends JPanel {
 	 * @param graphics The graphics object to paint on
 	 */
 	private void paintBeatIndicator(Graphics2D graphics){
-		graphics.fillRect(0,0, getWidth(), Math.round(HORIZON*getHeight()));
+		graphics.fillRect(0,0, getWidth(), (int) Math.floor(HORIZON*getHeight()));
 	}
 	
 	/**
@@ -134,11 +134,11 @@ public class BackgroundPanel extends JPanel {
 	 * @param reflection If true, the bar is drawn as a reflection
 	 */
 	private void paintBar(int i, Graphics2D graphics, boolean reflection){
-		graphics.fillRect(
-				/*X*/ (int) Math.ceil((i*getWidth() / (float) bars.length)),
-				/*Y*/ (int) Math.floor(getHeight() * HORIZON - ((reflection) ? 0 : Math.floor(getHeight() * HORIZON * bars[(i + pos) % bars.length] ))), 
-				/*W*/ (int) Math.ceil(getWidth() / (float) bars.length / 3), 
-				/*H*/ (int) Math.ceil(getHeight() * HORIZON * bars[(i + pos) % bars.length] ));
+		int x = (int) Math.ceil((i*getWidth() / (float) bars.length));
+		int y = (int) (Math.floor(getHeight() * HORIZON));
+		int width = (int) Math.ceil(getWidth() / (float) bars.length / 3);
+		int height = (int) Math.floor(getHeight() * HORIZON * bars[(i + pos) % bars.length] ) * (reflection?1:-1);
+		graphics.fillRect(x, y, width, height);
 	}
 	
 	

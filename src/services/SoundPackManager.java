@@ -52,6 +52,10 @@ public class SoundPackManager {
 				soundpack.setImageFile(imageFile);
 			}
 			@Override
+			public void readBpm(int bpm) {
+				soundpack.setBpm(bpm);
+			}
+			@Override
 			public void readKeyMapping(int keyCode, ActivationMode activationMode, String soundFile, String imageFile) {
 				if(new File(_soundPackFolder+File.separator+soundFile).exists()){
 					// Add keymapping, if the actual sound file exists
@@ -112,6 +116,7 @@ public class SoundPackManager {
 		public void readName(String name);
 		public void readCreator(String creator);
 		public void readImage(String imageFile);
+		public void readBpm(int bpm);
 		public void readKeyMapping(int keyCode, ActivationMode activationMode, String soundFile, String imageFile);
 	}
 	
@@ -141,6 +146,14 @@ public class SoundPackManager {
 				case "I ":
 					// read an image
 					handler.readImage(line.substring(2).trim());
+					break;
+				case "B ":
+					// read the bpm
+					try {
+						handler.readBpm(Integer.parseInt(line.substring(2).trim()));
+					} catch (NumberFormatException e) {
+						e.printStackTrace();
+					}
 					break;
 				case "K ":
 					// read a keymapping

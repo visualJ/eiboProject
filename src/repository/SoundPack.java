@@ -11,9 +11,10 @@ import java.util.List;
  */
 public class SoundPack {
 
-	private String packName;
-	private String creatorName;
-	private String imageFile;
+	private String packName = "";
+	private String creatorName = "";
+	private String imageFile = "";
+	private int bpm = 60;
 	
 	private List <KeyMapping> keyMappings = new ArrayList<KeyMapping>();
 
@@ -53,6 +54,14 @@ public class SoundPack {
 		keyMappings.add(keyMapping);
 	}
 	
+	public int getBpm() {
+		return bpm;
+	}
+
+	public void setBpm(int bpm) {
+		this.bpm = bpm;
+	}
+
 	public SoundPack(){
 		
 	}

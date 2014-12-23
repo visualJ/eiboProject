@@ -47,7 +47,7 @@ public class AudioCore {
 				
 				try {
 					// Sleep, so that this thread is active once per beat
-					Thread.sleep(60000/bpm);
+					Thread.sleep(Math.round(60000/bpm));
 				} catch (InterruptedException e) {
 					Thread.currentThread().interrupt();
 					e.printStackTrace();

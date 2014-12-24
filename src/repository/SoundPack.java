@@ -15,7 +15,6 @@ public class SoundPack {
 	private String creatorName = "";
 	private String imageFile = "";
 	private int bpm = 60;
-	
 	private List <KeyMapping> keyMappings = new ArrayList<KeyMapping>();
 
 	public String getImageFile() {

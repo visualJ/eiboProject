@@ -1,6 +1,7 @@
 package repository;
 
 import ddf.minim.AudioOutput;
+import ddf.minim.ugens.Bypass;
 import ddf.minim.ugens.Delay;
 import ddf.minim.ugens.MoogFilter;
 import ddf.minim.ugens.Summer;
@@ -15,16 +16,22 @@ public class AudioFx extends Summer{
 	
 	private AudioOutput audioOutput;
 	private Delay delayFilter = new Delay();
-	private MoogFilter lowpassFilter = new MoogFilter(1000, 0.1f, MoogFilter.Type.LP);
-	private MoogFilter highpassFilter = new MoogFilter(2200, 0.1f, MoogFilter.Type.HP);
+	private Bypass<MoogFilter> lowpassFilter = new Bypass<MoogFilter>(new MoogFilter(1000, 0.1f, MoogFilter.Type.LP));
+	private Bypass<MoogFilter> highpassFilter = new Bypass<MoogFilter>(new MoogFilter(2200, 0.1f, MoogFilter.Type.HP));
 	private float delTime;
-	private boolean lowpass = false, highpass = false;
 	
 	public AudioFx(AudioOutput audioOutput){
 		this.audioOutput = audioOutput;
 		delTime = 1/audioOutput.sampleRate();
 		delayFilter.setDelTime(delTime);
-		patch(delayFilter).patch(audioOutput);
+		
+		// DEactivate Lowpass und highpassfilter (activates bypass for those filters)
+		lowpassFilter.activate();
+		highpassFilter.activate();
+		
+		// Patch everything together, so the audio will be passed
+		// thru the filter chain
+		patch(delayFilter).patch(lowpassFilter).patch(highpassFilter).patch(audioOutput);
 	}
 	
 	/**
@@ -50,7 +57,7 @@ public class AudioFx extends Summer{
 	 * @return True, if the lowpass filter ist enabled
 	 */
 	public boolean isLowPass(){
-		return lowpass;
+		return !lowpassFilter.isActive();
 	}
 	
 	/**
@@ -62,30 +69,10 @@ public class AudioFx extends Summer{
 	public void setLowPass(boolean on){
 		if(on){
 			// Activate the low pass filter
-			if(!lowpass){
-				// Only do something, if not already enabled
-				lowpass = true;
-				if(highpass){
-					// Disable the highpass filter first
-					highpass = false;
-					highpassFilter.unpatch(audioOutput);
-					delayFilter.unpatch(highpassFilter);
-					// Enable the lowpass filter now
-					delayFilter.patch(lowpassFilter).patch(audioOutput);
-				}else{
-					// Just enable the lowpass filter
-					delayFilter.unpatch(audioOutput);
-					delayFilter.patch(lowpassFilter).patch(audioOutput);
-				}
-			}
+			lowpassFilter.deactivate();
+			highpassFilter.activate();
 		}else{
-			if(lowpass){
-				// Filter ausschalten, wenn eingeschaltet
-				lowpass = false;
-				lowpassFilter.unpatch(audioOutput);
-				delayFilter.unpatch(lowpassFilter);
-				delayFilter.patch(audioOutput);
-			}
+			lowpassFilter.activate();
 		}
 	}
 	
@@ -98,30 +85,10 @@ public class AudioFx extends Summer{
 	public void setHighPass(boolean on){
 		if(on){
 			// Activate the high pass filter
-			if(!highpass){
-				// Only do something, if not already enabled
-				highpass = true;
-				if(lowpass){
-					// Disable the lowpass filter first
-					lowpass = false;
-					lowpassFilter.unpatch(audioOutput);
-					delayFilter.unpatch(lowpassFilter);
-					// Enable the highpass filter now
-					delayFilter.patch(highpassFilter).patch(audioOutput);
-				}else{
-					// Just enable the highpass filter
-					delayFilter.unpatch(audioOutput);
-					delayFilter.patch(highpassFilter).patch(audioOutput);
-				}
-			}
+			highpassFilter.deactivate();
+			lowpassFilter.activate();
 		}else{
-			if(highpass){
-				// Filter ausschalten, wenn eingeschaltet
-				highpass = false;
-				highpassFilter.unpatch(audioOutput);
-				delayFilter.unpatch(highpassFilter);
-				delayFilter.patch(audioOutput);
-			}
+			highpassFilter.activate();
 		}
 	}
 	
@@ -129,6 +96,6 @@ public class AudioFx extends Summer{
 	 * @return True, if the highpass filter is enabled
 	 */
 	public boolean isHighPass(){
-		return highpass;
+		return !highpassFilter.isActive();
 	}
 }

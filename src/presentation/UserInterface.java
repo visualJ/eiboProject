@@ -3,7 +3,6 @@ package presentation;
 import javax.swing.JFrame;
 
 import repository.BeatListener;
-import repository.SoundPack;
 import services.AudioCore;
 import services.SoundPackManager;
 

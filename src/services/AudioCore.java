@@ -88,37 +88,6 @@ public class AudioCore {
 	}
 	
 	/**
-	 * Loads all Sounds in a pack.
-	 * This has to be called before any sound sample from the pack can be played.
-	 * @param soundPack The sound pack that contains the sound samples
-	 */
-	public void loadSoundPackSamples(SoundPack soundPack){
-		for(KeyMapping keyMapping:soundPack.getKeyMappings()){
-			
-			// Get the sound sample
-			SoundSample soundSample = keyMapping.getSoundSample();
-			
-			// Load the sound and add it to the sound map
-			loadSoundSample(soundSample);
-		}
-	}
-	
-	/**
-	 * Unloads and removes all Sounds in a pack from the list of sounds.
-	 * @param soundPack The sound pack to remove
-	 */
-	public void unloadSoundPackSamples(SoundPack soundPack){
-		for(KeyMapping keyMapping:soundPack.getKeyMappings()){
-			
-			// Get the sound sample
-			SoundSample soundSample = keyMapping.getSoundSample();
-			
-			// Unload and remove the sound sample
-			unloadSoundSample(soundSample);
-		}
-	}
-	
-	/**
 	 * Loads a single SoundSample and makes it available for playback
 	 * @param soundSample
 	 */

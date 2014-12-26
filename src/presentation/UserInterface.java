@@ -14,19 +14,7 @@ public class UserInterface extends JFrame {
 	private AudioCore audioCore;
 	private SoundPackManager soundpackManager;
 	private SoundPack currentSoundPack;
-	private BackgroundPanel background = new BackgroundPanel();
-	private Thread backgroundUpdate = new Thread(){
-		@Override
-		public void run() {
-			while(true){
-				background.update(audioCore.getOutputLevel());
-				try {
-					Thread.sleep(50);
-				} catch (InterruptedException e) {
-				}
-			}
-		}
-	};
+	private BackgroundPanel background;
 
 	public UserInterface(AudioCore audioCore, SoundPackManager soundpackManager) {
 		this.audioCore = audioCore;
@@ -40,25 +28,8 @@ public class UserInterface extends JFrame {
 		setSize(500, 400);
 		setVisible(true);
 		
+		background = new BackgroundPanel(audioCore);
 		add(background);
-		
-		// Add a beat listener, so that the UI can react to beats
-		audioCore.addBeatListener(new BeatListener() {
-			@Override
-			public void beat() {
-				background.beat();
-			}
-			@Override
-			public void bpmChanged(int bpm) {
-				background.setBpm(bpm);
-			}
-		});
-		
-		// Set the bpm right
-		background.setBpm(audioCore.getBpm());
-		
-		// Start updating the background
-		backgroundUpdate.start();
 	}
 	
 	/**

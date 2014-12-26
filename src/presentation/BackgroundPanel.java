@@ -7,29 +7,36 @@ import java.awt.Graphics2D;
 
 import javax.swing.JPanel;
 
+import repository.BeatListener;
+import services.AudioCore;
+
 public class BackgroundPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	private static final int NUMBER_OF_BARS = 100;
 	private static final float HORIZON = 0.4f;
 
+	private AudioCore audioCore;
 	private float[] bars = new float[NUMBER_OF_BARS];
 	private int barsOffset = 0;
 	private Thread barOffsetThread;
 	private Runnable barOffsetAnimation = new Runnable(){
 		@Override
 		public void run() {
-			for(int i=24;i>=0;i--){
-				barsOffset = Math.round(i/24f*getWidth() / (float) bars.length);
-				repaint();
-				try {
-					Thread.sleep(2);
-				} catch (InterruptedException e) {
-					Thread.currentThread().interrupt();
-					return;
+			while(!Thread.interrupted()){
+				update(audioCore.getOutputLevel());
+				for(int i=24;i>=0;i--){
+					barsOffset = Math.round(i/24f*getWidth() / (float) bars.length);
+					repaint();
+					try {
+						Thread.sleep(2);
+					} catch (InterruptedException e) {
+						Thread.currentThread().interrupt();
+						return;
+					}
 				}
+				barsOffset = 0;
 			}
-			barsOffset = 0;
 		}
 	};
 	private int pos = 0;
@@ -57,11 +64,31 @@ public class BackgroundPanel extends JPanel {
 	/**
 	 * A background panel with different visualizers
 	 */
-	public BackgroundPanel(){
+	public BackgroundPanel(AudioCore audioCore){
 		super();
+		this.audioCore = audioCore;
 		setOpaque(false);
 		setBackground(Color.black);
 		setForeground(new Color(170,20,240));
+		
+		// Add a beat listener, so that the UI can react to beats
+		audioCore.addBeatListener(new BeatListener() {
+			@Override
+			public void beat() {
+				showBeat();
+			}
+			@Override
+			public void bpmChanged(int bpm) {
+				setBpm(bpm);
+			}
+		});
+		
+		// Set the bpm right
+		setBpm(audioCore.getBpm());
+		
+		// Start the bars waveform graph animation thing
+		barOffsetThread = new Thread(barOffsetAnimation);
+		barOffsetThread.start();
 	}
 
 	public int getBpm() {
@@ -83,10 +110,6 @@ public class BackgroundPanel extends JPanel {
 		
 		// Set the new value on the right end
 		bars[(pos+bars.length-1)%bars.length] = value; 
-		
-		if(barOffsetThread != null) barOffsetThread.interrupt();
-		barOffsetThread = new Thread(barOffsetAnimation);
-		barOffsetThread.start();
 	}
 	
 	/**
@@ -94,7 +117,7 @@ public class BackgroundPanel extends JPanel {
 	 * This method should be called once every beat at
 	 * the set beats per minute.
 	 */
-	public void beat(){
+	public void showBeat(){
 		// Start or restart the animation
 		if(beatIndicatorThread!=null) beatIndicatorThread.interrupt();
 		beatIndicatorThread = new Thread(beatIndicatorAnimation);

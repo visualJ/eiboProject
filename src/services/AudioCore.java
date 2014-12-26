@@ -9,8 +9,6 @@ import java.util.Map;
 
 import repository.AudioFx;
 import repository.BeatListener;
-import repository.KeyMapping;
-import repository.SoundPack;
 import repository.SoundSample;
 import ddf.minim.AudioInput;
 import ddf.minim.AudioOutput;

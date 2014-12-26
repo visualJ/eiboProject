@@ -29,6 +29,7 @@ public class AudioCore {
 	private AudioSampleRecorder outputRecorder;
 	private Map<SoundSample, FilePlayer> sounds;
 	private List<SoundSample> sheduledSounds = new ArrayList<SoundSample>();
+	private List<SoundSample> loopedSounds = new ArrayList<SoundSample>();
 	private int bpm = 60;
 	private List<BeatListener> beatListeners = new ArrayList<BeatListener>();
 	private Thread beatThread;
@@ -42,6 +43,9 @@ public class AudioCore {
 				
 				// Play all sounds that are sheduled for the next beat
 				playSheduledSounds();
+				
+				// Play all looped sounds
+				playLoopedSounds();
 				
 				try {
 					// Sleep, so that this thread is active once per beat
@@ -124,9 +128,23 @@ public class AudioCore {
 	 * @param soundSample
 	 */
 	public void playSample(SoundSample soundSample){
+		playSample(soundSample, false);
+	}
+
+	/**
+	 * Plays a previously loaded sound sample.
+	 * If it is already playing, this will stop the
+	 * sound and play it from the beginning
+	 * @param soundSample
+	 */
+	public void playSample(SoundSample soundSample, boolean loop){
 		if(sounds.containsKey(soundSample)){
 			sounds.get(soundSample).rewind();
-			sounds.get(soundSample).play();
+			if(loop){
+				sounds.get(soundSample).loop();
+			}else{
+				sounds.get(soundSample).play();
+			}
 		}else{
 			System.out.println("Error: playSample() tried playing sound sample "+soundSample.getFileName()+" when is was not loaded!");
 		}
@@ -156,6 +174,34 @@ public class AudioCore {
 		if(!sheduledSounds.contains(soundSample)){
 			sheduledSounds.add(soundSample);
 		}
+	}
+	
+	/**
+	 * Starts playing a SoundSample in a loop.
+	 * It begins on the next beat and every repetition starts on a beat.
+	 */
+	public void playLoop(SoundSample sample){
+		if(!loopedSounds.contains(sample)){
+			loopedSounds.add(sample);
+		}
+	}
+	
+	/**
+	 * Stops a loop. THe loops still plays until its end.
+	 */
+	public void stopLoop(SoundSample sample){
+		if(loopedSounds.contains(sample)){
+			loopedSounds.remove(sample);
+		}
+	}
+	
+	/**
+	 * Tests, if a sample is currently being played as a loop (not just looped playback!)
+	 * @param sample The sample to test
+	 * @return True, if the sample is being played a a loop currently
+	 */
+	public boolean isLoopPlaying(SoundSample sample){
+		return loopedSounds.contains(sample);
 	}
 	
 	/**
@@ -271,6 +317,14 @@ public class AudioCore {
 		
 		// Clear the seduled sounds list
 		sheduledSounds.clear();
+	}
+	
+	private void playLoopedSounds(){
+		
+		// Play all looped sounds
+		for(SoundSample sample:loopedSounds){
+			playSample(sample);
+		}
 	}
 	
 	////////////////////////////////////////// Memberklassen \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\

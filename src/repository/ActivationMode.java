@@ -13,6 +13,13 @@ public enum ActivationMode {
 	WHILE_TRIGGERED, 
 	
 	/**
+	 * Like WHILE_TRIGGERED, then sound stops when untriggered. 
+	 * But in this mode, this sample is not looped, but instead
+	 * stops when finished playing.
+	 */
+	WHILE_TRIGGERED_ONCE,
+	
+	/**
 	 * Triggering in this mode will start or stop the sound playback.
 	 * The sound loops. And it finishes playing first, when untriggered.
 	 */

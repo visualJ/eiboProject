@@ -49,7 +49,7 @@ public class SoundPackManager {
 			}
 			@Override
 			public void readImage(String imageFile) {
-				soundpack.setImageFile(imageFile);
+				soundpack.setImageFile(_soundPackFolder+File.separator+imageFile);
 			}
 			@Override
 			public void readBpm(int bpm) {
@@ -59,7 +59,7 @@ public class SoundPackManager {
 			public void readKeyMapping(int keyCode, ActivationMode activationMode, String soundFile, String imageFile) {
 				if(new File(_soundPackFolder+File.separator+soundFile).exists()){
 					// Add keymapping, if the actual sound file exists
-					soundpack.addKeyMapping(new KeyMapping(keyCode, activationMode, new SoundSample(_soundPackFolder+File.separator+soundFile), imageFile));
+					soundpack.addKeyMapping(new KeyMapping(keyCode, activationMode, new SoundSample(_soundPackFolder+File.separator+soundFile), _soundPackFolder+File.separator+imageFile));
 				}
 			}
 		};

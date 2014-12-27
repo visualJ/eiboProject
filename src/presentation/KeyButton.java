@@ -2,8 +2,11 @@ package presentation;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.GradientPaint;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.awt.RenderingHints;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -12,6 +15,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.plaf.basic.BasicButtonUI;
+
+import ddf.minim.ugens.GranulateRandom;
 
 import repository.ActivationModeBehavior;
 import repository.KeyMapping;
@@ -28,6 +33,7 @@ public class KeyButton extends JButton {
 		setText(keyLabel);
 		setPreferredSize(new Dimension(60, 60));
 		setBorderPainted(false);
+		setOpaque(false);
 		
 		setUI(new BasicButtonUI() {
 			@Override
@@ -39,18 +45,21 @@ public class KeyButton extends JButton {
 			}
 			
 			@Override
-			public void paint(Graphics g, JComponent c) {
+			public void paint(Graphics g1, JComponent c) {
+				Graphics2D g = (Graphics2D)g1;
+				g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+				g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 				AbstractButton button =  (AbstractButton)c;
 				if(keyMapping != null){
 					if(button.getModel().isPressed()){
-						g.setColor(Color.green);
+						g.setPaint(new GradientPaint(0, 0, new Color(120,85,10), c.getWidth(), c.getHeight(), Color.black));
 					}else if(button.getModel().isRollover()){
-						g.setColor(new Color(0,100,0));
+						g.setPaint(new GradientPaint(0, 0, new Color(240,170,20), c.getWidth(), c.getHeight(), Color.black));
 					}else{
-						g.setColor(Color.black);
+						g.setPaint(new GradientPaint(0, 0, new Color(170,20,240), c.getWidth(), c.getHeight(), Color.black));
 					}
 				}else{
-					g.setColor(Color.darkGray);
+					g.setColor(UserInterface.alphaColor(Color.darkGray, 0.2f));
 				}
 				g.fillRect(0, 0, button.getWidth(), button.getHeight());
 				paintText(g, button, getBounds(), getText());
@@ -61,15 +70,14 @@ public class KeyButton extends JButton {
 			protected void paintIcon(Graphics g, JComponent c,
 					Rectangle iconRect) {
 				if(keyIcon != null){
-					g.drawImage(keyIcon.getImage(), 0, 0, getWidth(), getHeight(), c);
+					AbstractButton button =  (AbstractButton)c;
+					if(button.getModel().isPressed()){
+						g.drawImage(keyIcon.getImage(), 2, 2, getWidth()-4, getHeight()-4, c);
+					}else{
+						g.drawImage(keyIcon.getImage(), 0, 0, getWidth(), getHeight(), c);
+					}
 				}
 				
-			}
-			
-			@Override
-			protected void paintButtonPressed(Graphics g, AbstractButton b) {
-				g.setColor(Color.green);
-				g.fillRect(0, 0, b.getWidth(), b.getHeight());
 			}
 		});
 		

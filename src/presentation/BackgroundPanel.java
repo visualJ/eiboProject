@@ -133,7 +133,7 @@ public class BackgroundPanel extends JPanel {
 		graphics.fillRect(0, 0, getWidth(), getHeight());
 		
 		// draw beat indicator
-		graphics.setPaint(new GradientPaint(0, HORIZON*getHeight(), alphaColor(getForeground(), beatIndicatorAlpha), 0, 0, getBackground()));
+		graphics.setPaint(new GradientPaint(0, HORIZON*getHeight(), UserInterface.alphaColor(getForeground(), beatIndicatorAlpha), 0, 0, getBackground()));
 		paintBeatIndicator(graphics);
 		
 		// draw bars
@@ -143,23 +143,13 @@ public class BackgroundPanel extends JPanel {
 		}
 		
 		// draw reflections
-		graphics.setPaint(new GradientPaint(0, Math.round(HORIZON*getHeight()), alphaColor(getForeground(), 0.25f), 0, Math.round(HORIZON*getHeight()*1.5f), alphaColor(getForeground(), 0f)));
+		graphics.setPaint(new GradientPaint(0, Math.round(HORIZON*getHeight()), UserInterface.alphaColor(getForeground(), 0.25f), 0, Math.round(HORIZON*getHeight()*1.5f), UserInterface.alphaColor(getForeground(), 0f)));
 		for(int i = 0; i < bars.length; i++){
 			paintBar(i, graphics, true);
 		}
 		
 		// draw child elements
 		super.paint(g);
-	}
-	
-	/**
-	 * Creates a new Color with an alpha value
-	 * @param color The color to use
-	 * @param alpha The alpha value the new color should have
-	 * @return A new color with the specified alpha value
-	 */
-	private Color alphaColor(Color color, float alpha){
-		return new Color(color.getRed(),color.getGreen(),color.getBlue(),Math.round(255*alpha));
 	}
 	
 	/**

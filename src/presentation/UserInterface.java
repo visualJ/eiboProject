@@ -1,5 +1,7 @@
 package presentation;
 
+import java.awt.Color;
+
 import javax.swing.JFrame;
 
 import repository.ActivationModeBehavior;
@@ -37,6 +39,8 @@ public class UserInterface extends JFrame {
 		
 		keys = new KeyPanel();
 		background.add(keys);
+		
+		setSoundPack(soundpackManager.getSoundpacksInDirectory("./")[0]);
 	}
 	
 	/**
@@ -65,6 +69,16 @@ public class UserInterface extends JFrame {
 		
 		// also, set the key panels soundpack
 		keys.setSoundPack(sp);
+	}
+	
+	/**
+	 * Creates a new Color with an alpha value
+	 * @param color The color to use
+	 * @param alpha The alpha value the new color should have
+	 * @return A new color with the specified alpha value
+	 */
+	public static Color alphaColor(Color color, float alpha){
+		return new Color(color.getRed(),color.getGreen(),color.getBlue(),Math.round(255*alpha));
 	}
 	
 }

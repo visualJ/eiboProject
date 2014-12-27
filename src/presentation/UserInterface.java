@@ -2,7 +2,7 @@ package presentation;
 
 import javax.swing.JFrame;
 
-import repository.BeatListener;
+import repository.ActivationModeBehavior;
 import repository.KeyMapping;
 import repository.SoundPack;
 import services.AudioCore;
@@ -27,6 +27,9 @@ public class UserInterface extends JFrame {
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setSize(500, 400);
 		setVisible(true);
+		
+		// Initialize the ActivationModeBehavior
+		ActivationModeBehavior.init(audioCore);
 		
 		background = new BackgroundPanel(audioCore);
 		add(background);

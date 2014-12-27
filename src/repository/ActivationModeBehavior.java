@@ -20,6 +20,10 @@ public class ActivationModeBehavior {
 		return instance;
 	}
 	
+	/**
+	 * Initializes the Behavior with an AudioCore
+	 * @param audioCore The AudioCore to use
+	 */
 	public static void init(AudioCore audioCore){
 		instance = new ActivationModeBehavior(audioCore);
 	}

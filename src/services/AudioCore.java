@@ -220,7 +220,15 @@ public class AudioCore {
 	}
 	
 	/**
-	 * Starts recording the mic. A new soundfile is created.
+	 * Returns, whether the performance is being recorded currently
+	 * @return True, if a recording is running
+	 */
+	public boolean isPerformanceRecording(){
+		return outputRecorder.isRecording();
+	}
+	
+	/**
+	 * Starts recording the mic. A new sound file is created.
 	 * @param fileName The name of the sound file to record to.
 	 */
 	public void startRecordingMic(String fileName){
@@ -232,6 +240,14 @@ public class AudioCore {
 	 */
 	public SoundSample endRecordingMic(){
 		return inputRecorder.endRecord();
+	}
+	
+	/**
+	 * Returns, whether the microphone is being recorded currently
+	 * @return True, if a recording is running
+	 */
+	public boolean isMicRecording(){
+		return inputRecorder.isRecording();
 	}
 	
 	/**

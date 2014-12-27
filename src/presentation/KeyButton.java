@@ -15,7 +15,6 @@ import javax.swing.plaf.basic.BasicButtonUI;
 
 import repository.ActivationModeBehavior;
 import repository.KeyMapping;
-import services.AudioCore;
 
 public class KeyButton extends JButton {
 

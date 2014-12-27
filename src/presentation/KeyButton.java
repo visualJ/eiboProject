@@ -22,12 +22,10 @@ public class KeyButton extends JButton {
 	private static final long serialVersionUID = 1L;
 	private KeyMapping keyMapping;
 	private ImageIcon keyIcon;
-	private AudioCore audioCore;
 	private ActivationModeBehavior AMBehavior;
 	
-	public KeyButton(String keyLabel, AudioCore audioCore){
-		this.audioCore = audioCore;
-		this.AMBehavior = ActivationModeBehavior.getInstance(audioCore);
+	public KeyButton(String keyLabel){
+		this.AMBehavior = ActivationModeBehavior.getInstance();
 		setText(keyLabel);
 		setPreferredSize(new Dimension(60, 60));
 		setBorderPainted(false);

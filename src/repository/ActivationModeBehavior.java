@@ -4,7 +4,7 @@ import services.AudioCore;
 
 public class ActivationModeBehavior {
 
-	private static ActivationModeBehavior instance;
+	private static ActivationModeBehavior instance = null;
 	
 	private AudioCore audioCore;
 	
@@ -13,11 +13,15 @@ public class ActivationModeBehavior {
 	 * @param audioCore The audio core
 	 * @return The instance
 	 */
-	public static ActivationModeBehavior getInstance(AudioCore audioCore){
+	public static ActivationModeBehavior getInstance(){
 		if(instance == null){
-			instance = new ActivationModeBehavior(audioCore);
+			throw new NotInitializedException("ActivationModeBehavior");
 		}
 		return instance;
+	}
+	
+	public static void init(AudioCore audioCore){
+		instance = new ActivationModeBehavior(audioCore);
 	}
 	
 	/**

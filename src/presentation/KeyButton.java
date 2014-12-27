@@ -16,8 +16,6 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.plaf.basic.BasicButtonUI;
 
-import ddf.minim.ugens.GranulateRandom;
-
 import repository.ActivationModeBehavior;
 import repository.KeyMapping;
 
@@ -61,7 +59,7 @@ public class KeyButton extends JButton {
 				}else{
 					g.setColor(UserInterface.alphaColor(Color.darkGray, 0.2f));
 				}
-				g.fillRect(0, 0, button.getWidth(), button.getHeight());
+				g.fillRoundRect(0, 0, button.getWidth(), button.getHeight(),10,10);
 				paintText(g, button, getBounds(), getText());
 				paintIcon(g, c, getBounds());
 			}

@@ -39,8 +39,6 @@ public class UserInterface extends JFrame {
 		
 		keys = new KeyPanel();
 		background.add(keys);
-		
-		setSoundPack(soundpackManager.getSoundpacksInDirectory("./")[0]);
 	}
 	
 	/**

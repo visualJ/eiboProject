@@ -34,6 +34,7 @@ public class ActivationModeBehavior {
 	 * @param sample The sample to play
 	 */
 	public void trigger(ActivationMode mode, SoundSample sample){
+		if(sample == null) return;
 		switch (mode) {
 		case LOOP:
 			if(audioCore.isLoopPlaying(sample)){
@@ -61,6 +62,7 @@ public class ActivationModeBehavior {
 	 * @param sample The sample to top
 	 */
 	public void untrigger(ActivationMode mode, SoundSample sample){
+		if(sample == null) return;
 		switch (mode) {
 		case WHILE_TRIGGERED:
 		case WHILE_TRIGGERED_ONCE:

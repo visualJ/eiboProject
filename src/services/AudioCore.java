@@ -339,7 +339,9 @@ public class AudioCore {
 		
 		// Play all looped sounds
 		for(SoundSample sample:loopedSounds){
-			playSample(sample);
+			if(!sounds.get(sample).isPlaying()){
+				playSample(sample);
+			}
 		}
 	}
 	

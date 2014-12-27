@@ -15,6 +15,7 @@ public class UserInterface extends JFrame {
 	private SoundPackManager soundpackManager;
 	private SoundPack currentSoundPack;
 	private BackgroundPanel background;
+	private KeyPanel keys;
 
 	public UserInterface(AudioCore audioCore, SoundPackManager soundpackManager) {
 		this.audioCore = audioCore;
@@ -33,6 +34,9 @@ public class UserInterface extends JFrame {
 		
 		background = new BackgroundPanel(audioCore);
 		add(background);
+		
+		keys = new KeyPanel();
+		background.add(keys);
 	}
 	
 	/**
@@ -58,6 +62,9 @@ public class UserInterface extends JFrame {
 		
 		// set as current sound pack
 		currentSoundPack = sp;
+		
+		// also, set the key panels soundpack
+		keys.setSoundPack(sp);
 	}
 	
 }

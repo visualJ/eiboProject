@@ -41,12 +41,16 @@ public class KeyButton extends JButton {
 			@Override
 			public void paint(Graphics g, JComponent c) {
 				AbstractButton button =  (AbstractButton)c;
-				if(button.getModel().isPressed()){
-					g.setColor(Color.green);
-				}else if(button.getModel().isRollover()){
-					g.setColor(new Color(0,100,0));
+				if(keyMapping != null){
+					if(button.getModel().isPressed()){
+						g.setColor(Color.green);
+					}else if(button.getModel().isRollover()){
+						g.setColor(new Color(0,100,0));
+					}else{
+						g.setColor(Color.black);
+					}
 				}else{
-					g.setColor(Color.black);
+					g.setColor(Color.darkGray);
 				}
 				g.fillRect(0, 0, button.getWidth(), button.getHeight());
 				paintText(g, button, getBounds(), getText());
@@ -72,11 +76,15 @@ public class KeyButton extends JButton {
 		addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-				AMBehavior.trigger(keyMapping.getActivationMode(), keyMapping.getSoundSample());
+				if(keyMapping != null){
+					AMBehavior.trigger(keyMapping.getActivationMode(), keyMapping.getSoundSample());
+				}
 			}
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				AMBehavior.untrigger(keyMapping.getActivationMode(), keyMapping.getSoundSample());
+				if(keyMapping != null){
+					AMBehavior.untrigger(keyMapping.getActivationMode(), keyMapping.getSoundSample());
+				}
 			}
 		});
 	}
@@ -87,7 +95,9 @@ public class KeyButton extends JButton {
 
 	public void setKeyMapping(KeyMapping keyMapping) {
 		this.keyMapping = keyMapping;
-		keyIcon = new ImageIcon(keyMapping.getImageFile());
+		if(keyMapping != null){
+			keyIcon = new ImageIcon(keyMapping.getImageFile());
+		}
 	}
 	
 }

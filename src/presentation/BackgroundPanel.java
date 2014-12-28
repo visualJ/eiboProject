@@ -25,11 +25,11 @@ public class BackgroundPanel extends JPanel {
 		public void run() {
 			while(!Thread.interrupted()){
 				update(audioCore.getOutputLevel());
-				for(int i=24;i>=0;i--){
-					barsOffset = Math.round(i/24f*getWidth() / (float) bars.length);
+				for(int i=4;i>=0;i--){
+					barsOffset = Math.round(i/4f*getWidth() / (float) bars.length);
 					repaint();
 					try {
-						Thread.sleep(2);
+						Thread.sleep(10);
 					} catch (InterruptedException e) {
 						Thread.currentThread().interrupt();
 						return;
@@ -57,7 +57,6 @@ public class BackgroundPanel extends JPanel {
 					Thread.currentThread().interrupt();
 				}
 			}
-			repaint();
 		}
 	};
 	

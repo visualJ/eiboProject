@@ -3,10 +3,16 @@ package presentation;
 import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Image;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import repository.ActivationMode;
 import repository.ActivationModeBehavior;
 import repository.KeyMapping;
 import repository.SoundPack;
@@ -16,6 +22,8 @@ import services.SoundPackManager;
 public class UserInterface extends JFrame {
 
 	private static final long serialVersionUID = 1L;
+	private static Map<ActivationMode, Image> ICONS = new HashMap<ActivationMode, Image>();
+	
 	private AudioCore audioCore;
 	private SoundPackManager soundpackManager;
 	private SoundPack currentSoundPack;
@@ -32,6 +40,16 @@ public class UserInterface extends JFrame {
 		setTitle("eiboProject");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setSize(1000, 700);
+		
+		// Load icons
+		try {
+			ICONS.put(ActivationMode.LOOP,ImageIO.read(UserInterface.class.getResourceAsStream("LOOP.png")));
+			ICONS.put(ActivationMode.PLAY_ONCE,ImageIO.read(UserInterface.class.getResourceAsStream("PLAY_ONCE.png")));
+			ICONS.put(ActivationMode.WHILE_TRIGGERED,ImageIO.read(UserInterface.class.getResourceAsStream("WHILE_TRIGGERED.png")));
+			ICONS.put(ActivationMode.WHILE_TRIGGERED_ONCE,ImageIO.read(UserInterface.class.getResourceAsStream("WHILE_TRIGGERED_ONCE.png")));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		
 		// Initialize the ActivationModeBehavior
 		ActivationModeBehavior.init(audioCore);
@@ -60,8 +78,15 @@ public class UserInterface extends JFrame {
 		
 		// Make the frame visible
 		setVisible(true);
-		
-		setSoundPack(soundpackManager.getSoundpacksInDirectory("./")[0]);
+	}
+	
+	/**
+	 * Return the correspoding Image Icon
+	 * @param mode The Activaiton Mode
+	 * @return A Image
+	 */
+	public static Image getActivationModeImage(ActivationMode mode){
+		return ICONS.get(mode);
 	}
 	
 	/**

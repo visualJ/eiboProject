@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.event.MouseAdapter;
@@ -24,6 +25,7 @@ public class KeyButton extends JButton {
 	private static final long serialVersionUID = 1L;
 	private KeyMapping keyMapping;
 	private ImageIcon keyIcon;
+	private Image AMIcon;
 	private ActivationModeBehavior AMBehavior;
 	
 	public KeyButton(String keyLabel){
@@ -56,12 +58,16 @@ public class KeyButton extends JButton {
 					}else{
 						g.setPaint(new GradientPaint(0, 0, new Color(170,20,240), c.getWidth(), c.getHeight(), Color.black));
 					}
+					g.fillRoundRect(0, 0, button.getWidth(), button.getHeight(),10,10);
 				}else{
 					g.setColor(UserInterface.alphaColor(Color.darkGray, 0.2f));
+					g.fillRect(0, 0, button.getWidth(), button.getHeight());
 				}
-				g.fillRoundRect(0, 0, button.getWidth(), button.getHeight(),10,10);
 				paintText(g, button, getBounds(), getText());
 				paintIcon(g, c, getBounds());
+				if(AMIcon!=null){
+					g.drawImage(AMIcon, c.getWidth()-20, 3, 15, 15, c);
+				}
 			}
 
 			@Override
@@ -103,6 +109,9 @@ public class KeyButton extends JButton {
 		this.keyMapping = keyMapping;
 		if(keyMapping != null){
 			keyIcon = new ImageIcon(keyMapping.getImageFile());
+			AMIcon = UserInterface.getActivationModeImage(keyMapping.getActivationMode());
+		}else{
+			AMIcon = null;
 		}
 	}
 	

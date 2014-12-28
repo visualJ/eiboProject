@@ -1,8 +1,11 @@
 package presentation;
 
 import java.awt.Color;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 import repository.ActivationModeBehavior;
 import repository.KeyMapping;
@@ -28,17 +31,37 @@ public class UserInterface extends JFrame {
 		//TODO initialize the window and GUI components
 		setTitle("eiboProject");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		setSize(500, 400);
-		setVisible(true);
+		setSize(1000, 700);
 		
 		// Initialize the ActivationModeBehavior
 		ActivationModeBehavior.init(audioCore);
 		
 		background = new BackgroundPanel(audioCore);
+		background.setLayout(new GridBagLayout());
 		add(background);
 		
 		keys = new KeyPanel();
-		background.add(keys);
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		gbc.anchor = GridBagConstraints.CENTER;
+		gbc.fill = GridBagConstraints.BOTH;
+		gbc.weighty = 1;
+		gbc.weightx = 1;
+		JPanel upperPanel = new JPanel();
+		upperPanel.setOpaque(false);
+		background.add(upperPanel, gbc);
+		gbc.gridx = 0;
+		gbc.gridy = 1;
+		gbc.anchor = GridBagConstraints.CENTER;
+		gbc.fill = GridBagConstraints.NONE;
+		gbc.weighty = 1;
+		background.add(keys, gbc);
+		
+		// Make the frame visible
+		setVisible(true);
+		
+		setSoundPack(soundpackManager.getSoundpacksInDirectory("./")[0]);
 	}
 	
 	/**

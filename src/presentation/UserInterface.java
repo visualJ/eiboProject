@@ -13,9 +13,9 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import repository.ActivationMode;
-import repository.ActivationModeBehavior;
 import repository.KeyMapping;
 import repository.SoundPack;
+import services.ActivationModeBehavior;
 import services.AudioCore;
 import services.SoundPackManager;
 
@@ -35,8 +35,10 @@ public class UserInterface extends JFrame {
 		this.soundpackManager = soundpackManager;
 	}
 
+	/**
+	 * Initializes the user interface and prepares everything for use.
+	 */
 	public void init(){
-		//TODO initialize the window and GUI components
 		setTitle("eiboProject");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setSize(1000, 700);
@@ -58,7 +60,7 @@ public class UserInterface extends JFrame {
 		background.setLayout(new GridBagLayout());
 		add(background);
 		
-		keys = new KeyPanel();
+		keys = new KeyPanel(audioCore);
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.gridx = 0;
 		gbc.gridy = 0;
@@ -78,6 +80,8 @@ public class UserInterface extends JFrame {
 		
 		// Make the frame visible
 		setVisible(true);
+		
+		setSoundPack(soundpackManager.getSoundpacksInDirectory("./")[0]);
 	}
 	
 	/**

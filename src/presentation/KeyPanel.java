@@ -9,14 +9,22 @@ import javax.swing.JPanel;
 
 import repository.KeyMapping;
 import repository.SoundPack;
+import services.AudioCore;
 
+/**
+ * This panel imitates an onscreen keysboard using keyButtons.
+ * @author Benedikt Ringlein
+ *
+ */
 public class KeyPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	
 	private HashMap<Integer, KeyButton> buttons = new HashMap<Integer, KeyButton>();
+	private AudioCore audioCore;
 
-	public KeyPanel(){
+	public KeyPanel(AudioCore audioCore){
+		this.audioCore = audioCore;
 		setOpaque(false);
 		setLayout(new GridBagLayout());
 		
@@ -101,7 +109,7 @@ public class KeyPanel extends JPanel {
 		gbc.gridy = y;
 		gbc.gridwidth = width;
 		gbc.gridheight = height;
-		KeyButton button = new KeyButton(label);
+		KeyButton button = new KeyButton(label, audioCore);
 		buttons.put(keyCode, button);
 		add(button, gbc);
 	}

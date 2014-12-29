@@ -31,6 +31,13 @@ public class SoundSample {
 	}
 	
 	@Override
+	public boolean equals(Object obj) {
+		if(!(obj instanceof SoundSample)) return false;
+		SoundSample sample = (SoundSample) obj;
+		return sample.getFileName().equals(getFileName());
+	}
+	
+	@Override
 	public int hashCode() {
 		return fileName.hashCode();
 	}

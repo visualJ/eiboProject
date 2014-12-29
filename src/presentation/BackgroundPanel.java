@@ -10,6 +10,12 @@ import javax.swing.JPanel;
 import repository.BeatListener;
 import services.AudioCore;
 
+/**
+ * A backgroundpanel that can display a beat and a waveform.
+ * It can also contain and display other components.
+ * @author Benedikt Ringlein
+ *
+ */
 public class BackgroundPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;

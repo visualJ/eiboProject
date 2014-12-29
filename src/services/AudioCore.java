@@ -6,9 +6,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import repository.AudioFx;
 import repository.BeatListener;
+import repository.SampleListener;
 import repository.SoundSample;
 import ddf.minim.AudioInput;
 import ddf.minim.AudioOutput;
@@ -30,8 +33,11 @@ public class AudioCore {
 	private Map<SoundSample, FilePlayer> sounds;
 	private List<SoundSample> sheduledSounds = new ArrayList<SoundSample>();
 	private List<SoundSample> loopedSounds = new ArrayList<SoundSample>();
+	private Timer stopSampleTimer = new Timer();
 	private int bpm = 60;
 	private List<BeatListener> beatListeners = new ArrayList<BeatListener>();
+	private List<SampleListener> sampleListeners = new ArrayList<SampleListener>();
+	private Map<SoundSample, TimerTask> stopSampleNotificationTimers = new HashMap<SoundSample, TimerTask>();
 	private Thread beatThread;
 	private Runnable beatClock = new Runnable(){
 		@Override
@@ -144,10 +150,14 @@ public class AudioCore {
 				sounds.get(soundSample).loop();
 			}else{
 				sounds.get(soundSample).play();
+				sheduleStopSampleNotificaiton(soundSample);
+				
 			}
+			notifySampleListenerPlayedSample(soundSample);
 		}else{
 			System.out.println("Error: playSample() tried playing sound sample "+soundSample.getFileName()+" when is was not loaded!");
 		}
+		
 	}
 	
 	/**
@@ -160,6 +170,7 @@ public class AudioCore {
 		if(sounds.containsKey(soundSample)){
 			sounds.get(soundSample).pause();
 			sounds.get(soundSample).rewind();
+			notifySampleListenerStoppedSample(soundSample);
 		}else{
 			System.out.println("Error: playSample() tried stopping sound sample "+soundSample.getFileName()+" when is was not loaded!");
 		}
@@ -173,6 +184,7 @@ public class AudioCore {
 	public void playSampleOnNextBeat(SoundSample soundSample){
 		if(!sheduledSounds.contains(soundSample)){
 			sheduledSounds.add(soundSample);
+			notifySampleListenerSheduledSample(soundSample);
 		}
 	}
 	
@@ -180,28 +192,30 @@ public class AudioCore {
 	 * Starts playing a SoundSample in a loop.
 	 * It begins on the next beat and every repetition starts on a beat.
 	 */
-	public void playLoop(SoundSample sample){
-		if(!loopedSounds.contains(sample)){
-			loopedSounds.add(sample);
+	public void playLoop(SoundSample soundSample){
+		if(!loopedSounds.contains(soundSample)){
+			loopedSounds.add(soundSample);
+			notifySampleListenerSheduledSample(soundSample);
 		}
 	}
 	
 	/**
-	 * Stops a loop. THe loops still plays until its end.
+	 * Stops a loop. The loops still plays until its end.
 	 */
-	public void stopLoop(SoundSample sample){
-		if(loopedSounds.contains(sample)){
-			loopedSounds.remove(sample);
+	public void stopLoop(SoundSample soundSample){
+		if(loopedSounds.contains(soundSample)){
+			loopedSounds.remove(soundSample);
+			sheduleStopSampleNotificaiton(soundSample);
 		}
 	}
 	
 	/**
 	 * Tests, if a sample is currently being played as a loop (not just looped playback!)
-	 * @param sample The sample to test
+	 * @param soundSample The sample to test
 	 * @return True, if the sample is being played a a loop currently
 	 */
-	public boolean isLoopPlaying(SoundSample sample){
-		return loopedSounds.contains(sample);
+	public boolean isLoopPlaying(SoundSample soundSample){
+		return loopedSounds.contains(soundSample);
 	}
 	
 	/**
@@ -276,6 +290,18 @@ public class AudioCore {
 	}
 	
 	/**
+	 * Adds a {@link SampleListener} to the AudioCore
+	 * @param listener The listener to add
+	 */
+	public void addSampleListener(SampleListener listener){
+		sampleListeners.add(listener);
+	}
+	
+	public void removeSampleListener(SampleListener listener){
+		sampleListeners.remove(listener);
+	}
+	
+	/**
 	 * Resturns the volume of the current audio output
 	 * @return The volume
 	 */
@@ -299,6 +325,65 @@ public class AudioCore {
 		for(BeatListener listener:beatListeners){
 			listener.bpmChanged(bpm);
 		}
+	}
+	
+	/**
+	 * Notify all SampleListeners, that a sample has been sheduled
+	 * @param sample The sample, that has been sheduled
+	 */
+	private void notifySampleListenerSheduledSample(SoundSample sample){
+		for(SampleListener listener:sampleListeners){
+			if(listener.getSample().equals(sample)){
+				listener.sheduledSample();
+			}
+		}
+	}
+	
+	/**
+	 * Notify all SampleListeners, that a sample has been started playing
+	 * @param sample The sample, that is playing
+	 */
+	private void notifySampleListenerPlayedSample(SoundSample sample){
+		for(SampleListener listener:sampleListeners){
+			if(listener.getSample().equals(sample)){
+				listener.playedSample();
+			}
+		}
+	}
+	
+	/**
+	 * Notify all SampleListeners, that a sample has been stopped
+	 * @param sample The sample, that has been stopped
+	 */
+	private void notifySampleListenerStoppedSample(SoundSample sample){
+		if(stopSampleNotificationTimers.containsKey(sample)){
+			stopSampleNotificationTimers.get(sample).cancel();
+			stopSampleNotificationTimers.remove(sample);
+		}
+		for(SampleListener listener:sampleListeners){
+			if(listener.getSample().equals(sample)){
+				listener.stoppedSample();
+			}
+		}
+	}
+	
+	/**
+	 * Start the timer for a StoppedSmaple notification
+	 * @param soundSample The sound sample that will be stopped later
+	 */
+	private void sheduleStopSampleNotificaiton(SoundSample soundSample){
+		final SoundSample _soundSample = soundSample;
+		FilePlayer player = sounds.get(soundSample);
+		TimerTask task = new TimerTask() {
+			
+			@Override
+			public void run() {
+				notifySampleListenerStoppedSample(_soundSample);
+				
+			}
+		};
+		stopSampleNotificationTimers.put(soundSample, task);
+		stopSampleTimer.schedule(task, player.length() - player.position());
 	}
 	
 	/**
@@ -329,18 +414,23 @@ public class AudioCore {
 		// Play all sheduled sounds
 		for(SoundSample sample:sheduledSounds){
 			playSample(sample);
+			notifySampleListenerPlayedSample(sample);
 		}
 		
 		// Clear the seduled sounds list
 		sheduledSounds.clear();
 	}
 	
+	/**
+	 * Plays all the looped sounds
+	 */
 	private void playLoopedSounds(){
 		
 		// Play all looped sounds
 		for(SoundSample sample:loopedSounds){
 			if(!sounds.get(sample).isPlaying()){
 				playSample(sample);
+				notifySampleListenerPlayedSample(sample);
 			}
 		}
 	}

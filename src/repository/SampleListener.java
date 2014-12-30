@@ -11,5 +11,6 @@ public interface SampleListener {
 	void sheduledSample();
 	void playedSample();
 	void stoppedSample();
+	void stoppedLoop();
 	
 }

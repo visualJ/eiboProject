@@ -206,6 +206,7 @@ public class AudioCore {
 		if(loopedSounds.contains(soundSample)){
 			loopedSounds.remove(soundSample);
 			sheduleStopSampleNotificaiton(soundSample);
+			notifySampleListenerStoppedLoop(soundSample);
 		}
 	}
 	
@@ -363,6 +364,18 @@ public class AudioCore {
 		for(SampleListener listener:sampleListeners){
 			if(listener.getSample().equals(sample)){
 				listener.stoppedSample();
+			}
+		}
+	}
+	
+	/**
+	 * Notify all SampleListeners, that a loop has been stopped
+	 * @param sample The sample, that is playing as a loop
+	 */
+	private void notifySampleListenerStoppedLoop(SoundSample sample){
+		for(SampleListener listener:sampleListeners){
+			if(listener.getSample().equals(sample)){
+				listener.stoppedLoop();
 			}
 		}
 	}

@@ -170,6 +170,11 @@ public class KeyButton extends JButton {
 				public SoundSample getSample() {
 					return KeyButton.this.keyMapping.getSoundSample();
 				}
+
+				@Override
+				public void stoppedLoop() {
+					sampleState = SampleState.WAITING;
+				}
 			};
 			audioCore.addSampleListener(sampleListener);
 		}else{

@@ -428,7 +428,9 @@ public class AudioCore {
 		
 		// Play all looped sounds
 		for(SoundSample sample:loopedSounds){
-			if(!sounds.get(sample).isPlaying()){
+			FilePlayer player = sounds.get(sample);
+			// Only play sample, if the sample is not playing or almost finished
+			if(player.length()-player.position() < 50 || !player.isPlaying()){
 				playSample(sample);
 				notifySampleListenerPlayedSample(sample);
 			}

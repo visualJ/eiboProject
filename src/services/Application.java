@@ -1,5 +1,6 @@
 package services;
 
+import presentation.MenuPanel;
 import presentation.UserInterface;
 
 public class Application {
@@ -13,6 +14,8 @@ public class Application {
 		
 		UserInterface ui = new UserInterface(audioCore,soundpackManager);
 		ui.init();
+		
+		MenuPanel menu = new MenuPanel();
 	}
 
 }

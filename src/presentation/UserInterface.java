@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Image;
+import java.awt.Toolkit;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -29,6 +31,11 @@ public class UserInterface extends JFrame {
 	private SoundPack currentSoundPack;
 	private BackgroundPanel background;
 	private KeyPanel keys;
+	
+
+	
+	private final int windowWidth = (int) Toolkit.getDefaultToolkit().getScreenSize().getWidth();
+	private final int windowHeight = (int) Toolkit.getDefaultToolkit().getScreenSize().getHeight();
 
 	public UserInterface(AudioCore audioCore, SoundPackManager soundpackManager) {
 		this.audioCore = audioCore;
@@ -39,9 +46,14 @@ public class UserInterface extends JFrame {
 	 * Initializes the user interface and prepares everything for use.
 	 */
 	public void init(){
+		
+		
 		setTitle("eiboProject");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		setSize(1000, 700);
+		setSize(windowWidth, windowHeight);
+		setUndecorated(true);
+		
+
 		
 		// Load icons
 		try {
@@ -78,6 +90,8 @@ public class UserInterface extends JFrame {
 		gbc.weighty = 1;
 		background.add(keys, gbc);
 		
+		
+
 		// Make the frame visible
 		setVisible(true);
 		

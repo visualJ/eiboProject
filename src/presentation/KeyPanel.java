@@ -3,17 +3,12 @@ package presentation;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.event.ActionEvent;
 import java.util.HashMap;
 
-import javax.swing.AbstractAction;
-import javax.swing.Action;
 import javax.swing.JPanel;
-import javax.swing.KeyStroke;
 
 import repository.KeyMapping;
 import repository.SoundPack;
-import services.ActivationModeBehavior;
 import services.AudioCore;
 
 /**
@@ -25,7 +20,7 @@ public class KeyPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	
-	private HashMap<Integer, KeyButton> buttons = new HashMap<Integer, KeyButton>();
+	private HashMap<Integer, SampleKeyButton> buttons = new HashMap<Integer, SampleKeyButton>();
 	private AudioCore audioCore;
 
 	public KeyPanel(AudioCore audioCore){
@@ -83,54 +78,16 @@ public class KeyPanel extends JPanel {
 	public void setSoundPack(SoundPack soundPack){
 		
 		// Reset all the buttons first
-		for(KeyButton button:buttons.values()){
+		for(SampleKeyButton button:buttons.values()){
 			button.setKeyMapping(null);
-			getActionMap().clear();
-			getInputMap(WHEN_IN_FOCUSED_WINDOW).clear();
 		}
 		
 		// Set all key mappings to corresponding key buttons
 		for(KeyMapping mapping:soundPack.getKeyMappings()){
 			if(buttons.containsKey(mapping.getKeyCode())){
 				buttons.get(mapping.getKeyCode()).setKeyMapping(mapping);
-				addKeyMapping(mapping);
 			}
 		}
-	}
-	
-	/**
-	 * Adds a KeyMapping to the action and input maps,
-	 * so that they actually react to the keyboard
-	 * @param mapping The KeyMapping to insert
-	 */
-	private void addKeyMapping(KeyMapping mapping){
-		final KeyMapping _mapping = mapping;
-		
-		// Create Actions for pressing and realeasing a key
-		final Action pressed = new AbstractAction() {
-			private static final long serialVersionUID = 1L;
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				ActivationModeBehavior.getInstance().trigger(_mapping.getActivationMode(), _mapping.getSoundSample());
-				getActionMap().remove(_mapping.getKeyCode()+"p"); // dont retrigger, when held down
-			}
-		};
-		final Action released = new AbstractAction() {
-			private static final long serialVersionUID = 1L;
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				ActivationModeBehavior.getInstance().untrigger(_mapping.getActivationMode(), _mapping.getSoundSample());
-				getActionMap().put(_mapping.getKeyCode()+"p", pressed); // register again, when released
-			}
-		};
-		
-		// Put the action in the action map
-		getActionMap().put(mapping.getKeyCode()+"p", pressed);
-		getActionMap().put(mapping.getKeyCode()+"r", released);
-		
-		// register key strokes for the actions
-		getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(mapping.getKeyCode(), 0, false), mapping.getKeyCode()+"p");
-		getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(mapping.getKeyCode(), 0, true), mapping.getKeyCode()+"r");
 	}
 	
 	/**
@@ -152,7 +109,7 @@ public class KeyPanel extends JPanel {
 		gbc.gridy = y;
 		gbc.gridwidth = width;
 		gbc.gridheight = height;
-		KeyButton button = new KeyButton(label, audioCore);
+		SampleKeyButton button = new SampleKeyButton(label, keyCode, audioCore);
 		buttons.put(keyCode, button);
 		add(button, gbc);
 	}

@@ -440,12 +440,12 @@ public class AudioCore {
 	private void playLoopedSounds(){
 		
 		// Play all looped sounds
-		for(SoundSample sample:loopedSounds){
-			FilePlayer player = sounds.get(sample);
+		for(int i = 0; i < loopedSounds.size(); i++){
+			FilePlayer player = sounds.get(loopedSounds.get(i));
 			// Only play sample, if the sample is not playing or almost finished
 			if(player.length()-player.position() < 50 || !player.isPlaying()){
-				playSample(sample);
-				notifySampleListenerPlayedSample(sample);
+				playSample(loopedSounds.get(i));
+				notifySampleListenerPlayedSample(loopedSounds.get(i));
 			}
 		}
 	}

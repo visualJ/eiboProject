@@ -9,45 +9,38 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
+import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import javax.swing.AbstractAction;
 import javax.swing.AbstractButton;
-import javax.swing.ImageIcon;
+import javax.swing.Action;
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.KeyStroke;
 import javax.swing.plaf.basic.BasicButtonUI;
 
-import repository.KeyMapping;
-import repository.SampleListener;
-import repository.SoundSample;
-import services.ActivationModeBehavior;
-import services.AudioCore;
-
 /**
- * A button that can display a key label, an activation mode icon and a sample icon.
- * You just have to give it a key mapping, and it does all the work, like playing samples when clicked.
+ * A button that can display a key label, a big icon and a small icon.
+ * It can get Runnables to run when pressed or released. Those
+ * are also run when the according action happens on the actual keyboard.
  * @author Benedikt Ringlein
  *
  */
 public class KeyButton extends JButton {
 
 	private static final long serialVersionUID = 1L;
-	private static Color VIOLETT = new Color(170,20,240);
-	private static Color ORANGE = new Color(240,170,20);
-	private static Color GREEN = new Color(170,240,20);
 	
-	private KeyMapping keyMapping;
-	private ImageIcon keyIcon;
-	private Image activationModeIcon;
-	private ActivationModeBehavior activationModeBehavior;
-	private SampleState sampleState = SampleState.NORMAL;
-	private AudioCore audioCore;
-	private SampleListener sampleListener;
+	private Image bigIcon;
+	private Image smallIcon;
+	private int keyCode;
+	private Runnable onTrigger;
+	private Runnable onUntrigger;
 	
-	public KeyButton(String keyLabel, AudioCore audioCore){
-		this.activationModeBehavior = ActivationModeBehavior.getInstance();
-		this.audioCore = audioCore;
+	public KeyButton(String keyLabel, int keyCode){
+		this.keyCode = keyCode;
+		
 		setText(keyLabel);
 		setPreferredSize(new Dimension(60, 60));
 		setBorderPainted(false);
@@ -57,32 +50,30 @@ public class KeyButton extends JButton {
 			@Override
 			protected void paintText(Graphics g, AbstractButton b,
 					Rectangle textRect, String text) {
-				g.setColor(Color.white);
+				g.setColor(b.getForeground());
 				g.drawString(b.getText(), 5, 15);
 			}
 			
 			@Override
 			public void paint(Graphics g1, JComponent c) {
+				
+				// Prepare graphics for painting the button
 				Graphics2D g = (Graphics2D)g1;
 				g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 				g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+				g.setPaint(new GradientPaint(0, 0, c.getBackground(), c.getWidth(), c.getHeight(), Color.black));
+				
+				// Get the button
 				AbstractButton button =  (AbstractButton)c;
-				if(keyMapping != null){
-					switch (sampleState) {
-					case NORMAL:
-						g.setPaint(new GradientPaint(0, 0, VIOLETT, c.getWidth(), c.getHeight(), Color.black));
-						break;
-					case PLAYING:
-						g.setPaint(new GradientPaint(0, 0, GREEN, c.getWidth(), c.getHeight(), Color.black));
-						break;
-					case WAITING:
-						g.setPaint(new GradientPaint(0, 0, ORANGE, c.getWidth(), c.getHeight(), Color.black));
-						break;
-					default:
-						break;
-					}
+				
+				if(button.getModel().isEnabled()){
+					// Draw the enabled state of the button
+					
 					g.fillRoundRect(0, 0, button.getWidth(), button.getHeight(),10,10);
+					
 					if(button.getModel().isPressed()){
+						
+						// Draw pressed state
 						g.setColor(UserInterface.alphaColor(Color.black, 0.5f));
 						g.setStroke(new BasicStroke(2));
 						g.fillRoundRect(0, 0, button.getWidth(), button.getHeight(),10,10);
@@ -90,100 +81,167 @@ public class KeyButton extends JButton {
 						g.translate(getWidth()/2, getHeight()/2);
 						g.scale(0.95, 0.95);
 						g.translate(-getWidth()/2, -getHeight()/2);
+						
 					}else if(button.getModel().isRollover()){
+						
+						// Draw mouse over state
 						g.setColor(UserInterface.alphaColor(Color.black, 0.2f));
 						g.fillRoundRect(0, 0, button.getWidth(), button.getHeight(),10,10);
 					}
 				}else{
+					// Draw the disabled state of the button
 					g.setColor(UserInterface.alphaColor(Color.darkGray, 0.2f));
 					g.fillRect(0, 0, button.getWidth(), button.getHeight());
 				}
+				
+				// Paint the other elements on the button
 				paintText(g, button, getBounds(), getText());
 				paintIcon(g, c, getBounds());
-				paintActivationModeIcon(g, c);
+				paintSmallIcon(g, c);
 			}
-
+	
 			@Override
 			protected void paintIcon(Graphics g, JComponent c,
 					Rectangle iconRect) {
-				if(keyIcon != null){
-						g.drawImage(keyIcon.getImage(), 0, 0, getWidth(), getHeight(), c);
+				if(bigIcon != null){
+					g.drawImage(bigIcon, 0, 0, getWidth(), getHeight(), c);
 				}
 			}
 			
-			protected void paintActivationModeIcon(Graphics g, JComponent c){
-				if(activationModeIcon!=null){
-					g.drawImage(activationModeIcon, c.getWidth()-20, 3, 15, 15, c);
+			protected void paintSmallIcon(Graphics g, JComponent c){
+				if(smallIcon!=null){
+					g.drawImage(smallIcon, c.getWidth()-20, 3, 15, 15, c);
 				}
 			}
 		});
 		
+		// Add a mouse listener to the button
 		addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-				if(keyMapping != null){
-					activationModeBehavior.trigger(keyMapping.getActivationMode(), keyMapping.getSoundSample());
+				if(getModel().isEnabled() && KeyButton.this.onTrigger != null){
+					KeyButton.this.onTrigger.run();
 				}
 			}
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				if(keyMapping != null){
-					activationModeBehavior.untrigger(keyMapping.getActivationMode(), keyMapping.getSoundSample());
+				if(getModel().isEnabled() && KeyButton.this.onUntrigger != null){
+					KeyButton.this.onUntrigger.run();
 				}
 			}
 		});
 	}
-
-	public KeyMapping getKeyMapping() {
-		return keyMapping;
+	
+	public Runnable getOnTrigger() {
+		return onTrigger;
 	}
 
-	public void setKeyMapping(KeyMapping keyMapping) {
-		this.keyMapping = keyMapping;
-		if(sampleListener != null){
-			// Remove the sample listener from the audio core
-			audioCore.removeSampleListener(sampleListener);
-		}
-		if(keyMapping != null){
-			keyIcon = new ImageIcon(keyMapping.getImageFile());
-			activationModeIcon = UserInterface.getActivationModeImage(keyMapping.getActivationMode());
-			
-			// Set a new samplelistener in the audiocore
-			sampleListener = new SampleListener() {
-				
-				@Override
-				public void stoppedSample() {
-					sampleState = SampleState.NORMAL;
-				}
-				
-				@Override
-				public void sheduledSample() {
-					sampleState = SampleState.WAITING;
-				}
-				
-				@Override
-				public void playedSample() {
-					sampleState = SampleState.PLAYING;
-				}
-				
-				@Override
-				public SoundSample getSample() {
-					return KeyButton.this.keyMapping.getSoundSample();
-				}
+	/**
+	 * Sets the Runnable to run, when the button is triggered
+	 * @param onTrigger The Runnable for the triggering event
+	 */
+	public void setOnTrigger(Runnable onTrigger) {
+		this.onTrigger = onTrigger;
+		assignKeyboardKeyTrigger();
+	}
 
-				@Override
-				public void stoppedLoop() {
-					sampleState = SampleState.WAITING;
-				}
-			};
-			audioCore.addSampleListener(sampleListener);
-		}else{
-			activationModeIcon = null;
-		}
+	public Runnable getOnUntrigger() {
+		return onUntrigger;
+	}
+
+	/**
+	 * Sets the Runnable to run, when the button is untriggered
+	 * @param onTrigger The Runnable for the untriggering event
+	 */
+	public void setOnUntrigger(Runnable onUntrigger) {
+		this.onUntrigger = onUntrigger;
+		assignKeyboardKeyUntrigger();
+	}
+
+	public Image getBigIcon() {
+		return bigIcon;
+	}
+
+	/**
+	 * Sets the big incon that is displayed on the button
+	 * @param bigIcon The icon to show
+	 */
+	public void setBigIcon(Image bigIcon) {
+		this.bigIcon = bigIcon;
+	}
+
+	public Image getSmallIcon() {
+		return smallIcon;
+	}
+
+	/**
+	 * Sets the small icon that is displayed in the top right corner of the button
+	 * @param smallIcon The icon to show
+	 */
+	public void setSmallIcon(Image smallIcon) {
+		this.smallIcon = smallIcon;
+	}
+
+	public int getKeyCode() {
+		return keyCode;
 	}
 	
-	private enum SampleState{
-		NORMAL, WAITING, PLAYING
+	/**
+	 * Assigns the corredponding Keyboard key to this Button
+	 */
+	private void assignKeyboardKeyTrigger(){
+		
+		// Create Actions for pressing a key
+		final Action pressed = new AbstractAction() {
+			private static final long serialVersionUID = 1L;
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				onTrigger.run();
+				getActionMap().remove(keyCode+"p"); // dont retrigger, when held down
+			}
+		};
+		
+		// Put the action in the action map
+		getActionMap().remove(keyCode+"p");
+		getActionMap().put(keyCode+"p", pressed);
+		
+		// register key strokes for the actions
+		getInputMap(WHEN_IN_FOCUSED_WINDOW).remove(KeyStroke.getKeyStroke(keyCode, 0, false));
+		getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(keyCode, 0, false), keyCode+"p");
+	}
+	
+	/**
+	 * Assigns the corredponding Keyboard key to this Button
+	 */
+	private void assignKeyboardKeyUntrigger(){
+		
+		// Create Action for pressing a key
+				final Action pressed = new AbstractAction() {
+					private static final long serialVersionUID = 1L;
+					@Override
+					public void actionPerformed(ActionEvent arg0) {
+						onTrigger.run();
+						getActionMap().remove(keyCode+"p"); // dont retrigger, when held down
+					}
+				};
+		
+		// Create Action for realeasing a key
+		final Action released = new AbstractAction() {
+			private static final long serialVersionUID = 1L;
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				onUntrigger.run();
+				getActionMap().put(keyCode+"p", pressed); // register again, when released
+			}
+		};
+		
+		// Put the action in the action map
+		getActionMap().remove(keyCode+"r");
+		getActionMap().put(keyCode+"r", released);
+		
+		// register key strokes for the actions
+		getInputMap(WHEN_IN_FOCUSED_WINDOW).remove(KeyStroke.getKeyStroke(keyCode, 0, true));
+		getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(keyCode, 0, true), keyCode+"r");
 	}
 	
 }

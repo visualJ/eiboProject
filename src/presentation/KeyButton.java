@@ -45,6 +45,13 @@ public class KeyButton extends JButton {
 		setPreferredSize(new Dimension(60, 60));
 		setBorderPainted(false);
 		setOpaque(false);
+		setFocusable(false);
+		setForeground(Color.white);
+		setBackground(Color.gray);
+		
+		// Initialize Triggers
+		setOnTrigger(null);
+		setOnUntrigger(null);
 		
 		setUI(new BasicButtonUI() {
 			@Override
@@ -70,6 +77,11 @@ public class KeyButton extends JButton {
 					// Draw the enabled state of the button
 					
 					g.fillRoundRect(0, 0, button.getWidth(), button.getHeight(),10,10);
+					
+					// Paint a nice reflection effect
+					g.setPaint(new GradientPaint(0, 0, UserInterface.alphaColor(Color.white, 0.3f), 0, c.getHeight(), UserInterface.alphaColor(Color.white, 0.0f)));
+					g.fillRoundRect(0, 0, c.getWidth(), c.getHeight()/2,10,10);
+					
 					
 					if(button.getModel().isPressed()){
 						
@@ -98,6 +110,7 @@ public class KeyButton extends JButton {
 				paintText(g, button, getBounds(), getText());
 				paintIcon(g, c, getBounds());
 				paintSmallIcon(g, c);
+				
 			}
 	
 			@Override
@@ -220,7 +233,9 @@ public class KeyButton extends JButton {
 					private static final long serialVersionUID = 1L;
 					@Override
 					public void actionPerformed(ActionEvent arg0) {
-						onTrigger.run();
+						if(onTrigger != null){
+							onTrigger.run();
+						}
 						getActionMap().remove(keyCode+"p"); // dont retrigger, when held down
 					}
 				};
@@ -230,7 +245,9 @@ public class KeyButton extends JButton {
 			private static final long serialVersionUID = 1L;
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				onUntrigger.run();
+				if(onUntrigger != null){
+					onUntrigger.run();
+				}
 				getActionMap().put(keyCode+"p", pressed); // register again, when released
 			}
 		};

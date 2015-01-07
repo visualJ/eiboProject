@@ -43,7 +43,7 @@ public class KeyPanel extends JPanel {
 		addSampleKeyButton("P", 80, 9, 0, 1, 1);
 		addSampleKeyButton("Ü", 16777468, 10, 0, 1, 1);
 		addSampleKeyButton("*", 521, 11, 0, 1, 1);
-		addSampleKeyButton("", 10, 12, 0, 1, 2);
+		addSampleKeyButton("┘", 10, 12, 0, 1, 2);
 		
 		addSampleKeyButton("A", 65, 0, 1, 1, 1);
 		addSampleKeyButton("S", 83, 1, 1, 1, 1);
@@ -69,10 +69,10 @@ public class KeyPanel extends JPanel {
 		addSampleKeyButton(";", 44, 8, 2, 1, 1);
 		addSampleKeyButton(":", 46, 9, 2, 1, 1);
 		addSampleKeyButton("_", 45, 10, 2, 1, 1);
-		addSampleKeyButton("^", 16, 11, 2, 2, 1);
+		addSampleKeyButton("UMSCHALT", 16, 11, 2, 2, 1);
 		
 		// Add special keys
-		recordingButton = new RecordingButton("SPACE", 32, this.audioCore);
+		recordingButton = new RecordingButton("LEERTASTE", 32, this.audioCore);
 		addButton(3, 3, 5, 1, recordingButton);
 	}
 	

@@ -5,7 +5,9 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Image;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.imageio.ImageIO;
@@ -25,6 +27,8 @@ public class UserInterface extends JFrame {
 	private static final Map<ActivationMode, Image> ACTIVATION_MODE_ICONS = new HashMap<ActivationMode, Image>();
 	
 	public static Image recIcon;
+	public static Image programmIconSmall;
+	public static Image programmIconBig;
 	
 	private AudioCore audioCore;
 	private SoundPackManager soundpackManager;
@@ -47,14 +51,22 @@ public class UserInterface extends JFrame {
 		
 		// Load icons
 		try {
-			ACTIVATION_MODE_ICONS.put(ActivationMode.LOOP,ImageIO.read(UserInterface.class.getResourceAsStream("LOOP.png")));
-			ACTIVATION_MODE_ICONS.put(ActivationMode.PLAY_ONCE,ImageIO.read(UserInterface.class.getResourceAsStream("PLAY_ONCE.png")));
-			ACTIVATION_MODE_ICONS.put(ActivationMode.WHILE_TRIGGERED,ImageIO.read(UserInterface.class.getResourceAsStream("WHILE_TRIGGERED.png")));
-			ACTIVATION_MODE_ICONS.put(ActivationMode.WHILE_TRIGGERED_ONCE,ImageIO.read(UserInterface.class.getResourceAsStream("WHILE_TRIGGERED_ONCE.png")));
-			recIcon = ImageIO.read(UserInterface.class.getResourceAsStream("record.png"));
-		} catch (IOException e) {
+			ACTIVATION_MODE_ICONS.put(ActivationMode.LOOP,ImageIO.read(UserInterface.class.getResourceAsStream("res/LOOP.png")));
+			ACTIVATION_MODE_ICONS.put(ActivationMode.PLAY_ONCE,ImageIO.read(UserInterface.class.getResourceAsStream("res/PLAY_ONCE.png")));
+			ACTIVATION_MODE_ICONS.put(ActivationMode.WHILE_TRIGGERED,ImageIO.read(UserInterface.class.getResourceAsStream("res/WHILE_TRIGGERED.png")));
+			ACTIVATION_MODE_ICONS.put(ActivationMode.WHILE_TRIGGERED_ONCE,ImageIO.read(UserInterface.class.getResourceAsStream("res/WHILE_TRIGGERED_ONCE.png")));
+			recIcon = ImageIO.read(UserInterface.class.getResourceAsStream("res/record.png"));
+			programmIconSmall = ImageIO.read(UserInterface.class.getResourceAsStream("res/programmIconSmall.png"));
+			programmIconBig = ImageIO.read(UserInterface.class.getResourceAsStream("res/programmIconBig.png"));
+		} catch (IOException | IllegalArgumentException e) {
 			e.printStackTrace();
 		}
+		
+		// Load window icons
+		List<Image> windowIcons = new ArrayList<Image>();
+		windowIcons.add(programmIconSmall);
+		windowIcons.add(programmIconBig);
+		setIconImages(windowIcons);
 		
 		// Initialize the ActivationModeBehavior
 		ActivationModeBehavior.init(audioCore);
@@ -64,6 +76,7 @@ public class UserInterface extends JFrame {
 		add(background);
 		
 		keys = new KeyPanel(audioCore);
+		
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.gridx = 0;
 		gbc.gridy = 0;
@@ -74,6 +87,7 @@ public class UserInterface extends JFrame {
 		JPanel upperPanel = new JPanel();
 		upperPanel.setOpaque(false);
 		background.add(upperPanel, gbc);
+		
 		gbc.gridx = 0;
 		gbc.gridy = 1;
 		gbc.anchor = GridBagConstraints.CENTER;

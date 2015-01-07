@@ -498,6 +498,7 @@ public class AudioCore {
 			if(recorder != null && recorder.isRecording()){
 				recorder.endRecord();
 				recorder.save();
+				recorder = null;
 				return new SoundSample(fileName);
 			}else{
 				System.out.println("Error: endRecord() tried to end recording, when it was not started.");

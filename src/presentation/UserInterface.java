@@ -22,7 +22,9 @@ import services.SoundPackManager;
 public class UserInterface extends JFrame {
 
 	private static final long serialVersionUID = 1L;
-	private static Map<ActivationMode, Image> ICONS = new HashMap<ActivationMode, Image>();
+	private static final Map<ActivationMode, Image> ACTIVATION_MODE_ICONS = new HashMap<ActivationMode, Image>();
+	
+	public static Image recIcon;
 	
 	private AudioCore audioCore;
 	private SoundPackManager soundpackManager;
@@ -45,10 +47,11 @@ public class UserInterface extends JFrame {
 		
 		// Load icons
 		try {
-			ICONS.put(ActivationMode.LOOP,ImageIO.read(UserInterface.class.getResourceAsStream("LOOP.png")));
-			ICONS.put(ActivationMode.PLAY_ONCE,ImageIO.read(UserInterface.class.getResourceAsStream("PLAY_ONCE.png")));
-			ICONS.put(ActivationMode.WHILE_TRIGGERED,ImageIO.read(UserInterface.class.getResourceAsStream("WHILE_TRIGGERED.png")));
-			ICONS.put(ActivationMode.WHILE_TRIGGERED_ONCE,ImageIO.read(UserInterface.class.getResourceAsStream("WHILE_TRIGGERED_ONCE.png")));
+			ACTIVATION_MODE_ICONS.put(ActivationMode.LOOP,ImageIO.read(UserInterface.class.getResourceAsStream("LOOP.png")));
+			ACTIVATION_MODE_ICONS.put(ActivationMode.PLAY_ONCE,ImageIO.read(UserInterface.class.getResourceAsStream("PLAY_ONCE.png")));
+			ACTIVATION_MODE_ICONS.put(ActivationMode.WHILE_TRIGGERED,ImageIO.read(UserInterface.class.getResourceAsStream("WHILE_TRIGGERED.png")));
+			ACTIVATION_MODE_ICONS.put(ActivationMode.WHILE_TRIGGERED_ONCE,ImageIO.read(UserInterface.class.getResourceAsStream("WHILE_TRIGGERED_ONCE.png")));
+			recIcon = ImageIO.read(UserInterface.class.getResourceAsStream("record.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -90,7 +93,7 @@ public class UserInterface extends JFrame {
 	 * @return A Image
 	 */
 	public static Image getActivationModeImage(ActivationMode mode){
-		return ICONS.get(mode);
+		return ACTIVATION_MODE_ICONS.get(mode);
 	}
 	
 	/**

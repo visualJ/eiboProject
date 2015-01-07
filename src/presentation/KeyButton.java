@@ -74,12 +74,12 @@ public class KeyButton extends JButton {
 				AbstractButton button =  (AbstractButton)c;
 				
 				if(button.getModel().isEnabled()){
-					// Draw the enabled state of the button
 					
+					// Draw the enabled state of the button
 					g.fillRoundRect(0, 0, button.getWidth(), button.getHeight(),10,10);
 					
 					// Paint a nice reflection effect
-					g.setPaint(new GradientPaint(0, 0, UserInterface.alphaColor(Color.white, 0.3f), 0, c.getHeight(), UserInterface.alphaColor(Color.white, 0.0f)));
+					g.setPaint(new GradientPaint(0, 0, UserInterface.alphaColor(Color.white, 0.4f), 0, c.getHeight()/2, UserInterface.alphaColor(Color.white, 0.05f)));
 					g.fillRoundRect(0, 0, c.getWidth(), c.getHeight()/2,10,10);
 					
 					
@@ -117,7 +117,20 @@ public class KeyButton extends JButton {
 			protected void paintIcon(Graphics g, JComponent c,
 					Rectangle iconRect) {
 				if(bigIcon != null){
-					g.drawImage(bigIcon, 0, 0, getWidth(), getHeight(), c);
+					int iconWidth = bigIcon.getWidth(KeyButton.this);
+					int iconHeight = bigIcon.getHeight(KeyButton.this);
+					if(iconWidth/iconHeight != getWidth()/getHeight()){
+						if(iconWidth - getWidth() < iconHeight - getHeight()){
+							// Scale icon to fit vertically, keep aspect ratio
+							g.drawImage(bigIcon, getWidth()/2-getHeight()/2, 0, (int) (getHeight()*((float)iconWidth/iconHeight)), getHeight(), c);
+						}else{
+							// Scale icon to fit horizontally, keep aspect ratio
+							g.drawImage(bigIcon, 0, getHeight()/2-getWidth()/2, getWidth(), (int) (getWidth()*((float)iconWidth/iconHeight)), c);
+						}
+					}else{
+						// Scale Icon to full button size
+						g.drawImage(bigIcon, 0, 0, getWidth(), getHeight(), c);
+					}
 				}
 			}
 			

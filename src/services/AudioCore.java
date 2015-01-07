@@ -310,6 +310,15 @@ public class AudioCore {
 		return audioOutput.mix.level();
 	}
 	
+	public int getBpm() {
+		return bpm;
+	}
+
+	public void setBpm(int bpm) {
+		this.bpm = bpm;
+		notifyBeatListenersBpmChanged();
+	}
+
 	/**
 	 * Inform all BeatListeners, that a beat happened
 	 */
@@ -529,14 +538,5 @@ public class AudioCore {
 			return new FileInputStream(fileName);
 		} catch (Exception ex) {}
 		return null;
-	}
-
-	public int getBpm() {
-		return bpm;
-	}
-
-	public void setBpm(int bpm) {
-		this.bpm = bpm;
-		notifyBeatListenersBpmChanged();
 	}
 }

@@ -15,7 +15,17 @@ public class SoundPack {
 	private String creatorName = "";
 	private String imageFile = "";
 	private int bpm = 60;
+	private int barLength = 4;
 	private List <KeyMapping> keyMappings = new ArrayList<KeyMapping>();
+
+	public SoundPack(){
+		
+	}
+
+	public SoundPack(String packName, String creatorName) {
+		this.packName = packName;
+		this.creatorName = creatorName;
+	}
 
 	public String getImageFile() {
 		return imageFile;
@@ -61,12 +71,11 @@ public class SoundPack {
 		this.bpm = bpm;
 	}
 
-	public SoundPack(){
-		
+	public int getBarLength() {
+		return barLength;
 	}
 
-	public SoundPack(String packName, String creatorName) {
-		this.packName = packName;
-		this.creatorName = creatorName;
+	public void setBarLength(int barLength) {
+		this.barLength = barLength;
 	}
 }

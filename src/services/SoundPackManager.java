@@ -56,6 +56,10 @@ public class SoundPackManager {
 				soundpack.setBpm(bpm);
 			}
 			@Override
+			public void readBarLength(int barLength) {
+				soundpack.setBarLength(barLength);
+			}
+			@Override
 			public void readKeyMapping(int keyCode, ActivationMode activationMode, String soundFile, String imageFile) {
 				if(new File(_soundPackFolder+File.separator+soundFile).exists()){
 					// Add keymapping, if the actual sound file exists
@@ -117,6 +121,7 @@ public class SoundPackManager {
 		public void readCreator(String creator);
 		public void readImage(String imageFile);
 		public void readBpm(int bpm);
+		public void readBarLength(int barLength);
 		public void readKeyMapping(int keyCode, ActivationMode activationMode, String soundFile, String imageFile);
 	}
 	
@@ -151,6 +156,14 @@ public class SoundPackManager {
 					// read the bpm
 					try {
 						handler.readBpm(Integer.parseInt(line.substring(2).trim()));
+					} catch (NumberFormatException e) {
+						e.printStackTrace();
+					}
+					break;
+				case "L ":
+					// read the bar length
+					try {
+						handler.readBarLength(Integer.parseInt(line.substring(2).trim()));
 					} catch (NumberFormatException e) {
 						e.printStackTrace();
 					}

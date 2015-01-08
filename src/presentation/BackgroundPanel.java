@@ -128,7 +128,6 @@ public class BackgroundPanel extends JPanel {
 	public void showBeat(int beatInBar){
 		// Set beat color
 		beatColor = (beatInBar==0)?COLOR_FIRST_BEAT:getForeground();
-		System.out.println(beatInBar);
 		// Start or restart the animation
 		if(beatIndicatorThread!=null) beatIndicatorThread.interrupt();
 		beatIndicatorThread = new Thread(beatIndicatorAnimation);

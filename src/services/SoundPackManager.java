@@ -174,20 +174,32 @@ public class SoundPackManager {
 					break;
 				case "K":
 					// read a keymapping
-					int keyCode;
+					int keyCode = 0;
 					ActivationMode activationMode;
 					String soundFile, imageFile;
 					// split the comma separated values
 					String splitline[] = line.substring(2).split(",");
 					try {
-						keyCode = Integer.parseInt(splitline[0].trim());
+						try {
+							// Try to interpret as integer
+							keyCode = Integer.parseInt(splitline[0].trim());
+						} catch (NumberFormatException e) {
+							// Try interpret as a letter
+							int codePoint = splitline[0].trim().toUpperCase().codePointAt(0);
+							if(Character.isAlphabetic(codePoint)){
+								keyCode = codePoint;
+							}else{
+								// Neither integer, nor letter
+								break;
+							}
+						}
 						activationMode = ActivationMode.valueOf(splitline[1].trim());
 						soundFile = splitline[2].trim();
 						imageFile = splitline.length>=4?splitline[3].trim():null;
 						handler.readKeyMapping(keyCode, activationMode, soundFile, imageFile);
 					} catch (Exception e) {
 						e.printStackTrace();
-						// Don't add the mapping, if an error occurred during parsing
+						// Don't add the mapping, if any error occurred during parsing
 					}
 					break;
 				default:

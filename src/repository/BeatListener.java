@@ -7,7 +7,7 @@ package repository;
  */
 public interface BeatListener {
 
-	void beat();
+	void beat(int beatInBar);
 	void bpmChanged(int bpm);
 	
 }

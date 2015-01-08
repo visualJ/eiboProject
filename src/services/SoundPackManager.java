@@ -137,22 +137,26 @@ public class SoundPackManager {
 			BufferedReader reader = new BufferedReader(new FileReader(file));
 			String line;
 			while(null != (line = reader.readLine())){
+				// Ignore empty lines
+				if(line.isEmpty()){
+					continue;
+				}
 				// Read the file line by line and determine what to do
 				// by looking at the lines first two letters
-				switch(line.substring(0, 2)){
-				case "N ":
+				switch(line.substring(0, 1)){
+				case "N":
 					// read a name
 					handler.readName(line.substring(2).trim());
 					break;
-				case "C ":
+				case "C":
 					// read a creator
 					handler.readCreator(line.substring(2).trim());
 					break;
-				case "I ":
+				case "I":
 					// read an image
 					handler.readImage(line.substring(2).trim());
 					break;
-				case "B ":
+				case "B":
 					// read the bpm
 					try {
 						handler.readBpm(Integer.parseInt(line.substring(2).trim()));
@@ -160,7 +164,7 @@ public class SoundPackManager {
 						e.printStackTrace();
 					}
 					break;
-				case "L ":
+				case "L":
 					// read the bar length
 					try {
 						handler.readBarLength(Integer.parseInt(line.substring(2).trim()));
@@ -168,7 +172,7 @@ public class SoundPackManager {
 						e.printStackTrace();
 					}
 					break;
-				case "K ":
+				case "K":
 					// read a keymapping
 					int keyCode;
 					ActivationMode activationMode;

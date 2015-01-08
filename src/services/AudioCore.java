@@ -35,6 +35,8 @@ public class AudioCore {
 	private List<SoundSample> loopedSounds = new ArrayList<SoundSample>();
 	private Timer stopSampleTimer = new Timer();
 	private int bpm = 60;
+	private int beatInBar = 0;
+	private int barLength = 4;
 	private List<BeatListener> beatListeners = new ArrayList<BeatListener>();
 	private List<SampleListener> sampleListeners = new ArrayList<SampleListener>();
 	private Map<SoundSample, TimerTask> stopSampleNotificationTimers = new HashMap<SoundSample, TimerTask>();
@@ -50,8 +52,13 @@ public class AudioCore {
 				// Play all sounds that are sheduled for the next beat
 				playSheduledSounds();
 				
-				// Play all looped sounds
-				playLoopedSounds();
+				// Play all looped sounds on first beat in the bar
+				if(beatInBar == 0){
+					playLoopedSounds();
+				}
+				
+				// Move to the next beat in the bar
+				beatInBar = (beatInBar+1)%barLength;
 				
 				try {
 					// Sleep, so that this thread is active once per beat
@@ -319,12 +326,20 @@ public class AudioCore {
 		notifyBeatListenersBpmChanged();
 	}
 
+	public int getBarLength() {
+		return barLength;
+	}
+
+	public void setBarLength(int barLength) {
+		this.barLength = barLength;
+	}
+
 	/**
 	 * Inform all BeatListeners, that a beat happened
 	 */
 	private void notifyBeatListenersBeat(){
 		for(BeatListener listener:beatListeners){
-			listener.beat();
+			listener.beat(beatInBar);
 		}
 	}
 	

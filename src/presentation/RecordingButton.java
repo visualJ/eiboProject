@@ -48,7 +48,7 @@ public class RecordingButton extends KeyButton {
 			}
 			
 			@Override
-			public void beat() {
+			public void beat(int beatInBar) {
 				// When recording, let the button blink
 				if(RecordingButton.this.audioCore.isPerformanceRecording() && getBackground().equals(normal)){
 					setBackground(glowing);

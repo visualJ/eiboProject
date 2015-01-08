@@ -21,8 +21,11 @@ public class BackgroundPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private static final int NUMBER_OF_BARS = 100;
 	private static final float HORIZON = 0.4f;
+	private static final Color COLOR_FIRST_BEAT = new Color(240,20,170);
+	private static final Color COLOR_HIGHLIGHT = new Color(170,20,240);
 
 	private AudioCore audioCore;
+	private Color beatColor = COLOR_FIRST_BEAT;
 	private float[] bars = new float[NUMBER_OF_BARS];
 	private int barsOffset = 0;
 	private Thread barOffsetThread;
@@ -74,13 +77,13 @@ public class BackgroundPanel extends JPanel {
 		this.audioCore = audioCore;
 		setOpaque(false);
 		setBackground(Color.black);
-		setForeground(new Color(170,20,240));
+		setForeground(COLOR_HIGHLIGHT);
 		
 		// Add a beat listener, so that the UI can react to beats
 		audioCore.addBeatListener(new BeatListener() {
 			@Override
-			public void beat() {
-				showBeat();
+			public void beat(int beatInBar) {
+				showBeat(beatInBar);
 			}
 			@Override
 			public void bpmChanged(int bpm) {
@@ -122,7 +125,10 @@ public class BackgroundPanel extends JPanel {
 	 * This method should be called once every beat at
 	 * the set beats per minute.
 	 */
-	public void showBeat(){
+	public void showBeat(int beatInBar){
+		// Set beat color
+		beatColor = (beatInBar==0)?COLOR_FIRST_BEAT:getForeground();
+		System.out.println(beatInBar);
 		// Start or restart the animation
 		if(beatIndicatorThread!=null) beatIndicatorThread.interrupt();
 		beatIndicatorThread = new Thread(beatIndicatorAnimation);
@@ -138,7 +144,7 @@ public class BackgroundPanel extends JPanel {
 		graphics.fillRect(0, 0, getWidth(), getHeight());
 		
 		// draw beat indicator
-		graphics.setPaint(new GradientPaint(0, HORIZON*getHeight(), UserInterface.alphaColor(getForeground(), beatIndicatorAlpha), 0, 0, getBackground()));
+		graphics.setPaint(new GradientPaint(0, HORIZON*getHeight(), UserInterface.alphaColor(beatColor, beatIndicatorAlpha), 0, 0, getBackground()));
 		paintBeatIndicator(graphics);
 		
 		// draw bars

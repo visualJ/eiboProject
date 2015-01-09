@@ -85,7 +85,9 @@ public class UserInterface extends JFrame {
 		gbc.weighty = 1;
 		gbc.weightx = 1;
 		JPanel upperPanel = new JPanel();
-		upperPanel.setOpaque(false);
+		upperPanel.setOpaque(true);
+		upperPanel.setBackground(new Color(100,100,100,100));
+		upperPanel.setVisible(true);
 		background.add(upperPanel, gbc);
 		
 		gbc.gridx = 0;

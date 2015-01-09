@@ -1,6 +1,7 @@
 package presentation;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Image;
@@ -34,6 +35,7 @@ public class UserInterface extends JFrame {
 	private SoundPackManager soundpackManager;
 	private SoundPack currentSoundPack;
 	private BackgroundPanel background;
+	private MenuPanel upperPanel;
 	private KeyPanel keys;
 
 	public UserInterface(AudioCore audioCore, SoundPackManager soundpackManager) {
@@ -45,9 +47,12 @@ public class UserInterface extends JFrame {
 	 * Initializes the user interface and prepares everything for use.
 	 */
 	public void init(){
+		
+		//init Defaults
 		setTitle("eiboProject");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setSize(1000, 700);
+		setMinimumSize(new Dimension(500, 500));
 		
 		// Load icons
 		try {
@@ -84,10 +89,10 @@ public class UserInterface extends JFrame {
 		gbc.fill = GridBagConstraints.BOTH;
 		gbc.weighty = 1;
 		gbc.weightx = 1;
-		JPanel upperPanel = new JPanel();
-		upperPanel.setOpaque(true);
-		upperPanel.setBackground(new Color(100,100,100,100));
-		upperPanel.setVisible(true);
+		
+		//upperPanel
+		
+		upperPanel = new MenuPanel();
 		background.add(upperPanel, gbc);
 		
 		gbc.gridx = 0;

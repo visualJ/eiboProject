@@ -19,28 +19,28 @@ import services.AudioCore;
 public class SampleKeyButton extends KeyButton {
 
 	private static final long serialVersionUID = 1L;
-	private static Color VIOLETT = new Color(170,20,240);
-	private static Color ORANGE = new Color(240,170,20);
-	private static Color GREEN = new Color(170,240,20);
+	protected Color STANDART = new Color(170,20,240);
+	protected Color WAITING = new Color(240,170,20);
+	protected Color PLAYING = new Color(170,240,20);
+	protected ActivationModeBehavior activationModeBehavior;
+	protected AudioCore audioCore;
 	
 	private KeyMapping keyMapping;
-	private ActivationModeBehavior activationModeBehavior;
-	private AudioCore audioCore;
 	private SampleListener sampleListener = new SampleListener() {
 		
 		@Override
 		public void stoppedSample() {
-			setBackground(VIOLETT);
+			setBackground(STANDART);
 		}
 		
 		@Override
 		public void sheduledSample() {
-			setBackground(ORANGE);
+			setBackground(WAITING);
 		}
 		
 		@Override
 		public void playedSample() {
-			setBackground(GREEN);
+			setBackground(PLAYING);
 		}
 		
 		@Override
@@ -50,7 +50,7 @@ public class SampleKeyButton extends KeyButton {
 
 		@Override
 		public void stoppedLoop() {
-			setBackground(ORANGE);
+			setBackground(WAITING);
 		}
 	};
 	
@@ -58,6 +58,8 @@ public class SampleKeyButton extends KeyButton {
 		super(keyLabel, keyCode);
 		this.activationModeBehavior = ActivationModeBehavior.getInstance();
 		this.audioCore = audioCore;
+		
+		setBackground(STANDART);
 		
 		setOnTrigger(new Runnable() {
 			
@@ -92,12 +94,14 @@ public class SampleKeyButton extends KeyButton {
 			audioCore.removeSampleListener(sampleListener);
 		}
 		
-		setBackground(VIOLETT);
+		setBackground(STANDART);
 		
 		if(keyMapping != null){
 			
 			// Set the icons
-			setBigIcon(new ImageIcon(keyMapping.getImageFile()).getImage());
+			if(keyMapping.getImageFile() != null){
+				setBigIcon(new ImageIcon(keyMapping.getImageFile()).getImage());
+			}
 			setSmallIcon(UserInterface.getActivationModeImage(keyMapping.getActivationMode()));
 			
 			// Enable the button

@@ -261,7 +261,9 @@ public class AudioCore {
 	 * Stops a mic recording and saves the file
 	 */
 	public SoundSample endRecordingMic(){
-		return inputRecorder.endRecord();
+		SoundSample sample = inputRecorder.endRecord();
+		loadSoundSample(sample);
+		return sample;
 	}
 	
 	/**

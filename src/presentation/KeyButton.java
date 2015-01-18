@@ -12,6 +12,8 @@ import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.AbstractAction;
 import javax.swing.AbstractButton;
@@ -20,6 +22,9 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.KeyStroke;
 import javax.swing.plaf.basic.BasicButtonUI;
+
+import repository.RecSampleModeListener;
+import repository.RecordingSampleMode;
 
 /**
  * A button that can display a key label, a big icon and a small icon.
@@ -218,11 +223,13 @@ public class KeyButton extends JButton {
 	private void assignKeyboardKeyTrigger(){
 		
 		// Create Actions for pressing a key
-		final Action pressed = new AbstractAction() {
+		Action pressed = new AbstractAction() {
 			private static final long serialVersionUID = 1L;
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				onTrigger.run();
+				if(onTrigger != null){
+					onTrigger.run();
+				}
 				getActionMap().remove(keyCode+"p"); // dont retrigger, when held down
 			}
 		};

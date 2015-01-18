@@ -107,11 +107,8 @@ public class AudioCore {
 	 * @param soundSample
 	 */
 	public void loadSoundSample(SoundSample soundSample){
-		if(!sounds.containsKey(soundSample)){
-			
 			// Load a sound file and put it in the sounds map
 			sounds.put(soundSample, loadSoundSamplePlayer(soundSample));
-		}
 	}
 	
 	/**

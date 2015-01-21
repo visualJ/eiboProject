@@ -93,6 +93,7 @@ public class UserInterface extends JFrame {
 		//upperPanel
 		
 		upperPanel = new MenuPanel();
+		upperPanel.setVisible(true);
 		background.add(upperPanel, gbc);
 		
 		gbc.gridx = 0;

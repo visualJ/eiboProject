@@ -107,11 +107,8 @@ public class AudioCore {
 	 * @param soundSample
 	 */
 	public void loadSoundSample(SoundSample soundSample){
-		if(!sounds.containsKey(soundSample)){
-			
 			// Load a sound file and put it in the sounds map
 			sounds.put(soundSample, loadSoundSamplePlayer(soundSample));
-		}
 	}
 	
 	/**
@@ -261,7 +258,9 @@ public class AudioCore {
 	 * Stops a mic recording and saves the file
 	 */
 	public SoundSample endRecordingMic(){
-		return inputRecorder.endRecord();
+		SoundSample sample = inputRecorder.endRecord();
+		loadSoundSample(sample);
+		return sample;
 	}
 	
 	/**

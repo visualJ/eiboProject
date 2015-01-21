@@ -13,7 +13,6 @@ import java.util.Map;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
-import javax.swing.JPanel;
 
 import repository.ActivationMode;
 import repository.KeyMapping;
@@ -30,6 +29,9 @@ public class UserInterface extends JFrame {
 	public static Image recIcon;
 	public static Image programmIconSmall;
 	public static Image programmIconBig;
+	public static Image recordingSampleIcon;
+	public static Image recordingSampleRecordIcon;
+	public static Image recordingSampleDeleteIcon;
 	
 	private AudioCore audioCore;
 	private SoundPackManager soundpackManager;
@@ -49,7 +51,7 @@ public class UserInterface extends JFrame {
 	public void init(){
 		
 		//init Defaults
-		setTitle("eiboProject");
+		setTitle("iBO");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setSize(1000, 700);
 		setMinimumSize(new Dimension(500, 500));
@@ -63,6 +65,9 @@ public class UserInterface extends JFrame {
 			recIcon = ImageIO.read(UserInterface.class.getResourceAsStream("res/record.png"));
 			programmIconSmall = ImageIO.read(UserInterface.class.getResourceAsStream("res/programmIconSmall.png"));
 			programmIconBig = ImageIO.read(UserInterface.class.getResourceAsStream("res/programmIconBig.png"));
+			recordingSampleIcon = ImageIO.read(UserInterface.class.getResourceAsStream("res/recordSample.png"));
+			recordingSampleRecordIcon = ImageIO.read(UserInterface.class.getResourceAsStream("res/recordSampleRecord.png"));
+			recordingSampleDeleteIcon = ImageIO.read(UserInterface.class.getResourceAsStream("res/recordSampleDelete.png"));
 		} catch (IOException | IllegalArgumentException e) {
 			e.printStackTrace();
 		}

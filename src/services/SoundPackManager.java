@@ -1,5 +1,6 @@
 package services;
 
+import java.awt.event.KeyEvent;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -184,14 +185,8 @@ public class SoundPackManager {
 							// Try to interpret as integer
 							keyCode = Integer.parseInt(splitline[0].trim());
 						} catch (NumberFormatException e) {
-							// Try interpret as a letter
-							int codePoint = splitline[0].trim().toUpperCase().codePointAt(0);
-							if(Character.isAlphabetic(codePoint)){
-								keyCode = codePoint;
-							}else{
-								// Neither integer, nor letter
-								break;
-							}
+							// Try interpret as a character
+							keyCode =  KeyEvent.getExtendedKeyCodeForChar(splitline[0].trim().toUpperCase().charAt(0));
 						}
 						activationMode = ActivationMode.valueOf(splitline[1].trim());
 						soundFile = splitline[2].trim();

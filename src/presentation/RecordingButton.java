@@ -1,12 +1,17 @@
 package presentation;
 
 import java.awt.Color;
-import java.io.File;
-import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import repository.BeatListener;
 import services.AudioCore;
 
+/**
+ * A button that starts and stops performance recording
+ * @author Benedikt Ringlein
+ *
+ */
 public class RecordingButton extends KeyButton {
 	
 	private static final long serialVersionUID = 1L;
@@ -29,14 +34,8 @@ public class RecordingButton extends KeyButton {
 					// Stop the recording
 					RecordingButton.this.audioCore.endRecordingPerformance();
 				}else{
-					
-					// Start recording to a new file
-					try {
-						String fileName = File.createTempFile("recording", ".wav",new File("./")).getPath(); 
-						RecordingButton.this.audioCore.startRecordingPerformance(fileName);
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
+					String fileName = "recording_" + (new SimpleDateFormat("YYYYMMDD_HHmmss").format(new Date())) + ".wav";
+					RecordingButton.this.audioCore.startRecordingPerformance(fileName);
 				}
 			}
 		});

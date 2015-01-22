@@ -11,7 +11,11 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+
+import repository.SoundPack;
+import services.SoundPackManager;
 
 
 /** 
@@ -31,6 +35,11 @@ public class MenuPanel extends JPanel{
 	
 	private JButton recordFolder;
 	
+	private Button button; 
+	
+	private JLabel soundpack1;
+	private SoundPackManager manager;
+	
 	
 
 	/**
@@ -39,6 +48,8 @@ public class MenuPanel extends JPanel{
 	private static final long serialVersionUID = -8244586608783664164L;
 
 	public MenuPanel(){
+		
+		manager = new SoundPackManager();
 	
 		content = new JPanel();
 
@@ -61,6 +72,7 @@ public class MenuPanel extends JPanel{
 		constrain.gridx = 0;
 		constrain.gridy = 0;
 		constrain.fill = GridBagConstraints.BOTH;
+		constrain.anchor = GridBagConstraints.FIRST_LINE_START;
 		
 		einklappen.setText("einklappn");
 		einklappen.addActionListener(new ActionListener() {
@@ -128,6 +140,7 @@ public class MenuPanel extends JPanel{
 		constrain.gridx = 1;
 		constrain.gridy = 0;
 		constrain.fill = GridBagConstraints.BOTH;
+		constrain.anchor = GridBagConstraints.NORTH;
 		
 		content.add(compactPanel,constrain);
 		
@@ -138,9 +151,32 @@ public class MenuPanel extends JPanel{
 		constrain.gridx = 1;
 		constrain.gridy = 1;
 		constrain.fill = GridBagConstraints.BOTH;
+		constrain.anchor = GridBagConstraints.NORTH;
 		
 		content.add(recordFolder,constrain);
 		
+		button = new Button("Preferences");
+		
+		constrain.gridheight = 1;
+		constrain.gridwidth = 1;
+		constrain.gridx = 0;
+		constrain.gridy = 1;
+		constrain.fill = GridBagConstraints.BOTH;
+		
+		
+		content.add(button,constrain);
+		
+		
+		soundpack1 = new JLabel();
+		soundpack1.setText("" + manager.getSoundpacksInDirectory("./")[1].getPackName());
+		
+		constrain.gridheight = 1;
+		constrain.gridwidth = 1;
+		constrain.gridx = 0;
+		constrain.gridy = 3; 
+		constrain.fill = GridBagConstraints.BOTH;
+		
+		content.add(soundpack1,constrain);
 		
 
 

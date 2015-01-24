@@ -8,10 +8,13 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
 
 import repository.SoundPack;
@@ -24,22 +27,26 @@ import services.SoundPackManager;
  * **/
 public class MenuPanel extends JPanel{
 
+	
+	private boolean menuOpen = true;
 	private JPanel content;
 	private GridBagConstraints constrain;
 	private JButton einklappen;
 	
 	private JButton preferences;
-	private JButton info;
+	private MenuButton info;
 	private JButton help;
-	private JPanel compactPanel;
-	
 	private JButton recordFolder;
 	
-	private Button button; 
+	private JPanel lineendPanel;
+	private JPanel linestartPanel;
+	private JPanel listPanel;
 	
-	private JLabel soundpack1;
+	
+	private JButton button; 
+
 	private SoundPackManager manager;
-	
+	private JList<SoundPack> liste;
 	
 
 	/**
@@ -49,138 +56,116 @@ public class MenuPanel extends JPanel{
 
 	public MenuPanel(){
 		
-		manager = new SoundPackManager();
+		
+		//set genereal informations
 	
-		content = new JPanel();
 
-		setLayout(new FlowLayout());
+		setLayout(new FlowLayout()); //set Layout of outer Panel
 		setOpaque(true);
-		setBackground(new Color(255,255,255,0));
+		setBackground(new Color(255,255,255,0)); // set Panelbackground to invisible
 		
 		
-		content.setPreferredSize(new Dimension(600,200));
+		content = new JPanel(); // define content Panel
+	
 		content.setOpaque(true);
-		content.setBackground(new Color(255,0,0));
+		content.setBackground(new Color(255,0,0,0)); //set Panelbackground to invisible
+		content.setSize(new Dimension(1000,600));
+		content.setLayout(new GridBagLayout()); // Gridbacklayout for inner Panel
+		constrain = new GridBagConstraints(); // add constrain for Layout 
 		
-		content.setLayout(new GridBagLayout());
-		constrain = new GridBagConstraints();
+		/*
+		 * Genereller aufbau solle wie folgt aussehen 
+		 * Panel	einklappen	Panel
+		 * Listbutton	Liste mit Soundpacks
+		 * 
+		 * (mit Tabs hilfe / info / einstellungen)
+		 * */
 		
-		einklappen = new JButton();
 		
-		constrain.gridwidth = 1;
+	// linestartPanel = info and help button
+		linestartPanel = new JPanel();
+		info = new MenuButton();
+		help = new JButton();
+		
+		linestartPanel.setSize(new Dimension(150,50));
+		try {
+			info.setImage(ImageIO.read(MenuPanel.class.getResource("res/LOOP.png")));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		help.setText("h");
+		
+		linestartPanel.add(info);
+		linestartPanel.add(help);
+		
 		constrain.gridheight = 1;
+		constrain.gridwidth = 1;
 		constrain.gridx = 0;
 		constrain.gridy = 0;
 		constrain.fill = GridBagConstraints.BOTH;
-		constrain.anchor = GridBagConstraints.FIRST_LINE_START;
 		
+		content.add(linestartPanel,constrain);
+		
+	//
+	// einklappen button mit der einblendfunktion	
+		einklappen = new JButton();
+		
+		
+		constrain.gridwidth = 1;
+		constrain.gridheight = 1;
+		constrain.gridx = 1;
+		constrain.gridy = 0;
+		constrain.fill = GridBagConstraints.BOTH;
+
 		einklappen.setText("einklappn");
 		einklappen.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				// TODO Auto-generated method stub
-				closeMenu();
-				System.out.println("hallo ich wurde geklickt");
+				
+				switchMenu();
+				System.out.println("menu open is " + menuOpen);
 			}
 		});
 		content.add(einklappen,constrain);
 		
-		compactPanel = new JPanel();
+
+		lineendPanel = new JPanel();
 		preferences = new JButton();
-		info = new JButton();
-		help = new JButton();
+		recordFolder = new JButton();
 		
+		
+		recordFolder.setText("oR");
 		preferences.setText("p");
-		preferences.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				// TODO Auto-generated method stub
-				JFrame frame = new JFrame();
-				frame.setSize(new Dimension(500,500));
-				frame.setTitle("this would be the preference Frame");
-				
-				frame.setVisible(true);
-				
-			}
-		});
-		info.setText("i");
-		info.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				// TODO Auto-generated method stub
-				JFrame frame = new JFrame();
-				frame.setSize(new Dimension(500,500));
-				frame.setTitle("this would be the info Frame");
-				frame.setVisible(true);
-				
-			}
-		});
-		help.setText("h");
-		help.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				// TODO Auto-generated method stub
-				JFrame frame = new JFrame();
-				frame.setSize(new Dimension(500,500));
-				frame.setTitle("this would be the help Frame");
-				frame.setVisible(true);
-				
-			}
-		});
-		compactPanel.add(preferences);
-		compactPanel.add(info);
-		compactPanel.add(help);
+		
+		
+		lineendPanel.add(preferences);
+		lineendPanel.add(recordFolder);
 		
 		constrain.gridwidth = 1;
 		constrain.gridheight = 1;
-		constrain.gridx = 1;
+		constrain.gridx = 2;
 		constrain.gridy = 0;
 		constrain.fill = GridBagConstraints.BOTH;
-		constrain.anchor = GridBagConstraints.NORTH;
 		
-		content.add(compactPanel,constrain);
+		content.add(lineendPanel,constrain);
 		
-		recordFolder = new JButton();
-		recordFolder.setText("open Record");
-		constrain.gridwidth = 1;
-		constrain.gridheight = 1;
-		constrain.gridx = 1;
-		constrain.gridy = 1;
-		constrain.fill = GridBagConstraints.BOTH;
-		constrain.anchor = GridBagConstraints.NORTH;
+		listPanel = new JPanel();
+		button = new JButton("pref");
 		
-		content.add(recordFolder,constrain);
 		
-		button = new Button("Preferences");
+		listPanel.add(button);
 		
 		constrain.gridheight = 1;
 		constrain.gridwidth = 1;
 		constrain.gridx = 0;
-		constrain.gridy = 1;
+		constrain.gridy = 2;
 		constrain.fill = GridBagConstraints.BOTH;
 		
 		
-		content.add(button,constrain);
-		
-		
-		soundpack1 = new JLabel();
-		soundpack1.setText("" + manager.getSoundpacksInDirectory("./")[1].getPackName());
-		
-		constrain.gridheight = 1;
-		constrain.gridwidth = 1;
-		constrain.gridx = 0;
-		constrain.gridy = 3; 
-		constrain.fill = GridBagConstraints.BOTH;
-		
-		content.add(soundpack1,constrain);
-		
-
-
-  
+		content.add(listPanel,constrain);
 		
 		content.setVisible(true);
 		
@@ -194,9 +179,10 @@ public class MenuPanel extends JPanel{
 		
 	}
 	
-	public void closeMenu()
+	public void switchMenu()
 	{
-		this.setSize(1000, 50);
+	
+		menuOpen = !menuOpen;
 	}
 	
 	

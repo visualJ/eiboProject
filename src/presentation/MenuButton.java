@@ -15,13 +15,25 @@ import javax.swing.JComponent;
 import javax.swing.plaf.ButtonUI;
 
 
+/**
+ * 
+ * 
+ * @author Patrik Pezelj
+ * 
+ * This Class creates a individual Button with Image 
+ *
+ */
+public class MenuButton extends JButton {
 
-public class Button extends JButton {
-
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private Image icon;
+	private String text = "";
 
-	public Button(String label){
-		setText(label);
+	public MenuButton(){
+		setText(text);
 		setSize(100,100);
 		setOpaque(false);
 		
@@ -29,15 +41,16 @@ public class Button extends JButton {
 		
 		setUI(new ButtonUI() {
 			
+			
 			protected void paintText(Graphics g, AbstractButton b,
 					Rectangle textRect, String text){
 				
 				g.setColor(b.getForeground());
-				g.drawString(b.getText(), 5, 15);
+				g.drawString(b.getText(), (b.getWidth() / 2)-  (getFont().getSize() * getText().length() /4) , b.getHeight() / 2);
 			}
 			
-			
 			public void paint(Graphics g1, JComponent c){
+				
 				Graphics2D g = (Graphics2D)g1;
 				g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 				g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -60,6 +73,8 @@ public class Button extends JButton {
 				// Paint the other elements on the button
 				paintText(g, b, getBounds(), getText());
 				paintIcon(g, c, getBounds());
+				
+				
 						
 			}
 			
@@ -68,8 +83,8 @@ public class Button extends JButton {
 				
 				if(icon != null)
 				{
-					int iconWidth = icon.getWidth(Button.this);
-					int iconHeight = icon.getHeight(Button.this);
+					int iconWidth = icon.getWidth(MenuButton.this);
+					int iconHeight = icon.getHeight(MenuButton.this);
 					if(iconWidth/iconHeight != getWidth()/getHeight()){
 						if(iconWidth - getWidth() < iconHeight - getHeight()){
 							// Scale icon to fit vertically, keep aspect ratio
@@ -104,6 +119,10 @@ public class Button extends JButton {
 	
 	public void setPreferredSize(Dimension d){
 		setPreferredSize(d);
+	}
+	public void setText(String string)
+	{
+		this.text = string;
 	}
 	
 	

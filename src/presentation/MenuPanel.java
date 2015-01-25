@@ -84,12 +84,14 @@ public class MenuPanel extends JPanel{
 		
 	// linestartPanel = info and help button
 		linestartPanel = new JPanel();
-		info = new MenuButton();
+		info = new MenuButton("i");
 		help = new JButton();
 		
 		linestartPanel.setSize(new Dimension(150,50));
+		linestartPanel.setBackground(new Color(255,0,0));
 		try {
 			info.setImage(ImageIO.read(MenuPanel.class.getResource("res/LOOP.png")));
+			System.out.println("loop.png get loaded");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -30,15 +30,15 @@ public class MenuButton extends JButton {
 	 */
 	private static final long serialVersionUID = 1L;
 	private Image icon;
-	private String text = "";
 
-	public MenuButton(){
+
+	public MenuButton(String text){
 		setText(text);
 		setSize(100,100);
 		setOpaque(false);
 		
 
-		
+	
 		setUI(new ButtonUI() {
 			
 			
@@ -46,7 +46,9 @@ public class MenuButton extends JButton {
 					Rectangle textRect, String text){
 				
 				g.setColor(b.getForeground());
-				g.drawString(b.getText(), (b.getWidth() / 2)-  (getFont().getSize() * getText().length() /4) , b.getHeight() / 2);
+				//g.drawString(b.getText(), (b.getWidth() / 2)-  (getFont().getSize() * getText().length() /4) , b.getHeight() / 2);
+				g.drawString(b.getText(),5 , 5);
+				
 			}
 			
 			public void paint(Graphics g1, JComponent c){
@@ -120,11 +122,7 @@ public class MenuButton extends JButton {
 	public void setPreferredSize(Dimension d){
 		setPreferredSize(d);
 	}
-	public void setText(String string)
-	{
-		this.text = string;
-	}
-	
+
 	
 	
 	

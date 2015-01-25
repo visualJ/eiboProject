@@ -11,38 +11,19 @@ import java.awt.Rectangle;
 import java.awt.RenderingHints;
 
 import javax.swing.AbstractButton;
-import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.plaf.basic.BasicButtonUI;
 
-/**
- * A button that can display a key label, a big icon and a small icon.
- * It can get Runnables to run when pressed or released. Those
- * are also run when the according action happens on the actual keyboard.
- * @author Benedikt Ringlein changed by Patrik Pezelj
- *
- */
-public class MenuButton extends JButton {
+public class MenuOpenCloseButton extends MenuButton{
 
-	private static final long serialVersionUID = 1L;
-	
-	private Image bigIcon;
-	
-	public MenuButton(String keyLabel){
-		
-		
-		setText(keyLabel);
-		setPreferredSize(new Dimension(40, 40));
-		setBorderPainted(false);
-		setOpaque(false);
-		setFocusable(false);
-		setForeground(Color.white);
-		setBackground(Color.gray);
-		
-	
+	private Image icon;
+	public MenuOpenCloseButton(String keyLabel) {
+		super(keyLabel);
+		setPreferredSize(new Dimension(200,30));
+		// TODO Auto-generated constructor stub
 		
 		setUI(new BasicButtonUI() {
-		
+			
 			@Override
 			protected void paintText(Graphics g, AbstractButton b,
 					Rectangle textRect, String text) {
@@ -105,20 +86,20 @@ public class MenuButton extends JButton {
 			@Override
 			protected void paintIcon(Graphics g, JComponent c,
 					Rectangle iconRect) {
-				if(bigIcon != null){
-					int iconWidth = bigIcon.getWidth(MenuButton.this);
-					int iconHeight = bigIcon.getHeight(MenuButton.this);
+				if(icon != null){
+					int iconWidth = icon.getWidth(MenuOpenCloseButton.this);
+					int iconHeight = icon.getHeight(MenuOpenCloseButton.this);
 					if(iconWidth/iconHeight != getWidth()/getHeight()){
 						if(iconWidth - getWidth() < iconHeight - getHeight()){
 							// Scale icon to fit vertically, keep aspect ratio
-							g.drawImage(bigIcon, getWidth()/2-getHeight()/2, 0, (int) (getHeight()*((float)iconWidth/iconHeight)), getHeight(), c);
+							g.drawImage(icon, getWidth()/2-getHeight()/2, 0, (int) (getHeight()*((float)iconWidth/iconHeight)), getHeight(), c);
 						}else{
 							// Scale icon to fit horizontally, keep aspect ratio
-							g.drawImage(bigIcon, 0, getHeight()/2-getWidth()/2, getWidth(), (int) (getWidth()*((float)iconWidth/iconHeight)), c);
+							g.drawImage(icon, 0, getHeight()/2-getWidth()/2, getWidth(), (int) (getWidth()*((float)iconWidth/iconHeight)), c);
 						}
 					}else{
 						// Scale Icon to full button size
-						g.drawImage(bigIcon, 0, 0, getWidth(), getHeight(), c);
+						g.drawImage(icon, 0, 0, getWidth(), getHeight(), c);
 					}
 				}
 			}
@@ -131,7 +112,7 @@ public class MenuButton extends JButton {
 
 	
 	public Image getBigIcon() {
-		return bigIcon;
+		return icon;
 	}
 
 	/**
@@ -139,13 +120,15 @@ public class MenuButton extends JButton {
 	 * @param bigIcon The icon to show
 	 */
 	public void setBigIcon(Image bigIcon) {
-		this.bigIcon = bigIcon;
+		this.icon = bigIcon;
 	}
 
+	}
 
-
-
+	/**
+	 * 
+	 */
 
 	
 	
-}
+

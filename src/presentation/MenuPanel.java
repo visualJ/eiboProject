@@ -1,6 +1,7 @@
 package presentation;
 
 import java.awt.Color;
+import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
@@ -8,9 +9,12 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
+import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -27,26 +31,27 @@ import services.SoundPackManager;
  * **/
 public class MenuPanel extends JPanel{
 
+	private final Color BLACK = new Color(0,0,0);
 	
 	private boolean menuOpen = true;
 	private JPanel content;
 	private GridBagConstraints constrain;
-	private JButton einklappen;
+	private MenuOpenCloseButton einklappen;
 	
-	private JButton preferences;
+	private MenuButton preferences;
 	private MenuButton info;
-	private JButton help;
-	private JButton recordFolder;
+	private MenuButton help;
+	private MenuButton recordFolder;
 	
 	private JPanel lineendPanel;
 	private JPanel linestartPanel;
 	private JPanel listPanel;
 	
-	
-	private JButton button; 
 
 	private SoundPackManager manager;
 	private JList<SoundPack> liste;
+	
+	private SoundPackManager spm;
 	
 
 	/**
@@ -56,7 +61,7 @@ public class MenuPanel extends JPanel{
 
 	public MenuPanel(){
 		
-		
+		spm = new SoundPackManager();
 		//set genereal informations
 	
 
@@ -85,17 +90,22 @@ public class MenuPanel extends JPanel{
 	// linestartPanel = info and help button
 		linestartPanel = new JPanel();
 		info = new MenuButton("i");
-		help = new JButton();
+		help = new MenuButton("h");
+		
+		
+		info.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				System.out.println("i wurde gedrückt");
+				
+			}
+		});
 		
 		linestartPanel.setSize(new Dimension(150,50));
-		linestartPanel.setBackground(new Color(255,0,0));
-		try {
-			info.setImage(ImageIO.read(MenuPanel.class.getResource("res/LOOP.png")));
-			System.out.println("loop.png get loaded");
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		linestartPanel.setBackground(BLACK);
+	
 		help.setText("h");
 		
 		linestartPanel.add(info);
@@ -111,7 +121,7 @@ public class MenuPanel extends JPanel{
 		
 	//
 	// einklappen button mit der einblendfunktion	
-		einklappen = new JButton();
+		einklappen = new MenuOpenCloseButton("einklappen");
 		
 		
 		constrain.gridwidth = 1;
@@ -135,13 +145,27 @@ public class MenuPanel extends JPanel{
 		
 
 		lineendPanel = new JPanel();
-		preferences = new JButton();
-		recordFolder = new JButton();
+		preferences = new MenuButton("p");
+		recordFolder = new MenuButton("rF");
 		
 		
-		recordFolder.setText("oR");
+		recordFolder.setText("rF");
+		recordFolder.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				// TODO Auto-generated method stub
+				try {
+					Desktop.getDesktop().open(new File("./"));
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+			}
+		});
 		preferences.setText("p");
-		
+		lineendPanel.setBackground(BLACK);
 		
 		lineendPanel.add(preferences);
 		lineendPanel.add(recordFolder);
@@ -154,14 +178,18 @@ public class MenuPanel extends JPanel{
 		
 		content.add(lineendPanel,constrain);
 		
+		
+		
 		listPanel = new JPanel();
-		button = new JButton("pref");
+		liste = new JList(getSoundpackNames("./"));
 		
+		liste.setPreferredSize(new Dimension(200,60));
 		
-		listPanel.add(button);
+		listPanel.setBackground(BLACK);
+		listPanel.add(liste);
 		
 		constrain.gridheight = 1;
-		constrain.gridwidth = 1;
+		constrain.gridwidth = 3;
 		constrain.gridx = 0;
 		constrain.gridy = 2;
 		constrain.fill = GridBagConstraints.BOTH;
@@ -185,6 +213,34 @@ public class MenuPanel extends JPanel{
 	{
 	
 		menuOpen = !menuOpen;
+	}
+	
+	private String[] getSoundpackNames(String path){
+		SoundPack[] soundpacks;
+		
+		
+		soundpacks = spm.getSoundpacksInDirectory(path);
+		String[] soundpacknames = new String[soundpacks.length];
+		for(int i = 0; i < soundpacks.length; i++)
+		{
+			soundpacknames[i] = soundpacks[i].getPackName();
+		}
+		
+		return soundpacknames;
+	}
+	
+	private SoundPack getSoundpack(String name,String path)
+	{
+		SoundPack[] soundpacks;
+		soundpacks = spm.getSoundpacksInDirectory(path);
+		for(int i = 0; i < soundpacks.length; i++)
+		{
+			if(soundpacks[i].getPackName().equals(name)){
+				return soundpacks[i];
+			}
+		}
+		System.out.println("exeption handling ... sounpack not found exeption");
+		return null;
 	}
 	
 	

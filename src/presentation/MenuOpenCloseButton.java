@@ -16,7 +16,9 @@ import javax.swing.plaf.basic.BasicButtonUI;
 
 public class MenuOpenCloseButton extends MenuButton{
 
+	private static final long serialVersionUID = 1L;
 	private Image icon;
+	
 	public MenuOpenCloseButton(String keyLabel) {
 		super(keyLabel);
 		setPreferredSize(new Dimension(200,30));
@@ -50,7 +52,7 @@ public class MenuOpenCloseButton extends MenuButton{
 					
 					// Paint a nice reflection effect
 					g.setPaint(new GradientPaint(0, 0, UserInterface.alphaColor(Color.white, 0.4f), 0, c.getHeight()/2, UserInterface.alphaColor(Color.white, 0.05f)));
-					g.fillRoundRect(0, 0, c.getWidth(), c.getHeight()/2,20,20);
+					g.fillRoundRect(0, 0, c.getWidth(), c.getHeight()/2,10,10);
 					
 					
 					if(button.getModel().isPressed()){

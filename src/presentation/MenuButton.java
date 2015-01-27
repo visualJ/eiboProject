@@ -69,7 +69,7 @@ public class MenuButton extends JButton {
 					
 					// Paint a nice reflection effect
 					g.setPaint(new GradientPaint(0, 0, UserInterface.alphaColor(Color.white, 0.4f), 0, c.getHeight()/2, UserInterface.alphaColor(Color.white, 0.05f)));
-					g.fillRoundRect(0, 0, c.getWidth(), c.getHeight()/2,20,20);
+					g.fillRoundRect(0, 0, c.getWidth(), c.getHeight()/2,10,10);
 					
 					
 					if(button.getModel().isPressed()){

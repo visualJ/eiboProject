@@ -6,18 +6,11 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 
-import javax.imageio.ImageIO;
-import javax.swing.Icon;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 
@@ -30,8 +23,6 @@ import services.SoundPackManager;
  * 
  * **/
 public class MenuPanel extends JPanel{
-
-	private final Color BLACK = new Color(0,0,0);
 	
 	private boolean menuOpen = true;
 	private JPanel content;
@@ -48,10 +39,9 @@ public class MenuPanel extends JPanel{
 	private JPanel listPanel;
 	
 
-	private SoundPackManager manager;
-	private JList<SoundPack> liste;
+	private JList<SoundPack> soundPackList;
 	
-	private SoundPackManager spm;
+	private SoundPackManager soundPackManager;
 	
 
 	/**
@@ -61,7 +51,7 @@ public class MenuPanel extends JPanel{
 
 	public MenuPanel(){
 		
-		spm = new SoundPackManager();
+		soundPackManager = new SoundPackManager();
 		//set genereal informations
 	
 
@@ -73,7 +63,7 @@ public class MenuPanel extends JPanel{
 		content = new JPanel(); // define content Panel
 	
 		content.setOpaque(true);
-		content.setBackground(new Color(255,0,0,0)); //set Panelbackground to invisible
+		content.setBackground(UserInterface.alphaColor(Color.BLACK, 0.5f));
 		content.setSize(new Dimension(1000,600));
 		content.setLayout(new GridBagLayout()); // Gridbacklayout for inner Panel
 		constrain = new GridBagConstraints(); // add constrain for Layout 
@@ -97,14 +87,12 @@ public class MenuPanel extends JPanel{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
 				System.out.println("i wurde gedrückt");
-				
 			}
 		});
 		
 		linestartPanel.setSize(new Dimension(150,50));
-		linestartPanel.setBackground(BLACK);
+		linestartPanel.setOpaque(false);
 	
 		help.setText("h");
 		
@@ -135,10 +123,7 @@ public class MenuPanel extends JPanel{
 			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				// TODO Auto-generated method stub
-				
 				switchMenu();
-				System.out.println("menu open is " + menuOpen);
 			}
 		});
 		content.add(einklappen,constrain);
@@ -154,18 +139,16 @@ public class MenuPanel extends JPanel{
 			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				// TODO Auto-generated method stub
 				try {
 					Desktop.getDesktop().open(new File("./"));
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				
 			}
 		});
 		preferences.setText("p");
-		lineendPanel.setBackground(BLACK);
+		lineendPanel.setOpaque(false);
 		
 		lineendPanel.add(preferences);
 		lineendPanel.add(recordFolder);
@@ -181,12 +164,12 @@ public class MenuPanel extends JPanel{
 		
 		
 		listPanel = new JPanel();
-		liste = new JList(getSoundpackNames("./"));
+		soundPackList = new JList<SoundPack>(soundPackManager.getSoundpacksInDirectory("./"));
 		
-		liste.setPreferredSize(new Dimension(200,60));
+		soundPackList.setPreferredSize(new Dimension(200,120));
 		
-		listPanel.setBackground(BLACK);
-		listPanel.add(liste);
+		listPanel.setOpaque(false);
+		listPanel.add(soundPackList);
 		
 		constrain.gridheight = 1;
 		constrain.gridwidth = 3;
@@ -196,13 +179,7 @@ public class MenuPanel extends JPanel{
 		
 		
 		content.add(listPanel,constrain);
-		
 		content.setVisible(true);
-		
-		
-	
-	
-		
 
 		add(content);
 		setVisible(true);
@@ -211,36 +188,14 @@ public class MenuPanel extends JPanel{
 	
 	public void switchMenu()
 	{
-	
+		if(menuOpen){
+			content.setPreferredSize(new Dimension(500, 50));
+			listPanel.setVisible(false);
+		}else{
+			content.setPreferredSize(new Dimension(500, 180));
+			listPanel.setVisible(true);
+		}
 		menuOpen = !menuOpen;
-	}
-	
-	private String[] getSoundpackNames(String path){
-		SoundPack[] soundpacks;
-		
-		
-		soundpacks = spm.getSoundpacksInDirectory(path);
-		String[] soundpacknames = new String[soundpacks.length];
-		for(int i = 0; i < soundpacks.length; i++)
-		{
-			soundpacknames[i] = soundpacks[i].getPackName();
-		}
-		
-		return soundpacknames;
-	}
-	
-	private SoundPack getSoundpack(String name,String path)
-	{
-		SoundPack[] soundpacks;
-		soundpacks = spm.getSoundpacksInDirectory(path);
-		for(int i = 0; i < soundpacks.length; i++)
-		{
-			if(soundpacks[i].getPackName().equals(name)){
-				return soundpacks[i];
-			}
-		}
-		System.out.println("exeption handling ... sounpack not found exeption");
-		return null;
 	}
 	
 	

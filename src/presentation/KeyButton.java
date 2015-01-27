@@ -12,8 +12,6 @@ import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.AbstractAction;
 import javax.swing.AbstractButton;
@@ -22,9 +20,6 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.KeyStroke;
 import javax.swing.plaf.basic.BasicButtonUI;
-
-import repository.RecSampleModeListener;
-import repository.RecordingSampleMode;
 
 /**
  * A button that can display a key label, a big icon and a small icon.

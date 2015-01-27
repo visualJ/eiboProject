@@ -78,4 +78,9 @@ public class SoundPack {
 	public void setBarLength(int barLength) {
 		this.barLength = barLength;
 	}
+
+	@Override
+	public String toString(){
+		return packName;
+	}
 }

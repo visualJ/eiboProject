@@ -189,10 +189,8 @@ public class MenuPanel extends JPanel{
 	public void switchMenu()
 	{
 		if(menuOpen){
-			content.setPreferredSize(new Dimension(500, 50));
 			listPanel.setVisible(false);
 		}else{
-			content.setPreferredSize(new Dimension(500, 180));
 			listPanel.setVisible(true);
 		}
 		menuOpen = !menuOpen;

@@ -97,7 +97,7 @@ public class UserInterface extends JFrame {
 		
 		//upperPanel
 		
-		upperPanel = new MenuPanel();
+		upperPanel = new MenuPanel(soundpackManager, this);
 		upperPanel.setVisible(true);
 		background.add(upperPanel, gbc);
 		

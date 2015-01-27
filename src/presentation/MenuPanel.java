@@ -38,8 +38,10 @@ public class MenuPanel extends JPanel{
 	private JPanel linestartPanel;
 	private JPanel listPanel;
 	
+	private UserInterface userInterface;
+	
 
-	private JList<SoundPack> soundPackList;
+	private SoundPackList soundPackList;
 	
 	private SoundPackManager soundPackManager;
 	
@@ -49,9 +51,11 @@ public class MenuPanel extends JPanel{
 	 */
 	private static final long serialVersionUID = -8244586608783664164L;
 
-	public MenuPanel(){
+	public MenuPanel(SoundPackManager soundPackManager, UserInterface userInterface){
 		
-		soundPackManager = new SoundPackManager();
+		this.soundPackManager = soundPackManager;
+		this.userInterface = userInterface;
+		
 		//set genereal informations
 	
 
@@ -164,7 +168,7 @@ public class MenuPanel extends JPanel{
 		
 		
 		listPanel = new JPanel();
-		soundPackList = new JList<SoundPack>(soundPackManager.getSoundpacksInDirectory("./"));
+		soundPackList = new SoundPackList(soundPackManager.getSoundpacksInDirectory("./"), this.userInterface);
 		
 		soundPackList.setPreferredSize(new Dimension(200,120));
 		

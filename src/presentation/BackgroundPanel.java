@@ -131,7 +131,7 @@ public class BackgroundPanel extends JPanel {
 		// Start or restart the animation
 		if(beatIndicatorThread!=null) beatIndicatorThread.interrupt();
 		beatIndicatorThread = new Thread(beatIndicatorAnimation);
-		beatIndicatorThread.start(); 
+		beatIndicatorThread.start();
 	}
 	
 	@Override

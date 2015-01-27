@@ -94,6 +94,13 @@ public class KeyPanel extends JPanel {
 		// Add special keys
 		recordingButton = new RecordingButton("LEERTASTE", KeyEvent.VK_SPACE, this.audioCore);
 		addButton(3, 4, 5, 1, recordingButton);
+		
+		// Add effect keys
+		addEffectKeyButton("LINKS", KeyEvent.VK_LEFT, 9, 4);
+		addEffectKeyButton("HOCH", KeyEvent.VK_UP, 10, 4);
+		addEffectKeyButton("RUNTER", KeyEvent.VK_DOWN, 11, 4);
+		addEffectKeyButton("RECHTS", KeyEvent.VK_RIGHT, 12, 4);
+		
 	}
 	
 	/**
@@ -134,6 +141,18 @@ public class KeyPanel extends JPanel {
 	}
 
 	/**
+	 * Adds an effect key button to the panel
+	 * @param label The buttons label
+	 * @param keyCode The keycode of the corresponding button
+	 * @param x The grid x position
+	 * @param y The grid y position
+	 */
+	private void addEffectKeyButton(String label, int keyCode, int x, int y){
+		EffectKeyButton button = new EffectKeyButton(label, keyCode, audioCore);
+		addButton(x, y, 1, 1, button);
+	}
+	
+	/**
 	 * Adds a key button to the panel
 	 * @param label The buttons label
 	 * @param keyCode The key code
@@ -153,7 +172,7 @@ public class KeyPanel extends JPanel {
 	 * @param label The buttons label
 	 * @param keyCode The keycode of the corresponding button
 	 * @param x The grid x position
-	 * @param y The grid y positon
+	 * @param y The grid y positison
 	 */
 	private void addRecordingSampleKeyButton(String label, int keyCode, int x, int y){
 		RecordingSampleKeyButton button = new RecordingSampleKeyButton(label, keyCode, audioCore, this);

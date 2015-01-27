@@ -11,6 +11,7 @@ import java.util.List;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
+import repository.EffectMode;
 import repository.KeyMapping;
 import repository.RecSampleModeListener;
 import repository.RecordingSampleMode;
@@ -96,11 +97,10 @@ public class KeyPanel extends JPanel {
 		addButton(3, 4, 5, 1, recordingButton);
 		
 		// Add effect keys
-		addEffectKeyButton("LINKS", KeyEvent.VK_LEFT, 9, 4);
-		addEffectKeyButton("HOCH", KeyEvent.VK_UP, 10, 4);
-		addEffectKeyButton("RUNTER", KeyEvent.VK_DOWN, 11, 4);
-		addEffectKeyButton("RECHTS", KeyEvent.VK_RIGHT, 12, 4);
-		
+		addEffectKeyButton("LINKS", EffectMode.HIGHPASS, KeyEvent.VK_LEFT, 9, 4);
+		//addEffectKeyButton("HOCH", EffectMode.LOWPASS, KeyEvent.VK_UP, 10, 4);
+		addEffectKeyButton("RUNTER", EffectMode.DELAY, KeyEvent.VK_DOWN, 11, 4);
+		addEffectKeyButton("RECHTS", EffectMode.LOWPASS, KeyEvent.VK_RIGHT, 12, 4);
 	}
 	
 	/**
@@ -147,8 +147,8 @@ public class KeyPanel extends JPanel {
 	 * @param x The grid x position
 	 * @param y The grid y position
 	 */
-	private void addEffectKeyButton(String label, int keyCode, int x, int y){
-		EffectKeyButton button = new EffectKeyButton(label, keyCode, audioCore);
+	private void addEffectKeyButton(String label, EffectMode mode, int keyCode, int x, int y){
+		EffectKeyButton button = new EffectKeyButton(label, mode, keyCode, audioCore);
 		addButton(x, y, 1, 1, button);
 	}
 	

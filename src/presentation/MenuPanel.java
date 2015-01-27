@@ -11,6 +11,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -85,10 +86,16 @@ public class MenuPanel extends JPanel{
 		
 	// linestartPanel = info and help button
 		linestartPanel = new JPanel();
-		info = new MenuButton("i");
-		help = new MenuButton("h");
+		info = new MenuButton("");
+		help = new MenuButton("");
 		
-		
+		try {
+			info.setBigIcon(ImageIO.read(MenuPanel.class.getResource("res/Info.png")));
+			help.setBigIcon(ImageIO.read(MenuPanel.class.getResource("res/Hilfe.png")));
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		info.addActionListener(new ActionListener() {
 			
 			@Override
@@ -100,7 +107,8 @@ public class MenuPanel extends JPanel{
 		linestartPanel.setSize(new Dimension(150,50));
 		linestartPanel.setOpaque(false);
 	
-		help.setText("h");
+		help.setText("");
+		
 		
 		linestartPanel.add(info);
 		linestartPanel.add(help);
@@ -132,15 +140,29 @@ public class MenuPanel extends JPanel{
 				switchMenu();
 			}
 		});
+		try {
+			einklappen.setBigIcon(ImageIO.read(MenuPanel.class.getResource("res/arrow.png")));
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		content.add(einklappen,constrain);
 		
 
 		lineendPanel = new JPanel();
-		preferences = new MenuButton("p");
+		preferences = new MenuButton("");
 		recordFolder = new MenuButton("rF");
 		
 		
 		recordFolder.setText("rF");
+		try {
+			preferences.setBigIcon(ImageIO.read(MenuPanel.class.getResource("res/Einstellungen.png")));
+			recordFolder.setBigIcon(ImageIO.read(MenuPanel.class.getResource("res/Ordner.png")));
+			
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		recordFolder.addActionListener(new ActionListener() {
 			
 			@Override
@@ -153,7 +175,7 @@ public class MenuPanel extends JPanel{
 				
 			}
 		});
-		preferences.setText("p");
+		
 		lineendPanel.setOpaque(false);
 		
 		lineendPanel.add(preferences);
@@ -178,6 +200,7 @@ public class MenuPanel extends JPanel{
 		
 		listPanel.setOpaque(false);
 		listPanel.add(soundPackScrollPane);
+		listPanel.setVisible(false);
 		
 		constrain.gridheight = 1;
 		constrain.gridwidth = 3;
@@ -195,10 +218,22 @@ public class MenuPanel extends JPanel{
 	
 	public void switchMenu()
 	{
-		if(menuOpen){
+		if(!menuOpen){
 			listPanel.setVisible(false);
+			try {
+				einklappen.setBigIcon(ImageIO.read(MenuPanel.class.getResource("res/arrow.png")));
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		}else{
 			listPanel.setVisible(true);
+			try {
+				einklappen.setBigIcon(ImageIO.read(MenuPanel.class.getResource("res/arrowUp.png")));
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		}
 		menuOpen = !menuOpen;
 	}

@@ -1,7 +1,6 @@
 package services;
 
 import repository.EffectMode;
-import repository.NotInitializedException;
 
 public class EffectModeBehavior {
 
@@ -34,16 +33,12 @@ public class EffectModeBehavior {
 				System.out.println("lowpass: funktioniert");
 				break;
 			case DELAY:
+				System.out.println(audioCore.getAudioFx().isDelay());
 				System.out.println(audioCore.getAudioFx().getDelTime());
-				if(audioCore.getAudioFx().getDelTime() <= 0f){
-					audioCore.getAudioFx().setDelTime(2f);
-					System.out.println("sollte 2 sein");
-				}else{
-					audioCore.getAudioFx().setDelTime(0f);
-					System.out.println("sollte 0 sein");
-				}
-				//audioCore.getAudioFx().setDelTime(((audioCore.getAudioFx().getDelTime()<=0f)?2.0f:0f));
-				System.out.println("delay: funktioniert");
+				audioCore.getAudioFx().setDelTime(((audioCore.getAudioFx().isDelay())?0.0f:2.0f));
+				System.out.println("--");
+				System.out.println(audioCore.getAudioFx().isDelay());
+				System.out.println(audioCore.getAudioFx().getDelTime());
 				break;
 			default:
 				break;

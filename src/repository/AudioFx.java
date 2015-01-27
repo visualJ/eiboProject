@@ -43,6 +43,14 @@ public class AudioFx extends Summer{
 	}
 	
 	/**
+	 * Returns, if the delay effect is on
+	 * @return True, if delay effect is active
+	 */
+	public boolean isDelay(){
+		return delTime > 1/audioOutput.sampleRate();
+	}
+	
+	/**
 	 * Sets the delay time of the delay effect. The value
 	 * should be between 0 and 1 (lowest value depends on sample rate of
 	 * the audio output)
@@ -50,7 +58,7 @@ public class AudioFx extends Summer{
 	 */
 	public void setDelTime(float delTime){
 		this.delTime = Math.max(delTime, 1/audioOutput.sampleRate());
-		delayFilter.setDelTime(delTime);
+		delayFilter.setDelTime(this.delTime);
 	}
 	
 	/**

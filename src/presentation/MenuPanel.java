@@ -13,6 +13,8 @@ import java.io.IOException;
 
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneConstants;
 
 import repository.SoundPack;
 import services.SoundPackManager;
@@ -40,7 +42,7 @@ public class MenuPanel extends JPanel{
 	
 	private UserInterface userInterface;
 	
-
+	private JScrollPane soundPackScrollPane;
 	private SoundPackList soundPackList;
 	
 	private SoundPackManager soundPackManager;
@@ -165,22 +167,23 @@ public class MenuPanel extends JPanel{
 		
 		content.add(lineendPanel,constrain);
 		
-		
-		
 		listPanel = new JPanel();
 		soundPackList = new SoundPackList(soundPackManager.getSoundpacksInDirectory("./"), this.userInterface);
 		
-		soundPackList.setPreferredSize(new Dimension(200,120));
+		soundPackScrollPane = new JScrollPane(soundPackList);
+		soundPackScrollPane.setPreferredSize(new Dimension(200,120));
+		soundPackScrollPane.setBorder(null);
+		//soundPackScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		System.out.println(soundPackScrollPane.getVerticalScrollBarPolicy());
 		
 		listPanel.setOpaque(false);
-		listPanel.add(soundPackList);
+		listPanel.add(soundPackScrollPane);
 		
 		constrain.gridheight = 1;
 		constrain.gridwidth = 3;
 		constrain.gridx = 0;
 		constrain.gridy = 2;
 		constrain.fill = GridBagConstraints.BOTH;
-		
 		
 		content.add(listPanel,constrain);
 		content.setVisible(true);

@@ -19,6 +19,7 @@ import repository.KeyMapping;
 import repository.SoundPack;
 import services.ActivationModeBehavior;
 import services.AudioCore;
+import services.EffectModeBehavior;
 import services.SoundPackManager;
 
 public class UserInterface extends JFrame {
@@ -80,6 +81,9 @@ public class UserInterface extends JFrame {
 		
 		// Initialize the ActivationModeBehavior
 		ActivationModeBehavior.init(audioCore);
+		
+		// Initialize the EffectModeBehavior
+		EffectModeBehavior.init(audioCore);
 		
 		background = new BackgroundPanel(audioCore);
 		background.setLayout(new GridBagLayout());

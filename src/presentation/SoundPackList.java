@@ -3,6 +3,7 @@ package presentation;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Image;
+import java.awt.MediaTracker;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -58,10 +59,12 @@ public class SoundPackList extends JList<SoundPack> {
 			}
 			setIcon(new ImageIcon(UserInterface.programmIconBig.getScaledInstance(30, 30, Image.SCALE_SMOOTH)));
 			try {
-				setIcon(new ImageIcon(new ImageIcon(sp.getImageFile()).getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH)));
+				if(new ImageIcon(sp.getImageFile()).getImageLoadStatus()!=MediaTracker.ERRORED){
+					setIcon(new ImageIcon(new ImageIcon(sp.getImageFile()).getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH)));
+				}
 			} catch (Exception e) {
-				// Just in cas a file is missing, or
-				// an error occurrs during loading of the image
+				// Just in case a file is missing, or
+				// an error occurrs during loading of the image:
 				e.printStackTrace();
 			}
 			setToolTipText(String.format("%s (%s) - %d BPM - %d Samples",sp.getPackName(), sp.getCreatorName(), sp.getBpm(), sp.getKeyMappings().size()));

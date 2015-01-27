@@ -7,12 +7,11 @@ public class EffectModeBehavior {
 
 		private static EffectModeBehavior instance = null;
 		
-		private AudioCore audioCore;
-		
+		private static AudioCore audioCore;
 		
 		public static EffectModeBehavior getInstance(){
 			if(instance == null){
-				throw new NotInitializedException("EffectModeBehavior");
+				instance = new EffectModeBehavior();
 			}
 			return instance;
 		}
@@ -20,25 +19,30 @@ public class EffectModeBehavior {
 		/**
 		 */
 		public static void init(AudioCore audioCore){
-			instance = new EffectModeBehavior();
+			EffectModeBehavior.audioCore = audioCore;
 		}
 	
 		
-		public static void trigger(EffectMode mode){
-			instance.audioCore.getAudioFx().setHighPass(false);
-			instance.audioCore.getAudioFx().setLowPass(false);
-			instance.audioCore.getAudioFx().setDelTime(0.0f);
+		public void trigger(EffectMode mode){
 			switch (mode) {
 			case HIGHPASS:
-				instance.audioCore.getAudioFx().setHighPass(true);
+				audioCore.getAudioFx().setHighPass(!audioCore.getAudioFx().isHighPass());
 				System.out.println("highpass: funktioniert");
 				break;
 			case LOWPASS:
-				instance.audioCore.getAudioFx().setLowPass(true);
+				audioCore.getAudioFx().setLowPass(!audioCore.getAudioFx().isLowPass());
 				System.out.println("lowpass: funktioniert");
 				break;
 			case DELAY:
-				instance.audioCore.getAudioFx().setDelTime(2.0f);
+				System.out.println(audioCore.getAudioFx().getDelTime());
+				if(audioCore.getAudioFx().getDelTime() <= 0f){
+					audioCore.getAudioFx().setDelTime(2f);
+					System.out.println("sollte 2 sein");
+				}else{
+					audioCore.getAudioFx().setDelTime(0f);
+					System.out.println("sollte 0 sein");
+				}
+				//audioCore.getAudioFx().setDelTime(((audioCore.getAudioFx().getDelTime()<=0f)?2.0f:0f));
 				System.out.println("delay: funktioniert");
 				break;
 			default:

@@ -13,6 +13,9 @@ import java.util.Map;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
+import javax.swing.LookAndFeel;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
 import repository.ActivationMode;
 import repository.KeyMapping;
@@ -56,6 +59,14 @@ public class UserInterface extends JFrame {
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setSize(1000, 700);
 		setMinimumSize(new Dimension(500, 500));
+		
+		try {
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		} catch (ClassNotFoundException | InstantiationException
+				| IllegalAccessException | UnsupportedLookAndFeelException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		
 		// Load icons
 		try {

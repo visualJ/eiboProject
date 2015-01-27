@@ -173,8 +173,8 @@ public class MenuPanel extends JPanel{
 		soundPackScrollPane = new JScrollPane(soundPackList);
 		soundPackScrollPane.setPreferredSize(new Dimension(200,120));
 		soundPackScrollPane.setBorder(null);
-		//soundPackScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		System.out.println(soundPackScrollPane.getVerticalScrollBarPolicy());
+		soundPackScrollPane.getViewport().setOpaque(false);
+		soundPackScrollPane.setOpaque(false);
 		
 		listPanel.setOpaque(false);
 		listPanel.add(soundPackScrollPane);

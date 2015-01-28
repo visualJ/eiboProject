@@ -21,12 +21,15 @@ public class EffectKeyButton extends KeyButton{
 		switch(mode){
 		case HIGHPASS:
 			setBigIcon(UserInterface.highpassIcon);
+			setToolTipText("Highpass Filter");
 			break;
 		case LOWPASS:
 			setBigIcon(UserInterface.lowpassIcon);
+			setToolTipText("Lowpass Filter");
 			break;
 		case DELAY:
 			setBigIcon(UserInterface.delayIcon);
+			setToolTipText("Delay Filter (Echo)");
 			break;
 		default:
 			break;

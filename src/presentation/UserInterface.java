@@ -45,6 +45,7 @@ public class UserInterface extends JFrame {
 	public static Image highpassIcon;
 	public static Image lowpassIcon;
 	public static Image delayIcon;
+	public static Image soundpackIcon;
 	
 	private AudioCore audioCore;
 	private SoundPackManager soundpackManager;
@@ -78,29 +79,28 @@ public class UserInterface extends JFrame {
 		}
 		
 		// Load icons
-		try {
-			ACTIVATION_MODE_ICONS.put(ActivationMode.LOOP,ImageIO.read(UserInterface.class.getResourceAsStream("res/LOOP.png")));
-			ACTIVATION_MODE_ICONS.put(ActivationMode.PLAY_ONCE,ImageIO.read(UserInterface.class.getResourceAsStream("res/PLAY_ONCE.png")));
-			ACTIVATION_MODE_ICONS.put(ActivationMode.WHILE_TRIGGERED,ImageIO.read(UserInterface.class.getResourceAsStream("res/WHILE_TRIGGERED.png")));
-			ACTIVATION_MODE_ICONS.put(ActivationMode.WHILE_TRIGGERED_ONCE,ImageIO.read(UserInterface.class.getResourceAsStream("res/WHILE_TRIGGERED_ONCE.png")));
-			recIcon = ImageIO.read(UserInterface.class.getResourceAsStream("res/record.png"));
-			programmIconSmall = ImageIO.read(UserInterface.class.getResourceAsStream("res/programmIconSmall.png"));
-			programmIconBig = ImageIO.read(UserInterface.class.getResourceAsStream("res/programmIconBig.png"));
-			recordingSampleIcon = ImageIO.read(UserInterface.class.getResourceAsStream("res/recordSample.png"));
-			recordingSampleRecordIcon = ImageIO.read(UserInterface.class.getResourceAsStream("res/recordSampleRecord.png"));
-			recordingSampleDeleteIcon = ImageIO.read(UserInterface.class.getResourceAsStream("res/recordSampleDelete.png"));
-			arrowUpIcon = ImageIO.read(UserInterface.class.getResourceAsStream("res/arrowUp.png"));
-			arrowDonwIcon = ImageIO.read(UserInterface.class.getResourceAsStream("res/arrow.png"));
-			settingsIcon = ImageIO.read(UserInterface.class.getResourceAsStream("res/Einstellungen.png"));
-			folderIcon = ImageIO.read(UserInterface.class.getResourceAsStream("res/Ordner.png"));
-			infoIcon = ImageIO.read(UserInterface.class.getResourceAsStream("res/Info.png"));
-			helpIcon = ImageIO.read(UserInterface.class.getResourceAsStream("res/Hilfe.png"));
-			highpassIcon = ImageIO.read(UserInterface.class.getResourceAsStream("res/Highpass.png")); 
-			lowpassIcon = ImageIO.read(UserInterface.class.getResourceAsStream("res/Lowpass.png")); 
-			delayIcon = ImageIO.read(UserInterface.class.getResourceAsStream("res/Delay.png")); 
-		} catch (IOException | IllegalArgumentException e) {
-			e.printStackTrace();
-		}
+		
+			ACTIVATION_MODE_ICONS.put(ActivationMode.LOOP,loadImage("LOOP.png"));
+			ACTIVATION_MODE_ICONS.put(ActivationMode.PLAY_ONCE,loadImage("PLAY_ONCE.png"));
+			ACTIVATION_MODE_ICONS.put(ActivationMode.WHILE_TRIGGERED,loadImage("WHILE_TRIGGERED.png"));
+			ACTIVATION_MODE_ICONS.put(ActivationMode.WHILE_TRIGGERED_ONCE,loadImage("WHILE_TRIGGERED_ONCE.png"));
+			
+			recIcon = loadImage("record.png");
+			programmIconSmall = loadImage("programmIconSmall.png");
+			programmIconBig = loadImage("programmIconBig.png");
+			recordingSampleIcon = loadImage("recordSample.png");
+			recordingSampleRecordIcon = loadImage("recordSampleRecord.png");
+			recordingSampleDeleteIcon = loadImage("recordSampleDelete.png");
+			arrowUpIcon = loadImage("arrowUp.png");
+			arrowDonwIcon = loadImage("arrow.png");
+			settingsIcon = loadImage("Einstellungen.png");
+			folderIcon = loadImage("Ordner.png");
+			infoIcon = loadImage("Info.png");
+			helpIcon = loadImage("Hilfe.png");
+			highpassIcon = loadImage("Highpass.png"); 
+			lowpassIcon = loadImage("Lowpass.png"); 
+			delayIcon = loadImage("Delay.png"); 
+	
 		
 		// Load window icons
 		List<Image> windowIcons = new ArrayList<Image>();
@@ -192,6 +192,20 @@ public class UserInterface extends JFrame {
 	 */
 	public static Color alphaColor(Color color, float alpha){
 		return new Color(color.getRed(),color.getGreen(),color.getBlue(),Math.round(255*alpha));
+	}
+	
+	private Image loadImage(String path){
+		
+		try {
+			System.out.println("load Image :" + path);
+			return ImageIO.read(UserInterface.class.getResource("res/" + path));
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			System.out.println("Image " + path + " -- fail to load");
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 }

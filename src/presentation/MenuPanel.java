@@ -12,12 +12,9 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
-import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.ScrollPaneConstants;
 
-import repository.SoundPack;
 import services.SoundPackManager;
 
 
@@ -89,13 +86,9 @@ public class MenuPanel extends JPanel{
 		info = new MenuButton("");
 		help = new MenuButton("");
 		
-		try {
-			info.setBigIcon(ImageIO.read(MenuPanel.class.getResource("res/Info.png")));
-			help.setBigIcon(ImageIO.read(MenuPanel.class.getResource("res/Hilfe.png")));
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+		info.setBigIcon(UserInterface.infoIcon);
+		help.setBigIcon(UserInterface.helpIcon);
+		
 		info.addActionListener(new ActionListener() {
 			
 			@Override
@@ -123,7 +116,7 @@ public class MenuPanel extends JPanel{
 		
 	//
 	// einklappen button mit der einblendfunktion	
-		einklappen = new MenuOpenCloseButton("einklappen");
+		einklappen = new MenuOpenCloseButton("");
 		
 		
 		constrain.gridwidth = 1;
@@ -132,7 +125,6 @@ public class MenuPanel extends JPanel{
 		constrain.gridy = 0;
 		constrain.fill = GridBagConstraints.BOTH;
 
-		einklappen.setText("einklappn");
 		einklappen.addActionListener(new ActionListener() {
 			
 			@Override
@@ -140,12 +132,8 @@ public class MenuPanel extends JPanel{
 				switchMenu();
 			}
 		});
-		try {
-			einklappen.setBigIcon(ImageIO.read(MenuPanel.class.getResource("res/arrow.png")));
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+		
+		einklappen.setBigIcon(UserInterface.arrowDonwIcon);
 		content.add(einklappen,constrain);
 		
 
@@ -155,14 +143,8 @@ public class MenuPanel extends JPanel{
 		
 		
 		recordFolder.setText("rF");
-		try {
-			preferences.setBigIcon(ImageIO.read(MenuPanel.class.getResource("res/Einstellungen.png")));
-			recordFolder.setBigIcon(ImageIO.read(MenuPanel.class.getResource("res/Ordner.png")));
-			
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+		preferences.setBigIcon(UserInterface.settingsIcon);
+		recordFolder.setBigIcon(UserInterface.folderIcon);
 		recordFolder.addActionListener(new ActionListener() {
 			
 			@Override
@@ -190,7 +172,7 @@ public class MenuPanel extends JPanel{
 		content.add(lineendPanel,constrain);
 		
 		listPanel = new JPanel();
-		soundPackList = new SoundPackList(soundPackManager.getSoundpacksInDirectory("./"), this.userInterface);
+		soundPackList = new SoundPackList(this.soundPackManager.getSoundpacksInDirectory("./"), this.userInterface);
 		
 		soundPackScrollPane = new JScrollPane(soundPackList);
 		soundPackScrollPane.setPreferredSize(new Dimension(200,120));
@@ -220,20 +202,10 @@ public class MenuPanel extends JPanel{
 	{
 		if(!menuOpen){
 			listPanel.setVisible(false);
-			try {
-				einklappen.setBigIcon(ImageIO.read(MenuPanel.class.getResource("res/arrow.png")));
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+			einklappen.setBigIcon(UserInterface.arrowDonwIcon);
 		}else{
 			listPanel.setVisible(true);
-			try {
-				einklappen.setBigIcon(ImageIO.read(MenuPanel.class.getResource("res/arrowUp.png")));
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+			einklappen.setBigIcon(UserInterface.arrowUpIcon);
 		}
 		menuOpen = !menuOpen;
 	}

@@ -36,6 +36,12 @@ public class UserInterface extends JFrame {
 	public static Image recordingSampleIcon;
 	public static Image recordingSampleRecordIcon;
 	public static Image recordingSampleDeleteIcon;
+	public static Image arrowUpIcon;
+	public static Image arrowDonwIcon;
+	public static Image settingsIcon;
+	public static Image folderIcon;
+	public static Image infoIcon;
+	public static Image helpIcon;
 	
 	private AudioCore audioCore;
 	private SoundPackManager soundpackManager;
@@ -80,6 +86,12 @@ public class UserInterface extends JFrame {
 			recordingSampleIcon = ImageIO.read(UserInterface.class.getResourceAsStream("res/recordSample.png"));
 			recordingSampleRecordIcon = ImageIO.read(UserInterface.class.getResourceAsStream("res/recordSampleRecord.png"));
 			recordingSampleDeleteIcon = ImageIO.read(UserInterface.class.getResourceAsStream("res/recordSampleDelete.png"));
+			arrowUpIcon = ImageIO.read(UserInterface.class.getResourceAsStream("res/arrowUp.png"));
+			arrowDonwIcon = ImageIO.read(UserInterface.class.getResourceAsStream("res/arrow.png"));
+			settingsIcon = ImageIO.read(UserInterface.class.getResourceAsStream("res/Einstellungen.png"));
+			folderIcon = ImageIO.read(UserInterface.class.getResourceAsStream("res/Ordner.png"));
+			infoIcon = ImageIO.read(UserInterface.class.getResourceAsStream("res/Info.png"));
+			helpIcon = ImageIO.read(UserInterface.class.getResourceAsStream("res/Hilfe.png"));    
 		} catch (IOException | IllegalArgumentException e) {
 			e.printStackTrace();
 		}

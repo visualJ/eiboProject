@@ -97,8 +97,7 @@ public class KeyPanel extends JPanel {
 		addButton(3, 4, 5, 1, recordingButton);
 		
 		// Add effect keys
-		addEffectKeyButton("LINKS", EffectMode.HIGHPASS, KeyEvent.VK_LEFT, 9, 4);
-		//addEffectKeyButton("HOCH", EffectMode.LOWPASS, KeyEvent.VK_UP, 10, 4);
+		addEffectKeyButton("LINKS", EffectMode.HIGHPASS, KeyEvent.VK_LEFT, 10, 4);
 		addEffectKeyButton("RUNTER", EffectMode.DELAY, KeyEvent.VK_DOWN, 11, 4);
 		addEffectKeyButton("RECHTS", EffectMode.LOWPASS, KeyEvent.VK_RIGHT, 12, 4);
 	}

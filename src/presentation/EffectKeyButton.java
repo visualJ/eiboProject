@@ -18,6 +18,20 @@ public class EffectKeyButton extends KeyButton{
 		this.MODE = mode;
 		this.effectModeBehavior = EffectModeBehavior.getInstance();
 		
+		switch(mode){
+		case HIGHPASS:
+			setBigIcon(UserInterface.highpassIcon);
+			break;
+		case LOWPASS:
+			setBigIcon(UserInterface.lowpassIcon);
+			break;
+		case DELAY:
+			setBigIcon(UserInterface.delayIcon);
+			break;
+		default:
+			break;
+		}
+		
 		setOnTrigger(new Runnable() {
 			
 			@Override

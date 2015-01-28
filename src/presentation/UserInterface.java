@@ -42,6 +42,9 @@ public class UserInterface extends JFrame {
 	public static Image folderIcon;
 	public static Image infoIcon;
 	public static Image helpIcon;
+	public static Image highpassIcon;
+	public static Image lowpassIcon;
+	public static Image delayIcon;
 	
 	private AudioCore audioCore;
 	private SoundPackManager soundpackManager;
@@ -91,7 +94,10 @@ public class UserInterface extends JFrame {
 			settingsIcon = ImageIO.read(UserInterface.class.getResourceAsStream("res/Einstellungen.png"));
 			folderIcon = ImageIO.read(UserInterface.class.getResourceAsStream("res/Ordner.png"));
 			infoIcon = ImageIO.read(UserInterface.class.getResourceAsStream("res/Info.png"));
-			helpIcon = ImageIO.read(UserInterface.class.getResourceAsStream("res/Hilfe.png"));    
+			helpIcon = ImageIO.read(UserInterface.class.getResourceAsStream("res/Hilfe.png"));
+			highpassIcon = ImageIO.read(UserInterface.class.getResourceAsStream("res/Highpass.png")); 
+			lowpassIcon = ImageIO.read(UserInterface.class.getResourceAsStream("res/Lowpass.png")); 
+			delayIcon = ImageIO.read(UserInterface.class.getResourceAsStream("res/Delay.png")); 
 		} catch (IOException | IllegalArgumentException e) {
 			e.printStackTrace();
 		}

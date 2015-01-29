@@ -1,5 +1,6 @@
 package presentation;
 
+import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Desktop;
 import java.awt.Dimension;
@@ -11,7 +12,9 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 
-import javax.imageio.ImageIO;
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
@@ -24,6 +27,12 @@ import services.SoundPackManager;
  * **/
 public class MenuPanel extends JPanel{
 	
+	private final String INFO = "INFO";
+	private final String HELP = "HELP";
+	private final String PREFERENCES = "PREFERENCES";
+	private final String SOUNDPACK = "SPOUNDPACK";
+	
+	
 	private boolean menuOpen = true;
 	private JPanel content;
 	private GridBagConstraints constrain;
@@ -33,10 +42,26 @@ public class MenuPanel extends JPanel{
 	private MenuButton info;
 	private MenuButton help;
 	private MenuButton recordFolder;
+	private MenuButton soundPack;
+	
+	private JButton changeDirectory;
 	
 	private JPanel lineendPanel;
 	private JPanel linestartPanel;
 	private JPanel listPanel;
+	private JPanel panels;
+	
+	private JPanel infoPanel;
+	private JPanel helpPanel;
+	private JPanel preferencesPanel;
+	private JPanel soundpackPanel;
+	
+	
+	private JLabel infoLabel;
+	private JLabel helpLabel;
+	private JLabel preferencesLabel;
+	
+	private JFileChooser fileChooser;
 	
 	private UserInterface userInterface;
 	
@@ -44,6 +69,8 @@ public class MenuPanel extends JPanel{
 	private SoundPackList soundPackList;
 	
 	private SoundPackManager soundPackManager;
+	
+	private CardLayout cardLayout;
 	
 
 	/**
@@ -72,6 +99,9 @@ public class MenuPanel extends JPanel{
 		content.setLayout(new GridBagLayout()); // Gridbacklayout for inner Panel
 		constrain = new GridBagConstraints(); // add constrain for Layout 
 		
+
+		
+		
 		/*
 		 * Genereller aufbau solle wie folgt aussehen 
 		 * Panel	einklappen	Panel
@@ -93,7 +123,27 @@ public class MenuPanel extends JPanel{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("i wurde gedrückt");
+				if(menuOpen)
+				{
+					switchMenu();
+				}
+				cardLayout.show(panels, INFO);
+				System.out.println("open Menu -- info");
+			}
+		});
+		
+		help.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				if(menuOpen)
+				{
+					switchMenu();
+				}
+				cardLayout.show(panels, HELP);
+				System.out.println("open Menu -- Help");
+				
 			}
 		});
 		
@@ -139,11 +189,41 @@ public class MenuPanel extends JPanel{
 
 		lineendPanel = new JPanel();
 		preferences = new MenuButton("");
-		recordFolder = new MenuButton("rF");
+		recordFolder = new MenuButton("");
+		soundPack  = new MenuButton("");
 		
 		
-		recordFolder.setText("rF");
+		soundPack.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				if(menuOpen){
+					switchMenu();
+				}
+				cardLayout.show(panels, SOUNDPACK);
+				System.out.println("open Menu -- SoundPack");
+				
+			}
+		});
+		
+		
+		
 		preferences.setBigIcon(UserInterface.settingsIcon);
+		
+		preferences.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				if(menuOpen){
+					switchMenu();
+				}
+				cardLayout.show(panels, PREFERENCES);
+				System.out.println("open Menu -- preferences");
+				
+			}
+		});
 		recordFolder.setBigIcon(UserInterface.folderIcon);
 		recordFolder.addActionListener(new ActionListener() {
 			
@@ -151,6 +231,7 @@ public class MenuPanel extends JPanel{
 			public void actionPerformed(ActionEvent arg0) {
 				try {
 					Desktop.getDesktop().open(new File("./"));
+					System.out.println("open Menu -- open record Path");
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -161,6 +242,7 @@ public class MenuPanel extends JPanel{
 		lineendPanel.setOpaque(false);
 		
 		lineendPanel.add(preferences);
+		lineendPanel.add(soundPack);
 		lineendPanel.add(recordFolder);
 		
 		constrain.gridwidth = 1;
@@ -182,7 +264,48 @@ public class MenuPanel extends JPanel{
 		
 		listPanel.setOpaque(false);
 		listPanel.add(soundPackScrollPane);
-		listPanel.setVisible(false);
+		
+		//Card Layout
+		panels = new JPanel();
+		cardLayout = new CardLayout();
+		infoPanel = new JPanel();
+		helpPanel = new JPanel();
+		preferencesPanel = new JPanel();
+		fileChooser = new JFileChooser();
+		changeDirectory = new JButton("change Directory");
+	
+		panels.setLayout(cardLayout);
+		
+		
+		infoLabel = new JLabel("lalala");
+		infoPanel.add(infoLabel);
+		
+		helpLabel = new JLabel("Hilfe");
+		helpPanel.add(helpLabel);
+		
+		preferencesLabel = new JLabel("preferences");
+		preferencesPanel.add(preferencesLabel);
+		preferencesPanel.add(changeDirectory);
+		
+		changeDirectory.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				int choice = fileChooser.showOpenDialog(null);
+
+				
+				
+			}
+		});
+		
+		panels.add(listPanel,SOUNDPACK);
+		panels.add(infoPanel,INFO);
+		panels.add(helpPanel, HELP);
+		panels.add(preferencesPanel,PREFERENCES);
+		
+		panels.setBackground(new Color(0,0,0));
+		panels.setVisible(false);
 		
 		constrain.gridheight = 1;
 		constrain.gridwidth = 3;
@@ -190,7 +313,9 @@ public class MenuPanel extends JPanel{
 		constrain.gridy = 2;
 		constrain.fill = GridBagConstraints.BOTH;
 		
-		content.add(listPanel,constrain);
+		
+		content.add(panels,constrain);
+		
 		content.setVisible(true);
 
 		add(content);
@@ -201,10 +326,10 @@ public class MenuPanel extends JPanel{
 	public void switchMenu()
 	{
 		if(!menuOpen){
-			listPanel.setVisible(false);
+			panels.setVisible(false);
 			einklappen.setBigIcon(UserInterface.arrowDonwIcon);
 		}else{
-			listPanel.setVisible(true);
+			panels.setVisible(true);
 			einklappen.setBigIcon(UserInterface.arrowUpIcon);
 		}
 		menuOpen = !menuOpen;

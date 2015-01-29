@@ -32,7 +32,7 @@ public class MenuPanel extends JPanel{
 	private final String INFO = "INFO";
 	private final String HELP = "HELP";
 	private final String PREFERENCES = "PREFERENCES";
-	private final String SOUNDPACK = "SPOUNDPACK";
+	private final String SOUNDPACK = "SOUNDPACK";
 	
 	
 	private boolean menuClosed = true;
@@ -280,7 +280,7 @@ public class MenuPanel extends JPanel{
 		infoLabel = new JLabel("lalala");
 		infoPanel.add(infoLabel);
 		
-		helpLabel = new JLabel("Hilfe");
+		helpLabel = new JLabel("<html><b>ejfsdakljfdskfs<br />dakjfsjadkljklsdf</b></html>");
 		helpPanel.add(helpLabel);
 		
 		preferencesLabel = new JLabel("preferences");

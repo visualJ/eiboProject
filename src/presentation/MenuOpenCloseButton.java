@@ -94,7 +94,7 @@ public class MenuOpenCloseButton extends MenuButton{
 					if(iconWidth/iconHeight != getWidth()/getHeight()){
 						if(iconWidth - getWidth() < iconHeight - getHeight()){
 							// Scale icon to fit vertically, keep aspect ratio
-							g.drawImage(icon, getWidth()/2-getHeight()/2, 0, (int) (getHeight()*((float)iconWidth/iconHeight)), getHeight(), c);
+							g.drawImage(icon, 50, 0, 100, getHeight(), c);
 						}else{
 							// Scale icon to fit horizontally, keep aspect ratio
 							g.drawImage(icon, 0, getHeight()/2-getWidth()/2, getWidth(), (int) (getWidth()*((float)iconWidth/iconHeight)), c);

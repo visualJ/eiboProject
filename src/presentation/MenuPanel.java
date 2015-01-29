@@ -24,46 +24,52 @@ import services.SoundPackManager;
 
 
 /** 
- * This Class create the upperPanel 
+ * This Class create the upperPanel with the Settings and Help Buttons
  * 
  * **/
 public class MenuPanel extends JPanel{
 	
+	//CONSTANTS for CardLayout
 	private final String INFO = "INFO";
 	private final String HELP = "HELP";
 	private final String PREFERENCES = "PREFERENCES";
 	private final String SOUNDPACK = "SOUNDPACK";
 	
+	//set booleans
+	private boolean menuClosed = true; //is Menu closed
 	
-	private boolean menuClosed = true;
-	private JPanel content;
-	private GridBagConstraints constrain;
-	private MenuOpenCloseButton einklappen;
-	
-	private MenuButton preferences;
-	private MenuButton info;
-	private MenuButton help;
-	private RecordingFolderButton recordFolder;
-	private MenuButton soundPack;
-	
-	private JButton changeDirectory;
-	
-	private JPanel lineendPanel;
-	private JPanel linestartPanel;
-	private JPanel listPanel;
-	private JPanel panels;
-	
-	private JPanel infoPanel;
-	private JPanel helpPanel;
-	private JPanel preferencesPanel;
-	
+	//JPanels 
+	private JPanel contentPanel; //main Panel with GridBagLayout
+		//Menu Panels 
+	private JPanel linestartPanel; 	// information Panel
+	private JPanel lineendPanel; 	// Preferences Panel
+	private JPanel panels; 			// menu content
+		//panels Panels 
+	private JPanel soundPackPanel;		// CardLayout: soundPack List
+	private JPanel infoPanel;			// CardLayout information about the Program
+	private JPanel helpPanel;			// CardLayout: help about the Programm
+	private JPanel preferencesPanel;	// CardLayout: preferences of the programm
+		//CardLayout Labels
 	private JLabel infoLabel;
 	private JLabel helpLabel;
-	private JLabel preferencesLabel;
 	
-	private JFileChooser fileChooser;
+	//Buttons
+	private MenuOpenCloseButton collapseButton; // switch menu visibility 
+		//Menu Buttons
+	private MenuButton preferences; 	// open preferences Panel
+	private MenuButton info;			// open info Panel 
+	private MenuButton help;			// open help Panel
+	private MenuButton soundPack;		// open soundPack Panel
 	
-	private UserInterface userInterface;
+	private JButton changeDirectory; 	// change record Folder preferences
+		// Recording Button	
+	private RecordingFolderButton recordFolder; // open the record Folder
+	
+	private GridBagConstraints constrain; // constrain for GridBagLayout
+	
+	private JFileChooser fileChooser;	// file Chooser for new record path
+	
+
 	
 	private JScrollPane soundPackScrollPane;
 	private SoundPackList soundPackList;
@@ -71,6 +77,8 @@ public class MenuPanel extends JPanel{
 	private SoundPackManager soundPackManager;
 	
 	private CardLayout cardLayout;
+	
+	private UserInterface userInterface;
 	private AudioCore audioCore;
 	
 
@@ -91,36 +99,24 @@ public class MenuPanel extends JPanel{
 		setBackground(new Color(255,255,255,0)); // set Panelbackground to invisible
 		
 		
-		content = new JPanel(); // define content Panel
+		contentPanel = new JPanel(); // define content Panel
 	
-		content.setOpaque(true);
-		content.setBackground(UserInterface.alphaColor(Color.BLACK, 0.5f));
-		content.setSize(new Dimension(1000,600));
-		content.setLayout(new GridBagLayout()); // Gridbacklayout for inner Panel
+		contentPanel.setOpaque(true);
+		contentPanel.setBackground(UserInterface.alphaColor(Color.BLACK, 0.5f));
+		contentPanel.setSize(new Dimension(1000,600));
+		contentPanel.setLayout(new GridBagLayout()); // Gridbacklayout for inner Panel
 		constrain = new GridBagConstraints(); // add constrain for Layout 
-		
-
-		
-		
-		/*
-		 * Genereller aufbau solle wie folgt aussehen 
-		 * Panel	einklappen	Panel
-		 * Listbutton	Liste mit Soundpacks
-		 * 
-		 * (mit Tabs hilfe / info / einstellungen)
-		 * */
 		
 		
 	// linestartPanel = info and help button
 		linestartPanel = new JPanel();
-		info = new MenuButton("");
-		help = new MenuButton("");
+		linestartPanel.setSize(new Dimension(150,50));
+		linestartPanel.setOpaque(false);
 		
-		info.setBigIcon(UserInterface.infoIcon);
-		help.setBigIcon(UserInterface.helpIcon);
-		
-		info.addActionListener(new ActionListener() {
-			
+		//info Button
+		info = new MenuButton("");						// inizial the info Menu Button						
+		info.setBigIcon(UserInterface.infoIcon);		// set Icon from the class UserInterface
+		info.addActionListener(new ActionListener() {	// switch the CardLayout to info
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(menuClosed)
@@ -132,6 +128,9 @@ public class MenuPanel extends JPanel{
 			}
 		});
 		
+		// help Button
+		help = new MenuButton("");
+		help.setBigIcon(UserInterface.helpIcon);
 		help.addActionListener(new ActionListener() {
 			
 			@Override
@@ -146,71 +145,46 @@ public class MenuPanel extends JPanel{
 				
 			}
 		});
-		
-		linestartPanel.setSize(new Dimension(150,50));
-		linestartPanel.setOpaque(false);
-	
-		help.setText("");
-		
-		
+		// linestart Panel add
 		linestartPanel.add(info);
 		linestartPanel.add(help);
 		
+		// set Constrain to set the linestartPanel to the 1 point of the GridBagConstrain
 		constrain.gridheight = 1;
 		constrain.gridwidth = 1;
 		constrain.gridx = 0;
 		constrain.gridy = 0;
 		constrain.fill = GridBagConstraints.BOTH;
 		
-		content.add(linestartPanel,constrain);
-		
-	//
-	// einklappen button mit der einblendfunktion	
-		einklappen = new MenuOpenCloseButton("");
+		contentPanel.add(linestartPanel,constrain); // finally add
+		//
 		
 		
+		// collapse or show menue	
+		collapseButton = new MenuOpenCloseButton("");
+		collapseButton.setBigIcon(UserInterface.arrowDonwIcon);
+		collapseButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				switchMenu();
+			}
+		});
+
+		// set collapse Button to GridBagLayout
 		constrain.gridwidth = 1;
 		constrain.gridheight = 1;
 		constrain.gridx = 1;
 		constrain.gridy = 0;
 		constrain.fill = GridBagConstraints.BOTH;
 
-		einklappen.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				switchMenu();
-			}
-		});
+		contentPanel.add(collapseButton,constrain);
+		//
 		
-		einklappen.setBigIcon(UserInterface.arrowDonwIcon);
-		content.add(einklappen,constrain);
-		
-
 		lineendPanel = new JPanel();
+		lineendPanel.setOpaque(false);
+			//prefernces Menu Buttone defination
 		preferences = new MenuButton("");
-		recordFolder = new RecordingFolderButton("", this.audioCore);
-		soundPack  = new MenuButton("");
-		
-		
-		soundPack.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				if(menuClosed){
-					switchMenu();
-				}
-				cardLayout.show(panels, SOUNDPACK);
-				System.out.println("open Menu -- SoundPack");
-				
-			}
-		});
-		
-		
-		
 		preferences.setBigIcon(UserInterface.settingsIcon);
-		
 		preferences.addActionListener(new ActionListener() {
 			
 			@Override
@@ -224,6 +198,8 @@ public class MenuPanel extends JPanel{
 				
 			}
 		});
+			//record Folder defination
+		recordFolder = new RecordingFolderButton("", this.audioCore);
 		recordFolder.setBigIcon(UserInterface.folderIcon);
 		recordFolder.addActionListener(new ActionListener() {
 			
@@ -239,8 +215,22 @@ public class MenuPanel extends JPanel{
 			}
 		});
 		
-		lineendPanel.setOpaque(false);
-		
+			// soundPack 
+		soundPack  = new MenuButton("");
+		soundPack.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				if(menuClosed){
+					switchMenu();
+				}
+				cardLayout.show(panels, SOUNDPACK);
+				System.out.println("open Menu -- SoundPack");
+				
+			}
+		});
+			// add Menu Buttons to lineend Panel
 		lineendPanel.add(preferences);
 		lineendPanel.add(soundPack);
 		lineendPanel.add(recordFolder);
@@ -251,9 +241,11 @@ public class MenuPanel extends JPanel{
 		constrain.gridy = 0;
 		constrain.fill = GridBagConstraints.BOTH;
 		
-		content.add(lineendPanel,constrain);
+		contentPanel.add(lineendPanel,constrain);
 		
-		listPanel = new JPanel();
+	
+		soundPackPanel = new JPanel();
+		soundPackPanel.setOpaque(false);
 		soundPackList = new SoundPackList(this.soundPackManager.getSoundpacksInDirectory("./"), this.userInterface);
 		
 		soundPackScrollPane = new JScrollPane(soundPackList);
@@ -262,32 +254,32 @@ public class MenuPanel extends JPanel{
 		soundPackScrollPane.getViewport().setOpaque(false);
 		soundPackScrollPane.setOpaque(false);
 		
-		listPanel.setOpaque(false);
-		listPanel.add(soundPackScrollPane);
+		soundPackPanel.add(soundPackScrollPane);
 		
-		//Card Layout
-		panels = new JPanel();
+		
+		//Card Layout items
 		cardLayout = new CardLayout();
-		infoPanel = new JPanel();
-		helpPanel = new JPanel();
-		preferencesPanel = new JPanel();
-		fileChooser = new JFileChooser();
-		changeDirectory = new JButton("change Directory");
-		changeDirectory.setFocusable(false);
-	
+		
+		panels = new JPanel();
 		panels.setLayout(cardLayout);
 		panels.setOpaque(false);
+		panels.setBackground(new Color(0,0,0,0.5f));
+		panels.setVisible(false);
 		
+		infoPanel = new JPanel();
 		infoLabel = new JLabel("lalala");
-		infoPanel.add(infoLabel);
 		
+		
+		helpPanel = new JPanel();
 		helpLabel = new JLabel("<html><b>ejfsdakljfdskfs<br />dakjfsjadkljklsdf</b></html>");
-		helpPanel.add(helpLabel);
 		
-		preferencesLabel = new JLabel("preferences");
-		preferencesPanel.add(preferencesLabel);
-		preferencesPanel.add(changeDirectory);
+		preferencesPanel = new JPanel();
+		preferencesPanel.setBackground(UserInterface.alphaColor(Color.BLACK, 0.7f));
 		
+		fileChooser = new JFileChooser();
+		
+		changeDirectory = new JButton("Aufnahmeort ändern");
+		changeDirectory.setFocusable(false);
 		changeDirectory.addActionListener(new ActionListener() {
 			
 			@Override
@@ -302,38 +294,42 @@ public class MenuPanel extends JPanel{
 			}
 		});
 		
-		panels.add(listPanel,SOUNDPACK);
+		infoPanel.add(infoLabel);
+		helpPanel.add(helpLabel);
+		preferencesPanel.add(changeDirectory);
+		
+		panels.add(soundPackPanel,SOUNDPACK);
 		panels.add(infoPanel,INFO);
 		panels.add(helpPanel, HELP);
 		panels.add(preferencesPanel,PREFERENCES);
 		
-		panels.setBackground(new Color(0,0,0));
-		panels.setVisible(false);
-		
+
 		constrain.gridheight = 1;
 		constrain.gridwidth = 3;
 		constrain.gridx = 0;
 		constrain.gridy = 2;
 		constrain.fill = GridBagConstraints.BOTH;
 		
-		
-		content.add(panels,constrain);
-		
-		content.setVisible(true);
+		contentPanel.add(panels,constrain);
+		contentPanel.setVisible(true);
 
-		add(content);
+		add(contentPanel);
 		setVisible(true);
 		
 	}
+	
+	/**
+	 * 
+	 */
 	
 	public void switchMenu()
 	{
 		if(!menuClosed){
 			panels.setVisible(false);
-			einklappen.setBigIcon(UserInterface.arrowDonwIcon);
+			collapseButton.setBigIcon(UserInterface.arrowDonwIcon);
 		}else{
 			panels.setVisible(true);
-			einklappen.setBigIcon(UserInterface.arrowUpIcon);
+			collapseButton.setBigIcon(UserInterface.arrowUpIcon);
 		}
 		menuClosed = !menuClosed;
 	}

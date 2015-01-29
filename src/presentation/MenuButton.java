@@ -19,7 +19,7 @@ import javax.swing.plaf.basic.BasicButtonUI;
  * A button that can display a key label, a big icon and a small icon.
  * It can get Runnables to run when pressed or released. Those
  * are also run when the according action happens on the actual keyboard.
- * @author Benedikt Ringlein changed by Patrik Pezelj
+ * 
  *
  */
 public class MenuButton extends JButton {

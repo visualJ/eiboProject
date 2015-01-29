@@ -4,6 +4,11 @@ import java.io.File;
 
 import presentation.UserInterface;
 
+/**
+ * 
+ * @author Ulrike Kocher, Nadine Goebertshan, Benedikt Ringlein, Patrik Pezelj
+ *
+ */
 public class Application {
 
 	public static void main(String[] args) {

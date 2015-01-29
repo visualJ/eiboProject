@@ -1,11 +1,13 @@
 package presentation;
 
 import java.awt.Color;
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import repository.BeatListener;
 import services.AudioCore;
+import services.Preferences;
 
 /**
  * A button that starts and stops performance recording
@@ -35,7 +37,7 @@ public class RecordingButton extends KeyButton {
 					// Stop the recording
 					RecordingButton.this.audioCore.endRecordingPerformance();
 				}else{
-					String fileName = "recording_" + (new SimpleDateFormat("YYYYMMDD_HHmmss").format(new Date())) + ".wav";
+					String fileName = Preferences.getInstance().getRecordFolder() + File.separator +"recording_" + (new SimpleDateFormat("YYYYMMDD_HHmmss").format(new Date())) + ".wav";
 					RecordingButton.this.audioCore.startRecordingPerformance(fileName);
 				}
 			}

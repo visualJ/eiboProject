@@ -5,6 +5,9 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Image;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,6 +25,7 @@ import repository.SoundPack;
 import services.ActivationModeBehavior;
 import services.AudioCore;
 import services.EffectModeBehavior;
+import services.Preferences;
 import services.SoundPackManager;
 
 public class UserInterface extends JFrame {
@@ -124,6 +128,32 @@ public class UserInterface extends JFrame {
 		upperPanel.setVisible(true);
 		background.add(upperPanel, gbc);
 		
+		addWindowListener(new WindowListener() {
+			
+			@Override
+			public void windowOpened(WindowEvent e) {}
+			
+			@Override
+			public void windowIconified(WindowEvent e) {}
+			
+			@Override
+			public void windowDeiconified(WindowEvent e) {}
+			
+			@Override
+			public void windowDeactivated(WindowEvent e) {}
+			
+			@Override
+			public void windowClosing(WindowEvent e) {
+				Preferences.getInstance().savePreferences("." + File.separator);
+				
+			}
+			
+			@Override
+			public void windowClosed(WindowEvent e) {}
+			
+			@Override
+			public void windowActivated(WindowEvent e) {}
+		});
 		// Make the frame visible
 		setVisible(true);
 	}

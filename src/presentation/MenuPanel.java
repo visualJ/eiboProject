@@ -18,8 +18,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import repository.RecordingListener;
 import services.AudioCore;
+import services.Preferences;
 import services.SoundPackManager;
 
 
@@ -230,7 +230,7 @@ public class MenuPanel extends JPanel{
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				try {
-					Desktop.getDesktop().open(new File("./"));
+					Desktop.getDesktop().open(new File(Preferences.getInstance().getRecordFolder()));
 					System.out.println("open Menu -- open record Path");
 				} catch (IOException e) {
 					e.printStackTrace();
@@ -273,6 +273,7 @@ public class MenuPanel extends JPanel{
 		preferencesPanel = new JPanel();
 		fileChooser = new JFileChooser();
 		changeDirectory = new JButton("change Directory");
+		changeDirectory.setFocusable(false);
 	
 		panels.setLayout(cardLayout);
 		panels.setOpaque(false);
@@ -291,9 +292,13 @@ public class MenuPanel extends JPanel{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
+				fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+				fileChooser.setCurrentDirectory(new File(Preferences.getInstance().getRecordFolder()));
 				int choice = fileChooser.showOpenDialog(null);
 				
+				if(choice == JFileChooser.APPROVE_OPTION){
+					Preferences.getInstance().setRecordFolder(fileChooser.getSelectedFile().toString());
+				}
 			}
 		});
 		

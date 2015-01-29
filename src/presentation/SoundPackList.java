@@ -32,6 +32,7 @@ public class SoundPackList extends JList<SoundPack> {
 		setCellRenderer(new SoundPackCellRenderer());
 		setSelectedIndex(0);
 		this.userInterface.setSoundPack(soundPacks[0]);
+		setFocusable(false);
 		
 		addListSelectionListener(new ListSelectionListener() {
 			
@@ -75,6 +76,7 @@ public class SoundPackList extends JList<SoundPack> {
 
 		public SoundPackCellRenderer(){
 			setOpaque(true);
+
 		}
 		
 		@Override

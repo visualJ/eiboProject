@@ -33,7 +33,7 @@ public class MenuPanel extends JPanel{
 	private final String SOUNDPACK = "SPOUNDPACK";
 	
 	
-	private boolean menuOpen = true;
+	private boolean menuClosed = true;
 	private JPanel content;
 	private GridBagConstraints constrain;
 	private MenuOpenCloseButton einklappen;
@@ -123,7 +123,7 @@ public class MenuPanel extends JPanel{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(menuOpen)
+				if(menuClosed)
 				{
 					switchMenu();
 				}
@@ -137,7 +137,7 @@ public class MenuPanel extends JPanel{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				if(menuOpen)
+				if(menuClosed)
 				{
 					switchMenu();
 				}
@@ -198,7 +198,7 @@ public class MenuPanel extends JPanel{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				if(menuOpen){
+				if(menuClosed){
 					switchMenu();
 				}
 				cardLayout.show(panels, SOUNDPACK);
@@ -216,7 +216,7 @@ public class MenuPanel extends JPanel{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				if(menuOpen){
+				if(menuClosed){
 					switchMenu();
 				}
 				cardLayout.show(panels, PREFERENCES);
@@ -275,7 +275,7 @@ public class MenuPanel extends JPanel{
 		changeDirectory = new JButton("change Directory");
 	
 		panels.setLayout(cardLayout);
-		
+		panels.setOpaque(false);
 		
 		infoLabel = new JLabel("lalala");
 		infoPanel.add(infoLabel);
@@ -293,8 +293,6 @@ public class MenuPanel extends JPanel{
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				int choice = fileChooser.showOpenDialog(null);
-
-				
 				
 			}
 		});
@@ -325,14 +323,14 @@ public class MenuPanel extends JPanel{
 	
 	public void switchMenu()
 	{
-		if(!menuOpen){
+		if(!menuClosed){
 			panels.setVisible(false);
 			einklappen.setBigIcon(UserInterface.arrowDonwIcon);
 		}else{
 			panels.setVisible(true);
 			einklappen.setBigIcon(UserInterface.arrowUpIcon);
 		}
-		menuOpen = !menuOpen;
+		menuClosed = !menuClosed;
 	}
 	
 	

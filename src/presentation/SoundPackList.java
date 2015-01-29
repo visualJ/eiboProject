@@ -31,6 +31,7 @@ public class SoundPackList extends JList<SoundPack> {
 		setOpaque(false);
 		setCellRenderer(new SoundPackCellRenderer());
 		setSelectedIndex(0);
+		this.userInterface.setSoundPack(soundPacks[0]);
 		
 		addListSelectionListener(new ListSelectionListener() {
 			

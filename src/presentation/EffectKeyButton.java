@@ -13,8 +13,8 @@ public class EffectKeyButton extends KeyButton {
 	private AudioCore audioCore;
 	private final EffectMode MODE;
 	private EffectModeBehavior effectModeBehavior;
-	private Color colorStandart = new Color(85, 120, 10);
-	private Color colorActive = new Color(170, 240, 20);
+	private Color colorStandart = new Color(10, 95, 110);
+	private Color colorActive = new Color(20, 190, 220);
 	boolean active = false;
 
 	public EffectKeyButton(String keyLabel, EffectMode mode, int keyCode,
@@ -48,7 +48,6 @@ public class EffectKeyButton extends KeyButton {
 			@Override
 			public void run() {
 				effectModeBehavior.trigger(MODE);
-
 			}
 		});
 		

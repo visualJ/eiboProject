@@ -25,6 +25,9 @@ public class RecSampleModeDeleteButton extends KeyButton {
 		setBackground(colorStandart);
 		setBigIcon(UserInterface.recordingSampleDeleteIcon);
 		
+		// Tooltiptext setzen
+		setToolTipText("Samplelöschmodus: Zifferntasten drücken, um Samples zu löschen");
+		
 		setOnTrigger(new Runnable() {
 			
 			@Override

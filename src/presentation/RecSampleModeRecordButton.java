@@ -25,6 +25,9 @@ public class RecSampleModeRecordButton extends KeyButton {
 		setBackground(colorStandart);
 		setBigIcon(UserInterface.recordingSampleRecordIcon);
 		
+		// Tooltip ftw
+		setToolTipText("Sampleaufnahmemodus: Zifferntasten gedrückt halten zum aufnehmen eigener Samples.");
+		
 		setOnTrigger(new Runnable() {
 			
 			@Override

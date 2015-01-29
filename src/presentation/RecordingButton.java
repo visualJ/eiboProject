@@ -24,6 +24,7 @@ public class RecordingButton extends KeyButton {
 		this.audioCore = audioCore;
 		setBackground(normal);
 		setBigIcon(UserInterface.recIcon);
+		setToolTipText("Audiodatei aufnehmen");
 		
 		setOnTrigger(new Runnable() {
 			

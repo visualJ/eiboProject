@@ -115,7 +115,8 @@ public class MenuPanel extends JPanel{
 		
 		//info Button
 		info = new MenuButton("");						// inizial the info Menu Button						
-		info.setBigIcon(UserInterface.infoIcon);		// set Icon from the class UserInterface
+		info.setBigIcon(UserInterface.infoIcon);// set Icon from the class UserInterface
+		info.setToolTipText("Infos über iBo");
 		info.addActionListener(new ActionListener() {	// switch the CardLayout to info
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -131,6 +132,7 @@ public class MenuPanel extends JPanel{
 		// help Button
 		help = new MenuButton("");
 		help.setBigIcon(UserInterface.helpIcon);
+		help.setToolTipText("Hilfe zum Programm");
 		help.addActionListener(new ActionListener() {
 			
 			@Override
@@ -163,6 +165,7 @@ public class MenuPanel extends JPanel{
 		// collapse or show menue	
 		collapseButton = new MenuOpenCloseButton("");
 		collapseButton.setBigIcon(UserInterface.arrowDonwIcon);
+		collapseButton.setToolTipText("Menü ein - oder ausklappen");
 		collapseButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -185,6 +188,7 @@ public class MenuPanel extends JPanel{
 			//prefernces Menu Buttone defination
 		preferences = new MenuButton("");
 		preferences.setBigIcon(UserInterface.settingsIcon);
+		preferences.setToolTipText("Einstellungen ändern");
 		preferences.addActionListener(new ActionListener() {
 			
 			@Override
@@ -201,6 +205,7 @@ public class MenuPanel extends JPanel{
 			//record Folder defination
 		recordFolder = new RecordingFolderButton("", this.audioCore);
 		recordFolder.setBigIcon(UserInterface.folderIcon);
+		recordFolder.setToolTipText("Aufnahmeordner öffnen");
 		recordFolder.addActionListener(new ActionListener() {
 			
 			@Override
@@ -217,6 +222,7 @@ public class MenuPanel extends JPanel{
 		
 			// soundPack 
 		soundPack  = new MenuButton("");
+		soundPack.setToolTipText("Soundpack wählen");
 		soundPack.addActionListener(new ActionListener() {
 			
 			@Override
@@ -274,7 +280,7 @@ public class MenuPanel extends JPanel{
 		helpLabel = new JLabel("<html><b>ejfsdakljfdskfs<br />dakjfsjadkljklsdf</b></html>");
 		
 		preferencesPanel = new JPanel();
-		preferencesPanel.setBackground(UserInterface.alphaColor(Color.BLACK, 0.7f));
+		preferencesPanel.setBackground(UserInterface.alphaColor(Color.BLACK, 0.3f));
 		
 		fileChooser = new JFileChooser();
 		

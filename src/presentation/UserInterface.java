@@ -120,7 +120,7 @@ public class UserInterface extends JFrame {
 		gbc.fill = GridBagConstraints.BOTH;
 		gbc.weighty = 1;
 		gbc.weightx = 1;
-		upperPanel = new MenuPanel(soundpackManager, this);
+		upperPanel = new MenuPanel(soundpackManager, this, audioCore);
 		upperPanel.setVisible(true);
 		background.add(upperPanel, gbc);
 		

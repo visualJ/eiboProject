@@ -9,10 +9,9 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import javax.crypto.spec.GCMParameterSpec;
-
 import repository.AudioFx;
 import repository.BeatListener;
+import repository.RecordingListener;
 import repository.SampleListener;
 import repository.SoundSample;
 import ddf.minim.AudioInput;
@@ -41,6 +40,7 @@ public class AudioCore {
 	private int barLength = 4;
 	private List<BeatListener> beatListeners = new ArrayList<BeatListener>();
 	private List<SampleListener> sampleListeners = new ArrayList<SampleListener>();
+	private List<RecordingListener> recordingListeners = new ArrayList<RecordingListener>();
 	private Map<SoundSample, TimerTask> stopSampleNotificationTimers = new HashMap<SoundSample, TimerTask>();
 	private Thread beatThread;
 	private Runnable beatClock = new Runnable(){
@@ -231,12 +231,14 @@ public class AudioCore {
 	 */
 	public void startRecordingPerformance(String fileName){
 		outputRecorder.beginRecord(fileName);
+		notifyRecordingListenerStarted();
 	}
 	
 	/**
 	 * Stops a live performance recording and saves the file
 	 */
 	public SoundSample endRecordingPerformance(){
+		notifyRecordingListenerStopped();
 		return outputRecorder.endRecord();
 	}
 	
@@ -308,6 +310,18 @@ public class AudioCore {
 	
 	public void removeSampleListener(SampleListener listener){
 		sampleListeners.remove(listener);
+	}
+	
+	/**
+	 * Adds a {@link RecordingListener} to the AudioCore
+	 * @param listener The listener to add
+	 */
+	public void addRecordingListener(RecordingListener listener){
+		recordingListeners.add(listener);
+	}
+	
+	public void removeRecordingListener(RecordingListener listener){
+		recordingListeners.remove(listener);
 	}
 	
 	/**
@@ -402,6 +416,24 @@ public class AudioCore {
 			if(listener.getSample().equals(sample)){
 				listener.stoppedLoop();
 			}
+		}
+	}
+	
+	/**
+	 * Notify everyone who cares, that a recording startet
+	 */
+	public void notifyRecordingListenerStarted(){
+		for(RecordingListener listener:recordingListeners){
+			listener.recordingStarted();
+		}
+	}
+	
+	/**
+	 * Notify listeners that a recording was stopped
+	 */
+	public void notifyRecordingListenerStopped(){
+		for(RecordingListener listener:recordingListeners){
+			listener.recordingStopped();
 		}
 	}
 	

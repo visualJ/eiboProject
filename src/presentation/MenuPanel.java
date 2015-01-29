@@ -18,6 +18,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
+import repository.RecordingListener;
+import services.AudioCore;
 import services.SoundPackManager;
 
 
@@ -41,7 +43,7 @@ public class MenuPanel extends JPanel{
 	private MenuButton preferences;
 	private MenuButton info;
 	private MenuButton help;
-	private MenuButton recordFolder;
+	private RecordingFolderButton recordFolder;
 	private MenuButton soundPack;
 	
 	private JButton changeDirectory;
@@ -54,8 +56,6 @@ public class MenuPanel extends JPanel{
 	private JPanel infoPanel;
 	private JPanel helpPanel;
 	private JPanel preferencesPanel;
-	private JPanel soundpackPanel;
-	
 	
 	private JLabel infoLabel;
 	private JLabel helpLabel;
@@ -71,6 +71,7 @@ public class MenuPanel extends JPanel{
 	private SoundPackManager soundPackManager;
 	
 	private CardLayout cardLayout;
+	private AudioCore audioCore;
 	
 
 	/**
@@ -78,14 +79,13 @@ public class MenuPanel extends JPanel{
 	 */
 	private static final long serialVersionUID = -8244586608783664164L;
 
-	public MenuPanel(SoundPackManager soundPackManager, UserInterface userInterface){
+	public MenuPanel(SoundPackManager soundPackManager, UserInterface userInterface, AudioCore audioCore){
 		
 		this.soundPackManager = soundPackManager;
 		this.userInterface = userInterface;
+		this.audioCore = audioCore;
 		
 		//set genereal informations
-	
-
 		setLayout(new FlowLayout()); //set Layout of outer Panel
 		setOpaque(true);
 		setBackground(new Color(255,255,255,0)); // set Panelbackground to invisible
@@ -189,7 +189,7 @@ public class MenuPanel extends JPanel{
 
 		lineendPanel = new JPanel();
 		preferences = new MenuButton("");
-		recordFolder = new MenuButton("");
+		recordFolder = new RecordingFolderButton("", this.audioCore);
 		soundPack  = new MenuButton("");
 		
 		

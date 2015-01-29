@@ -9,6 +9,8 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javax.crypto.spec.GCMParameterSpec;
+
 import repository.AudioFx;
 import repository.BeatListener;
 import repository.SampleListener;
@@ -429,7 +431,6 @@ public class AudioCore {
 	 * @return The file player
 	 */
 	private FilePlayer loadSoundSamplePlayer(SoundSample soundSample){
-		System.out.println("load sound sample "+soundSample.getFileName());
 		
 		// Load the sound file and create a playable object
 		FilePlayer player = new FilePlayer(minim.loadFileStream(soundSample.getFileName(), 1024, false));

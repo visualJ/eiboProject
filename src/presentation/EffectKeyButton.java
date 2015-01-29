@@ -2,6 +2,7 @@ package presentation;
 
 import java.awt.Color;
 
+import repository.EffectListener;
 import repository.EffectMode;
 import services.AudioCore;
 import services.EffectModeBehavior;
@@ -48,14 +49,23 @@ public class EffectKeyButton extends KeyButton {
 			public void run() {
 				effectModeBehavior.trigger(MODE);
 
-				if (active == false) {
-					active = true;
+			}
+		});
+		
+		this.audioCore.getAudioFx().addEffectListener(new EffectListener() {
+			
+			@Override
+			public void effectOn(EffectMode effect) {
+				if(effect == EffectKeyButton.this.MODE){
 					setBackground(colorActive);
-				} else {
-					active = false;
+				}
+			}
+			
+			@Override
+			public void effectOff(EffectMode effect) {
+				if(effect == EffectKeyButton.this.MODE){
 					setBackground(colorStandart);
 				}
-
 			}
 		});
 

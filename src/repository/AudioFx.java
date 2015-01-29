@@ -1,5 +1,8 @@
 package repository;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import ddf.minim.AudioOutput;
 import ddf.minim.ugens.Bypass;
 import ddf.minim.ugens.Delay;
@@ -19,6 +22,7 @@ public class AudioFx extends Summer{
 	private Bypass<MoogFilter> lowpassFilter = new Bypass<MoogFilter>(new MoogFilter(1000, 0.1f, MoogFilter.Type.LP));
 	private Bypass<MoogFilter> highpassFilter = new Bypass<MoogFilter>(new MoogFilter(2200, 0.1f, MoogFilter.Type.HP));
 	private float delTime;
+	private List<EffectListener> effectListeners = new ArrayList<EffectListener>();
 	
 	public AudioFx(AudioOutput audioOutput){
 		this.audioOutput = audioOutput;
@@ -59,6 +63,11 @@ public class AudioFx extends Summer{
 	public void setDelTime(float delTime){
 		this.delTime = Math.max(delTime, 1/audioOutput.sampleRate());
 		delayFilter.setDelTime(this.delTime);
+		if(isDelay()){
+			notifyEffectOn(EffectMode.DELAY);
+		}else{
+			notifyEffectOff(EffectMode.DELAY);
+		}
 	}
 	
 	/**
@@ -79,8 +88,11 @@ public class AudioFx extends Summer{
 			// Activate the low pass filter
 			lowpassFilter.deactivate();
 			highpassFilter.activate();
+			notifyEffectOn(EffectMode.LOWPASS);
+			notifyEffectOff(EffectMode.HIGHPASS);
 		}else{
 			lowpassFilter.activate();
+			notifyEffectOff(EffectMode.LOWPASS);
 		}
 	}
 	
@@ -95,8 +107,11 @@ public class AudioFx extends Summer{
 			// Activate the high pass filter
 			highpassFilter.deactivate();
 			lowpassFilter.activate();
+			notifyEffectOn(EffectMode.HIGHPASS);
+			notifyEffectOff(EffectMode.LOWPASS);
 		}else{
 			highpassFilter.activate();
+			notifyEffectOff(EffectMode.HIGHPASS);
 		}
 	}
 	
@@ -105,5 +120,41 @@ public class AudioFx extends Summer{
 	 */
 	public boolean isHighPass(){
 		return !highpassFilter.isActive();
+	}
+	
+	/**
+	 * Add an effect listener to this audio fx object
+	 * @param listener The listener to add
+	 */
+	public void addEffectListener(EffectListener listener){
+		effectListeners.add(listener);
+	}
+	
+	/**
+	 * Removes an effect listener from this audio fx object
+	 * @param listener The listener to remove
+	 */
+	public void removeEffectListener(EffectListener listener){
+		effectListeners.remove(listener);
+	}
+	
+	/**
+	 * Notify listeners, that an effect is now on
+	 * @param effect The effect, that is affected
+	 */
+	private void notifyEffectOn(EffectMode effect){
+		for(EffectListener listener:effectListeners){
+			listener.effectOn(effect);
+		}
+	}
+	
+	/**
+	 * Notify listeners, that an effect is now off
+	 * @param effect The affected effect
+	 */
+	private void notifyEffectOff(EffectMode effect){
+		for(EffectListener listener:effectListeners){
+			listener.effectOff(effect);
+		}
 	}
 }

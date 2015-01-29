@@ -45,7 +45,6 @@ public class UserInterface extends JFrame {
 	public static Image highpassIcon;
 	public static Image lowpassIcon;
 	public static Image delayIcon;
-	public static Image soundpackIcon;
 	
 	private AudioCore audioCore;
 	private SoundPackManager soundpackManager;
@@ -54,6 +53,11 @@ public class UserInterface extends JFrame {
 	private MenuPanel upperPanel;
 	private KeyPanel keys;
 
+	/**
+	 * Creates the user interface using the specified audio core and soundpack manager
+	 * @param audioCore
+	 * @param soundpackManager
+	 */
 	public UserInterface(AudioCore audioCore, SoundPackManager soundpackManager) {
 		this.audioCore = audioCore;
 		this.soundpackManager = soundpackManager;
@@ -64,45 +68,24 @@ public class UserInterface extends JFrame {
 	 */
 	public void init(){
 		
-		//init Defaults
+		//init the window
 		setTitle("iBO");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setSize(1000, 700);
 		setMinimumSize(new Dimension(500, 500));
 		
 		try {
+			// Set the system look and feel
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		} catch (ClassNotFoundException | InstantiationException
 				| IllegalAccessException | UnsupportedLookAndFeelException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		
 		// Load icons
+		loadIcons();
 		
-			ACTIVATION_MODE_ICONS.put(ActivationMode.LOOP,loadImage("LOOP.png"));
-			ACTIVATION_MODE_ICONS.put(ActivationMode.PLAY_ONCE,loadImage("PLAY_ONCE.png"));
-			ACTIVATION_MODE_ICONS.put(ActivationMode.WHILE_TRIGGERED,loadImage("WHILE_TRIGGERED.png"));
-			ACTIVATION_MODE_ICONS.put(ActivationMode.WHILE_TRIGGERED_ONCE,loadImage("WHILE_TRIGGERED_ONCE.png"));
-			
-			recIcon = loadImage("record.png");
-			programmIconSmall = loadImage("programmIconSmall.png");
-			programmIconBig = loadImage("programmIconBig.png");
-			recordingSampleIcon = loadImage("recordSample.png");
-			recordingSampleRecordIcon = loadImage("recordSampleRecord.png");
-			recordingSampleDeleteIcon = loadImage("recordSampleDelete.png");
-			arrowUpIcon = loadImage("arrowUp.png");
-			arrowDonwIcon = loadImage("arrow.png");
-			settingsIcon = loadImage("Einstellungen.png");
-			folderIcon = loadImage("Ordner.png");
-			infoIcon = loadImage("Info.png");
-			helpIcon = loadImage("Hilfe.png");
-			highpassIcon = loadImage("Highpass.png"); 
-			lowpassIcon = loadImage("Lowpass.png"); 
-			delayIcon = loadImage("Delay.png"); 
-	
-		
-		// Load window icons
+		// Set window icons
 		List<Image> windowIcons = new ArrayList<Image>();
 		windowIcons.add(programmIconSmall);
 		windowIcons.add(programmIconBig);
@@ -114,26 +97,16 @@ public class UserInterface extends JFrame {
 		// Initialize the EffectModeBehavior
 		EffectModeBehavior.init(audioCore);
 		
+		// Add the backgorund panel
 		background = new BackgroundPanel(audioCore);
 		background.setLayout(new GridBagLayout());
 		add(background);
 		
-		keys = new KeyPanel(audioCore);
-		
+		// Create a constraints object to use for adding elements to the layout
 		GridBagConstraints gbc = new GridBagConstraints();
-		gbc.gridx = 0;
-		gbc.gridy = 0;
-		gbc.anchor = GridBagConstraints.CENTER;
-		gbc.fill = GridBagConstraints.BOTH;
-		gbc.weighty = 1;
-		gbc.weightx = 1;
 		
-		//upperPanel
-		
-		upperPanel = new MenuPanel(soundpackManager, this);
-		upperPanel.setVisible(true);
-		background.add(upperPanel, gbc);
-		
+		// Add the keyboard
+		keys = new KeyPanel(audioCore);
 		gbc.gridx = 0;
 		gbc.gridy = 1;
 		gbc.anchor = GridBagConstraints.CENTER;
@@ -141,10 +114,19 @@ public class UserInterface extends JFrame {
 		gbc.weighty = 1;
 		background.add(keys, gbc);
 		
+		//upperPanel
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		gbc.anchor = GridBagConstraints.CENTER;
+		gbc.fill = GridBagConstraints.BOTH;
+		gbc.weighty = 1;
+		gbc.weightx = 1;
+		upperPanel = new MenuPanel(soundpackManager, this);
+		upperPanel.setVisible(true);
+		background.add(upperPanel, gbc);
+		
 		// Make the frame visible
 		setVisible(true);
-		
-		setSoundPack(soundpackManager.getSoundpacksInDirectory("./")[0]);
 	}
 	
 	/**
@@ -194,18 +176,33 @@ public class UserInterface extends JFrame {
 		return new Color(color.getRed(),color.getGreen(),color.getBlue(),Math.round(255*alpha));
 	}
 	
-	private Image loadImage(String path){
-		
+	/**
+	 *  loads the icons
+	 * */
+	private void loadIcons(){
 		try {
-			System.out.println("load Image :" + path);
-			return ImageIO.read(UserInterface.class.getResource("res/" + path));
-			
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			System.out.println("Image " + path + " -- fail to load");
+			ACTIVATION_MODE_ICONS.put(ActivationMode.LOOP,ImageIO.read(UserInterface.class.getResourceAsStream("res/LOOP.png")));
+			ACTIVATION_MODE_ICONS.put(ActivationMode.PLAY_ONCE,ImageIO.read(UserInterface.class.getResourceAsStream("res/PLAY_ONCE.png")));
+			ACTIVATION_MODE_ICONS.put(ActivationMode.WHILE_TRIGGERED,ImageIO.read(UserInterface.class.getResourceAsStream("res/WHILE_TRIGGERED.png")));
+			ACTIVATION_MODE_ICONS.put(ActivationMode.WHILE_TRIGGERED_ONCE,ImageIO.read(UserInterface.class.getResourceAsStream("res/WHILE_TRIGGERED_ONCE.png")));
+			recIcon = ImageIO.read(UserInterface.class.getResourceAsStream("res/record.png"));
+			programmIconSmall = ImageIO.read(UserInterface.class.getResourceAsStream("res/programmIconSmall.png"));
+			programmIconBig = ImageIO.read(UserInterface.class.getResourceAsStream("res/programmIconBig.png"));
+			recordingSampleIcon = ImageIO.read(UserInterface.class.getResourceAsStream("res/recordSample.png"));
+			recordingSampleRecordIcon = ImageIO.read(UserInterface.class.getResourceAsStream("res/recordSampleRecord.png"));
+			recordingSampleDeleteIcon = ImageIO.read(UserInterface.class.getResourceAsStream("res/recordSampleDelete.png"));
+			arrowUpIcon = ImageIO.read(UserInterface.class.getResourceAsStream("res/arrowUp.png"));
+			arrowDonwIcon = ImageIO.read(UserInterface.class.getResourceAsStream("res/arrow.png"));
+			settingsIcon = ImageIO.read(UserInterface.class.getResourceAsStream("res/Einstellungen.png"));
+			folderIcon = ImageIO.read(UserInterface.class.getResourceAsStream("res/Ordner.png"));
+			infoIcon = ImageIO.read(UserInterface.class.getResourceAsStream("res/Info.png"));
+			helpIcon = ImageIO.read(UserInterface.class.getResourceAsStream("res/Hilfe.png"));  
+			highpassIcon = ImageIO.read(UserInterface.class.getResourceAsStream("res/Highpass.png"));
+			lowpassIcon = ImageIO.read(UserInterface.class.getResourceAsStream("res/Lowpass.png"));
+			delayIcon = ImageIO.read(UserInterface.class.getResourceAsStream("res/Delay.png"));
+		} catch (IOException | IllegalArgumentException e) {
 			e.printStackTrace();
 		}
-		return null;
 	}
 	
 }

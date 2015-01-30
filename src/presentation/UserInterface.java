@@ -48,6 +48,7 @@ public class UserInterface extends JFrame {
 	public static Image highpassIcon;
 	public static Image lowpassIcon;
 	public static Image delayIcon;
+	public static Image soundpackMenuIcon;
 	
 	private AudioCore audioCore;
 	private SoundPackManager soundpackManager;
@@ -209,29 +210,38 @@ public class UserInterface extends JFrame {
 	 *  loads the icons
 	 * */
 	private void loadIcons(){
+		
+			ACTIVATION_MODE_ICONS.put(ActivationMode.LOOP,loadImage("res/LOOP.png"));
+			ACTIVATION_MODE_ICONS.put(ActivationMode.PLAY_ONCE,loadImage("res/PLAY_ONCE.png"));
+			ACTIVATION_MODE_ICONS.put(ActivationMode.WHILE_TRIGGERED,loadImage("res/WHILE_TRIGGERED.png"));
+			ACTIVATION_MODE_ICONS.put(ActivationMode.WHILE_TRIGGERED_ONCE,loadImage("res/WHILE_TRIGGERED_ONCE.png"));
+			recIcon = loadImage("res/record.png");
+			programmIconSmall = loadImage("res/programmIconSmall.png");
+			programmIconBig = loadImage("res/programmIconBig.png");
+			recordingSampleIcon =loadImage("res/recordSample.png");
+			recordingSampleRecordIcon = loadImage("res/recordSampleRecord.png");
+			recordingSampleDeleteIcon = loadImage("res/recordSampleDelete.png");
+			arrowUpIcon = loadImage("res/arrowUp.png");
+			arrowDonwIcon = loadImage("res/arrow.png");
+			settingsIcon =loadImage("res/Einstellungen.png");
+			folderIcon = loadImage("res/Ordner.png");
+			infoIcon = loadImage("res/Info.png");
+			helpIcon = loadImage("res/Hilfe.png");  
+			highpassIcon =loadImage("res/Highpass.png");
+			lowpassIcon = loadImage("res/Lowpass.png");
+			delayIcon = loadImage("res/Delay.png");
+			soundpackMenuIcon = loadImage("res/Note.png");
+		
+	
+	}
+	private Image loadImage(String path){
 		try {
-			ACTIVATION_MODE_ICONS.put(ActivationMode.LOOP,ImageIO.read(UserInterface.class.getResourceAsStream("res/LOOP.png")));
-			ACTIVATION_MODE_ICONS.put(ActivationMode.PLAY_ONCE,ImageIO.read(UserInterface.class.getResourceAsStream("res/PLAY_ONCE.png")));
-			ACTIVATION_MODE_ICONS.put(ActivationMode.WHILE_TRIGGERED,ImageIO.read(UserInterface.class.getResourceAsStream("res/WHILE_TRIGGERED.png")));
-			ACTIVATION_MODE_ICONS.put(ActivationMode.WHILE_TRIGGERED_ONCE,ImageIO.read(UserInterface.class.getResourceAsStream("res/WHILE_TRIGGERED_ONCE.png")));
-			recIcon = ImageIO.read(UserInterface.class.getResourceAsStream("res/record.png"));
-			programmIconSmall = ImageIO.read(UserInterface.class.getResourceAsStream("res/programmIconSmall.png"));
-			programmIconBig = ImageIO.read(UserInterface.class.getResourceAsStream("res/programmIconBig.png"));
-			recordingSampleIcon = ImageIO.read(UserInterface.class.getResourceAsStream("res/recordSample.png"));
-			recordingSampleRecordIcon = ImageIO.read(UserInterface.class.getResourceAsStream("res/recordSampleRecord.png"));
-			recordingSampleDeleteIcon = ImageIO.read(UserInterface.class.getResourceAsStream("res/recordSampleDelete.png"));
-			arrowUpIcon = ImageIO.read(UserInterface.class.getResourceAsStream("res/arrowUp.png"));
-			arrowDonwIcon = ImageIO.read(UserInterface.class.getResourceAsStream("res/arrow.png"));
-			settingsIcon = ImageIO.read(UserInterface.class.getResourceAsStream("res/Einstellungen.png"));
-			folderIcon = ImageIO.read(UserInterface.class.getResourceAsStream("res/Ordner.png"));
-			infoIcon = ImageIO.read(UserInterface.class.getResourceAsStream("res/Info.png"));
-			helpIcon = ImageIO.read(UserInterface.class.getResourceAsStream("res/Hilfe.png"));  
-			highpassIcon = ImageIO.read(UserInterface.class.getResourceAsStream("res/Highpass.png"));
-			lowpassIcon = ImageIO.read(UserInterface.class.getResourceAsStream("res/Lowpass.png"));
-			delayIcon = ImageIO.read(UserInterface.class.getResourceAsStream("res/Delay.png"));
-		} catch (IOException | IllegalArgumentException e) {
+			return ImageIO.read(UserInterface.class.getResourceAsStream(path));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		return null;
 	}
 	
 }

@@ -35,6 +35,21 @@ public class MenuPanel extends JPanel{
 	private final String PREFERENCES = "PREFERENCES";
 	private final String SOUNDPACK = "SOUNDPACK";
 	
+	private final String infomartion = "<html><b>Beschreibung unserer Dienste</b>"
+		+ "<p><br />iBO verschafft Ihnen über seine sehr einfache Benutzungsoberfläche "
+		+ "Zugang zu einer Vielzahl von Ressourcen einschließlich einer<br /> "
+		+ "Soundbibliothek, die es ermöglicht Musik zu erstellen und aufzunehmen. "
+		+ "Jede Menge nützlicher Aufnahme- und Bearbeitungsfunktionen machen "
+		+ "iBO so benutzerfreundlich wie leistungsstark. "
+		+ "Finde den richtigen Rhythmus mit einem Klick.</p> "
+			+ ""
+			+ ""
+			+ ""
+			+ ""
+			+ ""
+			+ ""
+			+ "</html>";
+	
 	//set booleans
 	private boolean menuClosed = true; //is Menu closed
 	
@@ -272,8 +287,11 @@ public class MenuPanel extends JPanel{
 		panels.setBackground(new Color(0,0,0,0.5f));
 		panels.setVisible(false);
 		
+		
+		
 		infoPanel = new JPanel();
-		infoLabel = new JLabel("lalala");
+		infoPanel.setMaximumSize(new Dimension(500,500));
+		infoLabel = new JLabel(infomartion);
 		
 		
 		helpPanel = new JPanel();

@@ -122,19 +122,35 @@ public class KeyPanel extends JPanel {
 		}
 	}
 	
+	/**
+	 * Get the recording sample mode
+	 * @return recoridng sample mode
+	 */
 	public RecordingSampleMode getRecSampleMode() {
 		return recSampleMode;
 	}
 
+	/**
+	 * Set the recording sample mode
+	 * @param recSampleMode New mode
+	 */
 	public void setRecSampleMode(RecordingSampleMode recSampleMode) {
 		this.recSampleMode = recSampleMode;
 		notifyRecSampleListeners(recSampleMode);
 	}
 	
+	/**
+	 * add a listener, that listens to smaple mode changes
+	 * @param listener The listener to add
+	 */
 	public void addRecSampleModeListener(RecSampleModeListener listener){
 		recSampleModeListeners.add(listener);
 	}
 	
+	/**
+	 * Remove a rec mode listener
+	 * @param listener The listener to remove
+	 */
 	public void removeRecModeListener(RecSampleModeListener listener){
 		recSampleModeListeners.remove(listener);
 	}

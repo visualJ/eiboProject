@@ -23,11 +23,11 @@ import services.AudioCore;
 import services.Preferences;
 import services.SoundPackManager;
 
-
-/** 
- * This Class create the upperPanel with the Settings and Help Buttons
- * 
- * **/
+/**
+ * The menu panel which can be opened or closed
+ * @author Patrik Pezelj
+ *
+ */
 public class MenuPanel extends JPanel{
 	
 	//CONSTANTS for CardLayout
@@ -150,7 +150,7 @@ public class MenuPanel extends JPanel{
 		constrain = new GridBagConstraints(); // add constrain for Layout 
 		
 		
-	// linestartPanel = info and help button
+		// linestartPanel = info and help button
 		linestartPanel = new JPanel();
 		linestartPanel.setSize(new Dimension(150,50));
 		linestartPanel.setOpaque(false);
@@ -204,7 +204,7 @@ public class MenuPanel extends JPanel{
 		//
 		
 		
-		// collapse or show menue	
+		// collapse or show menu
 		collapseButton = new MenuOpenCloseButton("");
 		collapseButton.setBigIcon(UserInterface.arrowDonwIcon);
 		collapseButton.setToolTipText("Menü ein - oder ausklappen");
@@ -244,7 +244,8 @@ public class MenuPanel extends JPanel{
 				
 			}
 		});
-			//record Folder defination
+		
+		//record Folder defination
 		recordFolder = new RecordingFolderButton("", this.audioCore);
 		recordFolder.setBigIcon(UserInterface.folderIcon);
 		recordFolder.setToolTipText("Aufnahmeordner öffnen");
@@ -267,7 +268,7 @@ public class MenuPanel extends JPanel{
 			}
 		});
 		
-			// soundPack 
+		// soundPack 
 		soundPack  = new MenuButton("");
 		soundPack.setToolTipText("Soundpack wählen");
 		soundPack.setBigIcon(UserInterface.soundpackMenuIcon);
@@ -275,7 +276,6 @@ public class MenuPanel extends JPanel{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
 				if(menuClosed){
 					switchMenu();
 				}
@@ -284,7 +284,8 @@ public class MenuPanel extends JPanel{
 				
 			}
 		});
-			// add Menu Buttons to lineend Panel
+		
+		// add Menu Buttons to lineend Panel
 		lineendPanel.add(preferences);
 		lineendPanel.add(soundPack);
 		lineendPanel.add(recordFolder);
@@ -298,12 +299,13 @@ public class MenuPanel extends JPanel{
 		contentPanel.add(lineendPanel,constrain);
 		
 	
+		// Add panel to choose sound packs 
 		soundPackPanel = new JPanel();
 		soundPackPanel.setOpaque(false);
 		soundPackList = new SoundPackList(this.soundPackManager.getSoundpacksInDirectory("./"), this.userInterface);
 		
 		soundPackScrollPane = new JScrollPane(soundPackList);
-		soundPackScrollPane.setPreferredSize(new Dimension(200,120));
+		soundPackScrollPane.setPreferredSize(new Dimension(200,150));
 		soundPackScrollPane.setBorder(null);
 		soundPackScrollPane.getViewport().setOpaque(false);
 		soundPackScrollPane.setOpaque(false);
@@ -311,7 +313,7 @@ public class MenuPanel extends JPanel{
 		soundPackPanel.add(soundPackScrollPane);
 		
 		
-		//Card Layout items
+		// Card Layout items
 		cardLayout = new CardLayout();
 		
 		panels = new JPanel();
@@ -321,7 +323,7 @@ public class MenuPanel extends JPanel{
 		panels.setVisible(false);
 		
 		
-		
+		// add info panel
 		infoPanel = new JPanel();
 		infoPanel.setBackground(new Color(0,0,0,0.5f));
 		infoPanel.setPreferredSize(new Dimension(400,200));
@@ -336,7 +338,7 @@ public class MenuPanel extends JPanel{
 		scrollPane.getVerticalScrollBar().setUnitIncrement(20);
 		scrollPane.setPreferredSize(new Dimension(400,150));
 		
-		
+		// add the help panel
 		helpPanel = new JPanel();
 		helpPanel.setBackground(new Color(0,0,0,0.5f));
 		helpButton = new JButton("Hilfe öffnen");
@@ -356,6 +358,8 @@ public class MenuPanel extends JPanel{
 			}
 		});
 		
+		
+		// Add the preferences panel
 		preferencesPanel = new JPanel();
 		preferencesPanel.setBackground(UserInterface.alphaColor(Color.BLACK, 0.3f));
 		
@@ -381,6 +385,7 @@ public class MenuPanel extends JPanel{
 		helpPanel.add(helpButton);
 		preferencesPanel.add(changeDirectory);
 		
+		// Add everything to the panel with the main card layout
 		panels.add(soundPackPanel,SOUNDPACK);
 		panels.add(infoPanel,INFO);
 		panels.add(helpPanel, HELP);
@@ -402,9 +407,8 @@ public class MenuPanel extends JPanel{
 	}
 	
 	/**
-	 * 
+	 * Opens or closes the menu, depending on its current state
 	 */
-	
 	public void switchMenu()
 	{
 		if(!menuClosed){

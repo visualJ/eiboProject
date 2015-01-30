@@ -30,6 +30,7 @@ public class BackgroundPanel extends JPanel {
 	private int barsOffset = 0;
 	private Thread barOffsetThread;
 	private Runnable barOffsetAnimation = new Runnable(){
+		// Animation for smoothly transition between bars
 		@Override
 		public void run() {
 			while(!Thread.interrupted()){
@@ -99,10 +100,18 @@ public class BackgroundPanel extends JPanel {
 		barOffsetThread.start();
 	}
 
+	/**
+	 * Get the current beats per minute
+	 * @return bpm
+	 */
 	public int getBpm() {
 		return bpm;
 	}
 
+	/**
+	 * Set the beats per minute
+	 * @param bpm bmp value
+	 */
 	public void setBpm(int bpm) {
 		this.bpm = bpm;
 	}

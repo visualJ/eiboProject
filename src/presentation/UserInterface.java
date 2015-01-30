@@ -52,7 +52,6 @@ public class UserInterface extends JFrame {
 	
 	private AudioCore audioCore;
 	private SoundPackManager soundpackManager;
-	private SoundPack currentSoundPack;
 	private BackgroundPanel background;
 	private MenuPanel upperPanel;
 	private KeyPanel keys;
@@ -186,9 +185,6 @@ public class UserInterface extends JFrame {
 		
 		// set the bpm
 		audioCore.setBpm(sp.getBpm());
-		
-		// set as current sound pack
-		currentSoundPack = sp;
 		
 		// also, set the key panels soundpack
 		keys.setSoundPack(sp);

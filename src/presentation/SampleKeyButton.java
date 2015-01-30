@@ -26,6 +26,9 @@ public class SampleKeyButton extends KeyButton {
 	protected AudioCore audioCore;
 	
 	private KeyMapping keyMapping;
+	
+	// Listener, that updates the appearance of this button, when sample
+	// events happen
 	private SampleListener sampleListener = new SampleListener() {
 		
 		@Override

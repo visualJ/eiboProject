@@ -7,6 +7,9 @@ import repository.EffectMode;
 import services.AudioCore;
 import services.EffectModeBehavior;
 
+/**
+ * A Key Button, that can activate an audio effect
+ */
 public class EffectKeyButton extends KeyButton {
 
 	private static final long serialVersionUID = 1L;

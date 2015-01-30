@@ -25,11 +25,9 @@ import javax.swing.plaf.basic.BasicButtonUI;
 public class MenuButton extends JButton {
 
 	private static final long serialVersionUID = 1L;
-	
 	private Image bigIcon;
 	
 	public MenuButton(String keyLabel){
-		
 		
 		setText(keyLabel);
 		setPreferredSize(new Dimension(40, 40));
@@ -38,8 +36,6 @@ public class MenuButton extends JButton {
 		setFocusable(false);
 		setForeground(Color.white);
 		setBackground(Color.gray);
-		
-	
 		
 		setUI(new BasicButtonUI() {
 		
@@ -127,9 +123,10 @@ public class MenuButton extends JButton {
 		});
 	}
 		
-		
-
-	
+	/**
+	 * Get the big icon on this button
+	 * @return The icon image
+	 */
 	public Image getBigIcon() {
 		return bigIcon;
 	}

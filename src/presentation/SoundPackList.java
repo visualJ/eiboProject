@@ -14,9 +14,11 @@ import javax.swing.ListCellRenderer;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import repository.KeyMapping;
 import repository.SoundPack;
 
+/**
+ * A list that can be used to choose a sound pack
+ */
 public class SoundPackList extends JList<SoundPack> {
 
 	private static final long serialVersionUID = 1L;
@@ -72,7 +74,7 @@ public class SoundPackList extends JList<SoundPack> {
 	}
 	
 	private class SoundPackCellRenderer extends JLabel implements ListCellRenderer<SoundPack>{
-
+		// create a costum cell renderer
 		private static final long serialVersionUID = 1L;
 
 		public SoundPackCellRenderer(){

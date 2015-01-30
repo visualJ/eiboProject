@@ -14,6 +14,12 @@ import javax.swing.AbstractButton;
 import javax.swing.JComponent;
 import javax.swing.plaf.basic.BasicButtonUI;
 
+/**
+ * 
+ * A button that opens or closes the menu
+ * @author Patrik Pezelj
+ *
+ */
 public class MenuOpenCloseButton extends MenuButton{
 
 	private static final long serialVersionUID = 1L;
@@ -22,7 +28,6 @@ public class MenuOpenCloseButton extends MenuButton{
 	public MenuOpenCloseButton(String keyLabel) {
 		super(keyLabel);
 		setPreferredSize(new Dimension(200,30));
-		// TODO Auto-generated constructor stub
 		
 		setUI(new BasicButtonUI() {
 			

@@ -23,7 +23,7 @@ public class Preferences {
 	private Preferences() {
 	}
 
-		//getter for Instance
+	//getter for Instance
 	public static Preferences getInstance() {
 		if (intstance == null) {
 			intstance = new Preferences();
@@ -31,21 +31,23 @@ public class Preferences {
 
 		return intstance;
 	}
-		//set Recordfolder
+	
+	//set Recordfolder
 	public void setRecordFolder(String path) {
 		this.recordFolder = path;
 		System.out.println("New record Path: " + path);
 	}
-		// get location of the RecordFolder
+	
+	// get location of the RecordFolder
 	public String getRecordFolder() {
 		return this.recordFolder;
 	}
-		// load Preferences if file exist 
+	
+	// load Preferences if file exist 
 	public void loadPreferences(String path) {
 		File file = new File(path + File.separator + "iBo.pref");
 		if (file.exists()) {
-			try {
-				BufferedReader br = new BufferedReader(new FileReader(file));
+			try (BufferedReader br = new BufferedReader(new FileReader(file))){
 				this.recordFolder = br.readLine();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -54,7 +56,8 @@ public class Preferences {
 		}
 
 	}
-		// save Preferences to iBo.pref file
+	
+	// save Preferences to iBo.pref file
 	public void savePreferences(String path) {
 		File file = new File(path + File.separator + "iBo.pref");
 		if (!file.exists()) {

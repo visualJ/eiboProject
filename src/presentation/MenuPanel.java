@@ -15,9 +15,9 @@ import java.io.IOException;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.plaf.ScrollPaneUI;
 
 import services.AudioCore;
 import services.Preferences;
@@ -234,9 +234,14 @@ public class MenuPanel extends JPanel{
 			public void actionPerformed(ActionEvent arg0) {
 				try {
 					Desktop.getDesktop().open(new File(Preferences.getInstance().getRecordFolder()));
-					System.out.println("open Menu -- open record Path");
-				} catch (IOException e) {
-					e.printStackTrace();
+				} catch (IOException | IllegalArgumentException e) {
+					// If folder doeas not exist, tell the user, whats going on and
+					// show the preferences panel, where he/she can change the according setting
+					JOptionPane.showMessageDialog(MenuPanel.this, "Der Pfad "+Preferences.getInstance().getRecordFolder()+" existiert nicht. Bitte in den Einstellungen umstellen!");
+					cardLayout.show(panels, PREFERENCES);
+					if(menuClosed){
+						switchMenu();
+					}
 				}
 				
 			}

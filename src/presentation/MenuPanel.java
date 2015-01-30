@@ -348,7 +348,7 @@ public class MenuPanel extends JPanel{
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				try {
-					Desktop.getDesktop().open(new File("./"));
+					Desktop.getDesktop().open(new File("." + File.separator + "Hilfe.pdf"));
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();

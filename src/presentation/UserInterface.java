@@ -77,6 +77,16 @@ public class UserInterface extends JFrame {
 		setSize(1000, 700);
 		setMinimumSize(new Dimension(500, 500));
 		
+		// Load soundpacks.
+		// Because minim doesnt free resources properly,the sounds are loaded at the start.
+		// Otherwise, they would be loaded only when a soundpack is needed, but since minim doesnt free them, this
+		// would lead to memory problems, so this is neccessary
+		for(SoundPack sp:soundpackManager.getSoundpacksInDirectory("."+File.separator)){
+			for(KeyMapping k:sp.getKeyMappings()){
+				audioCore.loadSoundSample(k.getSoundSample());
+			}
+		}
+		
 		try {
 			// Set the system look and feel
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -172,18 +182,6 @@ public class UserInterface extends JFrame {
 	 * @param sp The Soundpack to use from now on
 	 */
 	public void setSoundPack(SoundPack sp){
-		
-		// Remove the old soundpack samples
-		if(currentSoundPack!=null){
-			for(KeyMapping k:currentSoundPack.getKeyMappings()){
-				audioCore.unloadSoundSample(k.getSoundSample());
-			}
-		}
-		
-		// load the new soundpack samples
-		for(KeyMapping k:sp.getKeyMappings()){
-			audioCore.loadSoundSample(k.getSoundSample());
-		}
 		
 		// set the bpm
 		audioCore.setBpm(sp.getBpm());

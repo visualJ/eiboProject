@@ -37,11 +37,15 @@ public class MenuPanel extends JPanel{
 	private final String SOUNDPACK = "SOUNDPACK";
 	
 	private final String infomartion = "<html><center><b>Beschreibung unserer Dienste</b></center>"
-		+ "<p><br />iBO verschafft Ihnen <br />über seine sehr einfache Benutzungsoberfläche<br /> "
-		+ "Zugang zu einer Vielzahl <br />von Ressourcen einschließlich einer<br /> "
-		+ "Soundbibliothek, die es<br /> ermöglicht Musik zu erstellen und aufzunehmen.<br /> "
-		+ "Jede Menge nützlicher<br /> Aufnahme- und Bearbeitungsfunktionen machen <br />"
-		+ "iBO so benutzerfreundlich <br />wie leistungsstark.<br /> "
+		+ "<p>"
+		+ "<br />"
+		+ "iBO verschafft Ihnen über seine sehr einfache <br />"
+		+ "Benutzungsoberfläche Zugang zu einer Vielzahl <br />"
+		+ "von Ressourcen einschließlich einer Sound- <br /> "
+		+ "bibliothek, die es ermöglicht Musik zu erstellen und aufzunehmen.<br /> "
+		+ "Jede Menge nützlicher Aufnahme-und <br />"
+		+ "Bearbeitungsfunktionen machen iBO so benutzerfreundlich <br />"
+		+ "wie leistungsstark.<br /> "
 		+ "Finde den richtigen Rhythmus mit einem Klick.<br /></p> "
 			+ ""
 			+ ""
@@ -303,6 +307,8 @@ public class MenuPanel extends JPanel{
 		scrollPane.getViewport().setOpaque(false);
 		scrollPane.setBorder(null);
 		scrollPane.setOpaque(false);
+		scrollPane.getVerticalScrollBar().setBlockIncrement(50);
+		scrollPane.getVerticalScrollBar().setUnitIncrement(20);
 		scrollPane.setPreferredSize(new Dimension(400,150));
 		
 		

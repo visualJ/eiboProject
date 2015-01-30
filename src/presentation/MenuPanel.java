@@ -42,15 +42,35 @@ public class MenuPanel extends JPanel{
 		+ "iBO verschafft Ihnen über seine sehr einfache <br />"
 		+ "Benutzungsoberfläche Zugang zu einer Vielzahl <br />"
 		+ "von Ressourcen einschließlich einer Sound- <br /> "
-		+ "bibliothek, die es ermöglicht Musik zu erstellen und aufzunehmen.<br /> "
-		+ "Jede Menge nützlicher Aufnahme-und <br />"
-		+ "Bearbeitungsfunktionen machen iBO so benutzerfreundlich <br />"
+		+ "bibliothek, die es ermöglicht Musik zu erstellen<br /> und aufzunehmen. "
+		+ "Jede Menge nützlicher<br />"
+		+ "Aufnahme-und Bearbeitungsfunktionen machen  <br />iBO so benutzerfreundlich"
 		+ "wie leistungsstark.<br /> "
-		+ "Finde den richtigen Rhythmus mit einem Klick.<br /></p> "
+		+ "Finde den richtigen Rhythmus mit einem Klick.<br /></p><br/> "
+			+ "<center><b>Nutzungsbedingungen iBOSoftware.</b></center><br /> "
+			+ "<p>"
+			+ "Sie dürfen die Audio Loop-Inhalte (Audio-Inhalte) <br />"
+			+ "von iBO und Drittanbietern, die in der <br /> "
+			+ "iBO Software enthalten sind oder auf andere Weise  <br />"
+			+ "gebührenfrei mitgeliefert werden, zum Erstellen <br /> "
+			+ "eigener Originalmusikkompositionen oder <br /> "
+			+ "Audioprojekte verwenden. Sie dürfen eigene <br />"
+			+ "Musikkompositionen oder Audioprojekte, die unter  <br /> "
+			+ "Verwendung der Audio-Inhalte erstellt wurden, <br />"
+			+ "senden und/oder vertreiben.  Allerdings dürfen <br />"
+			+ "Audio-Loops nicht kommerziell oder in anderer  <br />"
+			+ "Weise als eigenständige Produkte vertrieben werden, <br />"
+			+ " und sie dürfen  nicht als Ganzes oder in Teilen <br /> "
+			+ " als Audio-Samples, Soundeffekte <br /> neu verpackt werden. "
+			+ "</p><br />"
 			+ ""
-			+ ""
-			+ ""
-			+ ""
+			+ "<center><b>Entwickler</b></center><br /><br />"
+			+ "<p>"
+			+ "Benedikt Ringlein<br />"
+			+ "Patrik Pezelj<br />"
+			+ "Nadine Göbertshan<br />"
+			+ "Ulrike Kocher<br />"
+			+ "</p>"
 			+ ""
 			+ ""
 			+ "</html>";
@@ -71,7 +91,7 @@ public class MenuPanel extends JPanel{
 	private JPanel preferencesPanel;	// CardLayout: preferences of the programm
 		//CardLayout Labels
 	private JLabel infoLabel;
-	private JLabel helpLabel;
+	private JButton helpButton;
 	
 	//Buttons
 	private MenuOpenCloseButton collapseButton; // switch menu visibility 
@@ -318,7 +338,23 @@ public class MenuPanel extends JPanel{
 		
 		
 		helpPanel = new JPanel();
-		helpLabel = new JLabel("<html><b>ejfsdakljfdskfs<br />dakjfsjadkljklsdf</b></html>");
+		helpPanel.setBackground(new Color(0,0,0,0.5f));
+		helpButton = new JButton("Hilfe öffnen");
+		helpButton.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				try {
+					Desktop.getDesktop().open(new File("./"));
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+				
+			}
+		});
 		
 		preferencesPanel = new JPanel();
 		preferencesPanel.setBackground(UserInterface.alphaColor(Color.BLACK, 0.3f));
@@ -342,7 +378,7 @@ public class MenuPanel extends JPanel{
 		});
 		
 		infoPanel.add(scrollPane);
-		helpPanel.add(helpLabel);
+		helpPanel.add(helpButton);
 		preferencesPanel.add(changeDirectory);
 		
 		panels.add(soundPackPanel,SOUNDPACK);

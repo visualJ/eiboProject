@@ -17,6 +17,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.plaf.ScrollPaneUI;
 
 import services.AudioCore;
 import services.Preferences;
@@ -35,13 +36,13 @@ public class MenuPanel extends JPanel{
 	private final String PREFERENCES = "PREFERENCES";
 	private final String SOUNDPACK = "SOUNDPACK";
 	
-	private final String infomartion = "<html><b>Beschreibung unserer Dienste</b>"
-		+ "<p><br />iBO verschafft Ihnen über seine sehr einfache Benutzungsoberfläche "
-		+ "Zugang zu einer Vielzahl von Ressourcen einschließlich einer<br /> "
-		+ "Soundbibliothek, die es ermöglicht Musik zu erstellen und aufzunehmen. "
-		+ "Jede Menge nützlicher Aufnahme- und Bearbeitungsfunktionen machen "
-		+ "iBO so benutzerfreundlich wie leistungsstark. "
-		+ "Finde den richtigen Rhythmus mit einem Klick.</p> "
+	private final String infomartion = "<html><center><b>Beschreibung unserer Dienste</b></center>"
+		+ "<p><br />iBO verschafft Ihnen <br />über seine sehr einfache Benutzungsoberfläche<br /> "
+		+ "Zugang zu einer Vielzahl <br />von Ressourcen einschließlich einer<br /> "
+		+ "Soundbibliothek, die es<br /> ermöglicht Musik zu erstellen und aufzunehmen.<br /> "
+		+ "Jede Menge nützlicher<br /> Aufnahme- und Bearbeitungsfunktionen machen <br />"
+		+ "iBO so benutzerfreundlich <br />wie leistungsstark.<br /> "
+		+ "Finde den richtigen Rhythmus mit einem Klick.<br /></p> "
 			+ ""
 			+ ""
 			+ ""
@@ -83,6 +84,8 @@ public class MenuPanel extends JPanel{
 	private GridBagConstraints constrain; // constrain for GridBagLayout
 	
 	private JFileChooser fileChooser;	// file Chooser for new record path
+	
+	private JScrollPane scrollPane;
 	
 
 	
@@ -238,6 +241,7 @@ public class MenuPanel extends JPanel{
 			// soundPack 
 		soundPack  = new MenuButton("");
 		soundPack.setToolTipText("Soundpack wählen");
+		soundPack.setBigIcon(UserInterface.soundpackMenuIcon);
 		soundPack.addActionListener(new ActionListener() {
 			
 			@Override
@@ -290,8 +294,16 @@ public class MenuPanel extends JPanel{
 		
 		
 		infoPanel = new JPanel();
-		infoPanel.setMaximumSize(new Dimension(500,500));
+		infoPanel.setBackground(new Color(0,0,0,0.5f));
+		infoPanel.setPreferredSize(new Dimension(400,200));
 		infoLabel = new JLabel(infomartion);
+		infoLabel.setForeground(new Color(255,255,255));
+		scrollPane = new JScrollPane(infoLabel);
+		scrollPane.setBackground(new Color(0,0,0,0.5f));
+		scrollPane.getViewport().setOpaque(false);
+		scrollPane.setBorder(null);
+		scrollPane.setOpaque(false);
+		scrollPane.setPreferredSize(new Dimension(400,150));
 		
 		
 		helpPanel = new JPanel();
@@ -318,7 +330,7 @@ public class MenuPanel extends JPanel{
 			}
 		});
 		
-		infoPanel.add(infoLabel);
+		infoPanel.add(scrollPane);
 		helpPanel.add(helpLabel);
 		preferencesPanel.add(changeDirectory);
 		
